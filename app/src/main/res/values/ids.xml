@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="color_picker_seekbar_red" type="id"/>
+    <item name="color_picker_seekbar_green" type="id"/>
+    <item name="color_picker_seekbar_blue" type="id"/>
+</resources>
