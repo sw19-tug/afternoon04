@@ -1,5 +1,6 @@
 package at.tugraz.ist.swe;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -16,6 +18,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ColorPicker.Builder bld_ColorPicker = new ColorPicker.Builder(this);
+        ColorPicker dlg_color = (ColorPicker) bld_ColorPicker.create();
 
+        dlg_color.show();
     }
+
+
+
 }
