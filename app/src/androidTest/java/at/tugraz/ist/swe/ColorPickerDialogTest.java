@@ -35,4 +35,12 @@ public class ColorPickerDialogTest {
     {
         onView(withText(R.string.color_picker_title)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testDialogButtonsVisible()
+    {
+        onView(withText(R.string.color_picker_button_apply)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withText(R.string.color_picker_button_reset)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withText(R.string.color_picker_button_cancel)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
 }
