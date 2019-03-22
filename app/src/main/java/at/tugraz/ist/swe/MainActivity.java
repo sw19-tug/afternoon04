@@ -19,12 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AlertDialog.Builder bld_ColorPicker = new AlertDialog.Builder(this);
+        bld_ColorPicker.setTitle(R.string.color_picker_title);
         AlertDialog dlg_color = bld_ColorPicker.create();
-
-        bld_ColorPicker.setMessage("this is a dialog").setTitle("Color Picker");
         dlg_color.show();
     }
-
-
-
 }
