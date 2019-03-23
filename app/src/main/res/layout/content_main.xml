@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
-</android.support.constraint.ConstraintLayout>
+    tools:context=".MainActivity">
+
+    <org.zakariya.flyoutmenu.FlyoutMenuView
+        android:id="@+id/smileyFlyoutMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/flyout_menu_button_padding"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        app:fmButtonSize="@dimen/flyout_menu_button_size"
+        app:fmDialogMode="true"
+        app:fmItemHeight="@dimen/smiley_menu_item_size"
+        app:fmItemMargin="@dimen/smiley_menu_item_margin"
+        app:fmItemWidth="@dimen/smiley_menu_item_size"
+        app:fmMenuAnchor="bottom"
+        app:fmSelectedItemBackgroundColor="@color/smileyMenuSelectionColor"
+        app:fmShieldVisible="true"
+        />
+
+</RelativeLayout>
