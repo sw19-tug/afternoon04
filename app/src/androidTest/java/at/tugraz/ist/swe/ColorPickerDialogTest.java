@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
+import android.content.Context;
 import static org.junit.Assert.*;
 
 import android.support.test.rule.ActivityTestRule;
@@ -51,5 +53,12 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_red)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.color_picker_seekbar_green)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.color_picker_seekbar_blue)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testButtonColors(){
+        onView(withText("Cancel")).inRoot(isDialog()).check(matches(hasTextColor(16711680)));
+        onView(withText("Reset")).inRoot(isDialog()).check(matches(hasTextColor(9671571)));
+        onView(withText("Apply")).inRoot(isDialog()).check(matches(hasTextColor(2539776)));
     }
 }
