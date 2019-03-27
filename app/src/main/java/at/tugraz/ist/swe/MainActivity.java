@@ -37,13 +37,17 @@ private void setupToolbar() {
     float fontSizeInMenu = getResources().getDimension(R.dimen.smiley_menu_item_size) * 0.5f;
     float fontSizeInButton = getResources().getDimension(R.dimen.flyout_menu_button_size) * 0.5f;
     List<FlyoutToolbar.MenuItem> menuItems = new ArrayList<>();
+    List<FlyoutToolbar.MenuItemImage> menuItemsImages = new ArrayList<>();
+    menuItemsImages.add(new FlyoutToolbar.MenuItemImage(menuItemsImages.size(), R.drawable.ic_outline_add_a_photo_24px, this.getApplicationContext()));
+
     for (int code : unicodeChars) {
         menuItems.add(new FlyoutToolbar.MenuItem(menuItems.size(), code, fontSizeInMenu, color));
     }
 
 
     smileyFlyoutMenu.setLayout(new FlyoutMenuView.GridLayout(5, FlyoutMenuView.GridLayout.UNSPECIFIED));
-    smileyFlyoutMenu.setAdapter(new FlyoutMenuView.ArrayAdapter<>(menuItems));
+    smileyFlyoutMenu.setAdapter(new FlyoutMenuView.ArrayAdapter<>(menuItemsImages));
+    //smileyFlyoutMenu.setAdapter(new FlyoutMenuView.ArrayAdapter<>(menuItems));
 
     final FlyoutToolbar.ButtonRenderer renderer = new FlyoutToolbar.ButtonRenderer(unicodeChars[0], fontSizeInButton, color);
     smileyFlyoutMenu.setButtonRenderer(renderer);

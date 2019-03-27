@@ -1,9 +1,15 @@
 package at.tugraz.ist.swe;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.support.annotation.ColorInt;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.text.TextPaint;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
@@ -39,6 +45,24 @@ public class FlyoutToolbar {
         @Override
         public void onDraw(Canvas canvas, RectF bounds, float degreeSelected) {
             canvas.drawText(emojiString, bounds.centerX(), bounds.centerY() - ((textPaint.descent() + textPaint.ascent()) / 2), textPaint);
+        }
+    }
+
+    public static class MenuItemImage extends FlyoutMenuView.MenuItem
+    {
+        Drawable icon;
+
+        public MenuItemImage(int id, int vector, Context context)
+        {
+            super(id);
+            icon = AppCompatResources.getDrawable(context, vector);
+        }
+
+        @Override
+        public void onDraw(Canvas canvas, RectF bounds, float degreeSelected)
+        {
+            icon.setBounds(canvas.getClipBounds());
+            icon.draw(canvas);
         }
     }
 
