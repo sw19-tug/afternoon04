@@ -61,4 +61,12 @@ public class ColorPickerDialogTest {
         onView(withText("Reset")).inRoot(isDialog()).check(matches(hasTextColor(R.color.colorResetButtons)));
         onView(withText("Apply")).inRoot(isDialog()).check(matches(hasTextColor(R.color.colorAcceptButtons)));
     }
+
+    @Test
+    public void testTextViewVisible(){
+        onView(withId(R.id.textView_red_color)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withId(R.id.textView_green_color)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withId(R.id.textView_blue_color)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
+
 }
