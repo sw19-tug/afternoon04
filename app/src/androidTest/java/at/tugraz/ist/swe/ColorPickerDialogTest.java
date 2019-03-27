@@ -57,8 +57,8 @@ public class ColorPickerDialogTest {
 
     @Test
     public void testButtonColors(){
-        onView(withText("Cancel")).inRoot(isDialog()).check(matches(hasTextColor(16711680)));
-        onView(withText("Reset")).inRoot(isDialog()).check(matches(hasTextColor(9671571)));
-        onView(withText("Apply")).inRoot(isDialog()).check(matches(hasTextColor(2539776)));
+        onView(withText("Cancel")).inRoot(isDialog()).check(matches(hasTextColor(R.color.colorCancelButtons)));
+        onView(withText("Reset")).inRoot(isDialog()).check(matches(hasTextColor(R.color.colorResetButtons)));
+        onView(withText("Apply")).inRoot(isDialog()).check(matches(hasTextColor(R.color.colorAcceptButtons)));
     }
 }
