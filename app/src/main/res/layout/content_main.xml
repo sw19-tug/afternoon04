@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,9 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/flyout_menu_button_padding"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
         app:fmButtonSize="@dimen/flyout_menu_button_size"
         app:fmDialogMode="true"
         app:fmItemHeight="@dimen/smiley_menu_item_size"
@@ -25,4 +23,4 @@
         app:fmShieldVisible="true"
         />
 
-</RelativeLayout>
+</FrameLayout>

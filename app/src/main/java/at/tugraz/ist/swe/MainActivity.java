@@ -4,10 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
@@ -29,14 +25,12 @@ private void setupToolbar() {
 
     int[] unicodeChars = {
             0x1F58C,
-            0x0270E,
-            0x1F605,
-            0x41,
-            0x1F613,
-            0x1F61E,
-            0x1F620,
-            0x1F62D,
-            0x1F4A9,
+            0x2307,
+            0x23AF,
+            0x1F58D,
+            0x2795,
+            0x1F4F7,
+            0x1F5D1
     };
 
     @ColorInt int color = ContextCompat.getColor(this, R.color.smileyMenuCharColor);

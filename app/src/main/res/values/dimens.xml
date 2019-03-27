@@ -10,6 +10,6 @@
     <dimen name="palette_menu_item_size">40dp</dimen>
     <dimen name="palette_swatch_inset">8dp</dimen>
 
-    <dimen name="smiley_menu_item_size">64dp</dimen>
+    <dimen name="smiley_menu_item_size">66dp</dimen>
     <dimen name="smiley_menu_item_margin">8dp</dimen>
 </resources>
