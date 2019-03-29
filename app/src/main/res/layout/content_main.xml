@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <org.zakariya.flyoutmenu.FlyoutMenuView
-        android:id="@+id/smileyFlyoutMenu"
+        android:id="@+id/toolFlyoutMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/flyout_menu_button_padding"

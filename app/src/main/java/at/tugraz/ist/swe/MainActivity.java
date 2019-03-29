@@ -1,9 +1,13 @@
 package at.tugraz.ist.swe;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
@@ -12,56 +16,77 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public List<Integer> tools = new ArrayList<>();
+
+    private int selected_tool;
+
+    public boolean setTool(int id)
+    {
+        if(!tools.contains(id))
+            return false;
+        this.selected_tool = id;
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupToolbar();
 
+        tools.add(R.drawable.ic_outline_add_a_photo_24px);
+        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
+        tools.add(R.drawable.ic_outline_brush_24px);
+        tools.add(R.drawable.ic_outline_color_lens_24px);
+        tools.add(R.drawable.ic_outline_crop_square_24px);
+        tools.add(R.drawable.ic_si_glyph_bucket);
+        tools.add(R.drawable.ic_si_glyph_circle);
+        tools.add(R.drawable.ic_si_glyph_erase);
+        tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
+
+        this.setupToolbar();
     }
 
-private void setupToolbar() {
-    FlyoutMenuView smileyFlyoutMenu = findViewById(R.id.smileyFlyoutMenu);
+    private void setupToolbar() {
+        FlyoutMenuView toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
 
-    int[] unicodeChars = {
-            0x1F58C,
-            0x2307,
-            0x23AF,
-            0x1F58D,
-            0x2795,
-            0x1F4F7,
-            0x1F5D1
-    };
+        List<FlyoutToolbar.MenuItemImage> menuItemsImages = new ArrayList<>();
 
-    @ColorInt int color = ContextCompat.getColor(this, R.color.smileyMenuCharColor);
-    float fontSizeInMenu = getResources().getDimension(R.dimen.smiley_menu_item_size) * 0.5f;
-    float fontSizeInButton = getResources().getDimension(R.dimen.flyout_menu_button_size) * 0.5f;
-    List<FlyoutToolbar.MenuItem> menuItems = new ArrayList<>();
-    List<FlyoutToolbar.MenuItemImage> menuItemsImages = new ArrayList<>();
-    menuItemsImages.add(new FlyoutToolbar.MenuItemImage(menuItemsImages.size(), R.drawable.ic_outline_add_a_photo_24px, this.getApplicationContext()));
+        for (int item : this.tools)
+        {
+            menuItemsImages.add(new FlyoutToolbar.MenuItemImage(menuItemsImages.size(), item, this.getApplicationContext()));
+        }
+        DisplayMetrics display;
+        display = this.getApplicationContext().getResources().getDisplayMetrics();
 
-    for (int code : unicodeChars) {
-        menuItems.add(new FlyoutToolbar.MenuItem(menuItems.size(), code, fontSizeInMenu, color));
+        int width = toolFlyoutMenu.getItemWidth();
+        int margin = toolFlyoutMenu.getItemMargin() * 2;
+
+        int colums;
+        for (colums = 5; colums >= 0; --colums)
+        {
+            if(width * colums + margin * colums < display.widthPixels)
+                break;
+        }
+
+        toolFlyoutMenu.setLayout(new FlyoutMenuView.GridLayout(colums, FlyoutMenuView.GridLayout.UNSPECIFIED));
+        toolFlyoutMenu.setAdapter(new FlyoutMenuView.ArrayAdapter<>(menuItemsImages));
+
+        final FlyoutToolbar.ButtonRenderer renderer = new FlyoutToolbar.ButtonRenderer(R.drawable.ic_outline_apps_24px, this.getApplicationContext());
+        toolFlyoutMenu.setButtonRenderer(renderer);
+
+        toolFlyoutMenu.setSelectionListener(new FlyoutMenuView.SelectionListener() {
+            @Override
+            public void onItemSelected(FlyoutMenuView flyoutMenuView, FlyoutMenuView.MenuItem item) {
+
+                FlyoutToolbar.MenuItemImage selected = (FlyoutToolbar.MenuItemImage) item;
+                if(!setTool(selected.getID()))
+                    return;
+            }
+
+            @Override
+            public void onDismissWithoutSelection(FlyoutMenuView flyoutMenuView) {
+            }
+        });
     }
-
-
-    smileyFlyoutMenu.setLayout(new FlyoutMenuView.GridLayout(5, FlyoutMenuView.GridLayout.UNSPECIFIED));
-    smileyFlyoutMenu.setAdapter(new FlyoutMenuView.ArrayAdapter<>(menuItemsImages));
-    //smileyFlyoutMenu.setAdapter(new FlyoutMenuView.ArrayAdapter<>(menuItems));
-
-    final FlyoutToolbar.ButtonRenderer renderer = new FlyoutToolbar.ButtonRenderer(unicodeChars[0], fontSizeInButton, color);
-    smileyFlyoutMenu.setButtonRenderer(renderer);
-
-    smileyFlyoutMenu.setSelectionListener(new FlyoutMenuView.SelectionListener() {
-        @Override
-        public void onItemSelected(FlyoutMenuView flyoutMenuView, FlyoutMenuView.MenuItem item) {
-
-            renderer.setEmojiCode(((FlyoutToolbar.MenuItem) item).getEmojiCode());
-        }
-
-        @Override
-        public void onDismissWithoutSelection(FlyoutMenuView flyoutMenuView) {
-        }
-    });
-}
 }
