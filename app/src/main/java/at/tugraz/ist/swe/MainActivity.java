@@ -128,6 +128,100 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        textBox_Red.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+
+                if(TextUtils.isEmpty(text))
+                {
+                    textBox_Red.setText("0");
+                    text = "0";
+                }
+
+                if(Integer.parseInt(text) > 255)
+                {
+                    textBox_Red.setText("255");
+                    text = "255";
+                }
+
+                seekBar_Red.setProgress(Integer.parseInt(text));
+                textBox_Red.setSelection(textBox_Red.getText().length());
+            }
+        });
+
+        textBox_Green.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+
+                if(TextUtils.isEmpty(text))
+                {
+                    textBox_Green.setText("0");
+                    text = "0";
+                }
+
+                if(Integer.parseInt(text) > 255)
+                {
+                    textBox_Green.setText("255");
+                    text = "255";
+                }
+
+                seekBar_Green.setProgress(Integer.parseInt(text));
+                textBox_Green.setSelection(textBox_Green.getText().length());
+            }
+        });
+
+        textBox_Blue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+
+                if(TextUtils.isEmpty(text))
+                {
+                    textBox_Blue.setText("0");
+                    text = "0";
+                }
+
+                if(Integer.parseInt(text) > 255)
+                {
+                    textBox_Blue.setText("255");
+                    text = "255";
+                }
+
+                seekBar_Blue.setProgress(Integer.parseInt(text));
+                textBox_Blue.setSelection(textBox_Blue.getText().length());
+
+            }
+        });
     }
 
 }

@@ -73,9 +73,11 @@ public class ColorPickerDialogTest {
     public void testTextBoxShowsSeekBarProgress() {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(50));
         onView(withId(R.id.textView_red_color)).check(matches(withText("50")));
+
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
         onView(withId(R.id.textView_green_color)).check(matches(withText("100")));
-        onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(255));
+
+        onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
         onView(withId(R.id.textView_blue_color)).check(matches(withText("255")));
     }
 
@@ -85,7 +87,7 @@ public class ColorPickerDialogTest {
         withId(R.id.color_picker_seekbar_red).matches(withProgress(50));
         onView(withId(R.id.textView_green_color)).perform(setText("100"));
         withId(R.id.color_picker_seekbar_green).matches(withProgress(100));
-        onView(withId(R.id.textView_blue_color)).perform(setText("255"));
+        onView(withId(R.id.textView_blue_color)).perform(setText("200"));
         withId(R.id.color_picker_seekbar_blue).matches(withProgress(255));
     }
 
