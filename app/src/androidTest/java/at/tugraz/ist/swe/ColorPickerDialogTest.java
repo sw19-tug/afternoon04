@@ -1,17 +1,6 @@
 package at.tugraz.ist.swe;
 
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
-import android.content.Context;
-import static org.junit.Assert.*;
-
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -21,9 +10,11 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -68,5 +59,12 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.textView_green_color)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.textView_blue_color)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testTextBoxShowsSeekBarProgress() {
+        onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(50));
+        onView(withId(R.id.textView_red_color)).check(matches(withText("50")));
+    }
+
 
 }
