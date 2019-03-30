@@ -6,8 +6,11 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.SeekBar;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.UiController;
+import android.support.test.espresso.matcher.BoundedMatcher;
+import android.widget.EditText;
 import android.view.View;
 import org.hamcrest.Matcher;
+import org.hamcrest.Description;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -70,8 +73,24 @@ public class ColorPickerDialogTest {
     public void testTextBoxShowsSeekBarProgress() {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(50));
         onView(withId(R.id.textView_red_color)).check(matches(withText("50")));
+        onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
+        onView(withId(R.id.textView_green_color)).check(matches(withText("100")));
+        onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(255));
+        onView(withId(R.id.textView_blue_color)).check(matches(withText("255")));
     }
 
+    @Test
+    public void testSeekbarShowsTextBoxValue() {
+        onView(withId(R.id.textView_red_color)).perform(setText("50"));
+        withId(R.id.color_picker_seekbar_red).matches(withProgress(50));
+        onView(withId(R.id.textView_green_color)).perform(setText("100"));
+        withId(R.id.color_picker_seekbar_green).matches(withProgress(100));
+        onView(withId(R.id.textView_blue_color)).perform(setText("255"));
+        withId(R.id.color_picker_seekbar_blue).matches(withProgress(255));
+    }
+
+
+    // helper function to set value on seekbar
     public static ViewAction setProgress(final int progress) {
         return new ViewAction() {
             @Override
@@ -81,12 +100,49 @@ public class ColorPickerDialogTest {
 
             @Override
             public String getDescription() {
-                return "Set a progress";
+                return "Set Progress of Seekbar";
             }
 
             @Override
             public Matcher<View> getConstraints() {
                 return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
+    }
+
+    // helper function to set value on edit text
+    public static ViewAction setText(final String value){
+        return new ViewAction() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(EditText.class);
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((EditText) view).setText(value);
+            }
+
+            @Override
+            public String getDescription() {
+                return "sets text of Edit Text";
+            }
+        };
+    }
+
+    //helper function to check progress of seekbar
+    public static Matcher<View> withProgress(final int expectedProgress) {
+        return new BoundedMatcher<View, SeekBar>(SeekBar.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("expected: ");
+                description.appendText(""+expectedProgress);
+            }
+
+            @Override
+            public boolean matchesSafely(SeekBar seekBar) {
+                return seekBar.getProgress() == expectedProgress;
             }
         };
     }

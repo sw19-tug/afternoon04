@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText textBox_Red = dlg_color.findViewById(R.id.textView_red_color);
         final EditText textBox_Green = dlg_color.findViewById(R.id.textView_green_color);
         final EditText textBox_Blue = dlg_color.findViewById(R.id.textView_blue_color);
-        
+
 
         seekBar_Red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
