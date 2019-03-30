@@ -24,7 +24,8 @@
             android:inputType="numberDecimal"
             android:digits="0123456789"
             android:maxLength="3"
-            android:layout_weight="0.20"/>
+            android:layout_weight="0.20"
+            android:text="0"/>
 
     </LinearLayout>
 
@@ -48,7 +49,8 @@
             android:inputType="numberDecimal"
             android:digits="0123456789"
             android:maxLength="3"
-            android:layout_weight="0.20"/>
+            android:layout_weight="0.20"
+            android:text="0"/>
     </LinearLayout>
 
     <LinearLayout
@@ -71,7 +73,8 @@
             android:inputType="numberDecimal"
             android:digits="0123456789"
             android:maxLength="3"
-            android:layout_weight="0.20"/>
+            android:layout_weight="0.20"
+            android:text="0"/>
     </LinearLayout>
 
 

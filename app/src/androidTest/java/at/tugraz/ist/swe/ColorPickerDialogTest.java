@@ -77,7 +77,6 @@ public class ColorPickerDialogTest {
             @Override
             public void perform(UiController uiController, View view) {
                 ((SeekBar) view).setProgress(progress);
-                //or ((SeekBar) view).setProgress(progress);
             }
 
             @Override
