@@ -3,6 +3,11 @@ package at.tugraz.ist.swe;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.SeekBar;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.UiController;
+import android.view.View;
+import org.hamcrest.Matcher;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,6 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import android.support.test.espresso.matcher.ViewMatchers;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -64,6 +70,26 @@ public class ColorPickerDialogTest {
     public void testTextBoxShowsSeekBarProgress() {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(50));
         onView(withId(R.id.textView_red_color)).check(matches(withText("50")));
+    }
+
+    public static ViewAction setProgress(final int progress) {
+        return new ViewAction() {
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((SeekBar) view).setProgress(progress);
+                //or ((SeekBar) view).setProgress(progress);
+            }
+
+            @Override
+            public String getDescription() {
+                return "Set a progress";
+            }
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(SeekBar.class);
+            }
+        };
     }
 
 
