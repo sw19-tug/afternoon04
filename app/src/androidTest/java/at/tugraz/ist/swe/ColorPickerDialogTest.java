@@ -97,7 +97,7 @@ public class ColorPickerDialogTest {
     }
 
     @Test
-    public void testTextBoxHexCharacters()
+    public void testTextBoxHexShowsSeekbarValues()
     {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
@@ -105,7 +105,17 @@ public class ColorPickerDialogTest {
 
         onView(withId(R.id.textView_hex_color)).check(matches(withText("0064FF")));
     }
-    
+
+    @Test
+    public void testSeekbarShowsTextBoxHexValues()
+    {
+        onView(withId(R.id.textView_hex_color)).perform(setText("64FF32"));
+
+        onView(withId(R.id.color_picker_seekbar_red)).check(matches(withProgress(100)));
+        onView(withId(R.id.color_picker_seekbar_green)).check(matches(withProgress(255)));
+        onView(withId(R.id.color_picker_seekbar_blue)).check(matches(withProgress(50)));
+    }
+
     // helper function to set value on seekbar
     public static ViewAction setProgress(final int progress) {
         return new ViewAction() {
