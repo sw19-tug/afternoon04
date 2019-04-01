@@ -96,6 +96,9 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.textView_hex_color)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
 
+
+
+
     // helper function to set value on seekbar
     public static ViewAction setProgress(final int progress) {
         return new ViewAction() {
