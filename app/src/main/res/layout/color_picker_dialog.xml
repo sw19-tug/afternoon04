@@ -86,6 +86,7 @@
             android:layout_height="wrap_content"
             android:maxLength="6"
             android:layout_weight="0.30"
+            android:digits="0123456789ABCDEFabcdef"
             android:text="000000"/>
     </LinearLayout>
 
