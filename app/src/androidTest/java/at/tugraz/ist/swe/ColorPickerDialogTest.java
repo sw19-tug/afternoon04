@@ -101,7 +101,7 @@ public class ColorPickerDialogTest {
     {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
-        onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(256));
+        onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
 
         onView(withId(R.id.textView_hex_color)).check(matches(withText("0064FF")));
     }

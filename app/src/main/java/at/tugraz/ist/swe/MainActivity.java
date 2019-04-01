@@ -76,11 +76,16 @@ public class MainActivity extends AppCompatActivity {
         final EditText textBox_Green = dlg_color.findViewById(R.id.textView_green_color);
         final EditText textBox_Blue = dlg_color.findViewById(R.id.textView_blue_color);
 
+        final EditText textBox_Hex = dlg_color.findViewById(R.id.textView_hex_color);
+
 
         seekBar_Red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 textBox_Red.setText(String.valueOf(progress));
+
+                String green_blue_value = textBox_Hex.getText().toString().substring(2);
+                textBox_Hex.setText(String.format("%02X", Integer.parseInt(textBox_Red.getText().toString())) + green_blue_value);
             }
 
             @Override
@@ -98,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 textBox_Green.setText(String.valueOf(progress));
+
+                String red_value = textBox_Hex.getText().toString().substring(0,2);
+                String blue_value = textBox_Hex.getText().toString().substring(4,6);
+                String green_value = String.format("%02X", Integer.parseInt(textBox_Green.getText().toString()));
+                textBox_Hex.setText(red_value + green_value + blue_value);
             }
 
             @Override
@@ -116,6 +126,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 textBox_Blue.setText(String.valueOf(progress));
+
+                String red_green_value = textBox_Hex.getText().toString().substring(0,4);
+                textBox_Hex.setText(red_green_value + String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString())));
             }
 
             @Override
