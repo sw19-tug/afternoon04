@@ -31,7 +31,7 @@ public class ColorPickerDialogTest {
 
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
-/*
+
     @Test
     public void testDialogVisible()
     {
@@ -68,7 +68,7 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.textView_green_color)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.textView_blue_color)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
-*/
+
     @Test
     public void testTextBoxShowsSeekBarProgress() {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
@@ -91,6 +91,10 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_blue)).check(matches(withProgress(255)));
     }
 
+    @Test
+    public void testTextBoxHexShown() {
+        onView(withId(R.id.textView_hex_color)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
 
     // helper function to set value on seekbar
     public static ViewAction setProgress(final int progress) {
