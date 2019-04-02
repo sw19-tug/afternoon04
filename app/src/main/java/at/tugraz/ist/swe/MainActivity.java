@@ -1,30 +1,36 @@
 package at.tugraz.ist.swe;
 
-import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity
-{
-    private PaintView paintView;
+public class MainActivity extends AppCompatActivity {
+    FrameLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        paintView = findViewById(R.id.PaintView);
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        paintView.init(metrics);
-    }
 
+        setContentView(R.layout.activity_main);
+        layout=(FrameLayout)findViewById(R.id.main_canvas_view);
+        layout.addView(new DrawPointView(MainActivity.this));
+        setupToolbar();
+
+    }
 
 
 
@@ -69,6 +75,4 @@ private void setupToolbar() {
         }
     });
 }
-
-
 }

@@ -22,6 +22,6 @@ public class DrawPointTest {
     @Test
     public void testDrawboardActivity()
     {
-        //onView(withId(R.id.mainDrawboard)).check(matches(isDisplayed()));
+        onView(withId(R.id.main_canvas_view)).check(matches(isDisplayed()));
     }
 }
