@@ -56,6 +56,7 @@ public class ColorPicker {
         });
 
         dlg_color = bld_ColorPicker.create();
+        dlg_color.show();
 
         // set button color
         dlg_color.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.colorCancelButtons));
@@ -277,7 +278,7 @@ public class ColorPicker {
         int blue = this.seekBar_Blue.getProgress();
         return Color.argb(255, red, green, blue);
     }
-    
+
     public void show()
     {
         dlg_color.show();
