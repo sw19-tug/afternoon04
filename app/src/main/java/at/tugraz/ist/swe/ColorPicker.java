@@ -7,10 +7,13 @@ import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class ColorPicker {
 
@@ -137,6 +140,8 @@ public class ColorPicker {
 
                 String green_blue_value = textBox_Hex.getText().toString().substring(2);
                 textBox_Hex.setText(String.format("%02X", Integer.parseInt(textBox_Red.getText().toString())) + green_blue_value);
+                View preview = (View) dlg_color.findViewById(R.id.color_picker_preview);
+                preview.setBackgroundColor(getColor());
             }
 
             @Override
@@ -159,6 +164,8 @@ public class ColorPicker {
                 String blue_value = textBox_Hex.getText().toString().substring(4,6);
                 String green_value = String.format("%02X", Integer.parseInt(textBox_Green.getText().toString()));
                 textBox_Hex.setText(red_value + green_value + blue_value);
+                View preview = (View) dlg_color.findViewById(R.id.color_picker_preview);
+                preview.setBackgroundColor(getColor());
             }
 
             @Override
@@ -180,6 +187,8 @@ public class ColorPicker {
 
                 String red_green_value = textBox_Hex.getText().toString().substring(0,4);
                 textBox_Hex.setText(red_green_value + String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString())));
+                View preview = (View) dlg_color.findViewById(R.id.color_picker_preview);
+                preview.setBackgroundColor(getColor());
             }
 
             @Override
@@ -198,7 +207,6 @@ public class ColorPicker {
             private int start_position;
             private int end_position;
             private int length_before_change;
-            private int selection_position;
             private boolean marked = false;
 
             @Override
@@ -209,7 +217,7 @@ public class ColorPicker {
                 if (start_position != end_position)
                     marked = true;
 
-                length_before_change = textBox_Red.getText().length();
+                length_before_change = s.length();
             }
 
             @Override
@@ -220,46 +228,39 @@ public class ColorPicker {
             @Override
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
-                int len = textBox_Red.getText().length();
-
-                if(TextUtils.isEmpty(text))
-                {
-
+                int len = s.length();
+                if(!marked) {
+                    if (len > length_before_change) {
+                        //added char
+                        if (start_position + 1 <= 3)
+                            textBox_Red.setSelection(start_position + 1);
+                        else
+                            textBox_Red.setSelection(3);
+                    }
+                    else if (len < length_before_change) {
+                        //deleted char
+                        if (start_position - 1 >= 0)
+                            textBox_Red.setSelection(start_position - 1);
+                        else
+                            textBox_Red.setSelection(0);
+                    }
                 }
-                else
-                {
+            }
+        });
 
-                }
-
-                if(Integer.parseInt(text) > 255)
+        textBox_Red.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(Integer.parseInt(textBox_Red.getText().toString()) > 255)
                 {
                     textBox_Red.setText("255");
-                    text = "255";
                 }
-
-
-                if (marked)
+                if(textBox_Red.getText().length() == 0)
                 {
-
+                    textBox_Red.setText("0");
                 }
-                else
-                {
-
-                    if(length_before_change < len)
-                        selection_position = start_position - 1;
-                    if(length_before_change >  len)
-                        selection_position = start_position + 1;
-
-                    if (selection_position < 0)
-                        selection_position = 0;
-
-                    if (selection_position > len)
-                        selection_position = len;
-
-                }
-
-                textBox_Red.setSelection(selection_position);
-
+                seekBar_Red.setProgress(Integer.parseInt(textBox_Red.getText().toString()));
+                return false;
             }
         });
 
