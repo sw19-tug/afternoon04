@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ColorPicker picker = new ColorPicker(this);
+        ColorPicker foreground = new ColorPicker(this);
 
     }
 

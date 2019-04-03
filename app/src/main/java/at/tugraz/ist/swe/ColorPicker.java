@@ -14,6 +14,15 @@ import android.widget.SeekBar;
 
 public class ColorPicker {
 
+    private SeekBar seekBar_Red;
+    private SeekBar seekBar_Green;
+    private SeekBar seekBar_Blue;
+
+    private EditText textBox_Red;
+    private EditText textBox_Green;
+    private EditText textBox_Blue;
+
+    private AlertDialog dlg_color;
 
     public ColorPicker(Context context)
     {
@@ -46,21 +55,20 @@ public class ColorPicker {
             }
         });
 
-        final AlertDialog dlg_color = bld_ColorPicker.create();
-        dlg_color.show();
+        dlg_color = bld_ColorPicker.create();
 
         // set button color
         dlg_color.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.colorCancelButtons));
         dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(context.getResources().getColor(R.color.colorResetButtons));
         dlg_color.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
 
-        final SeekBar seekBar_Red = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_red);
-        final SeekBar seekBar_Green = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_green);
-        final SeekBar seekBar_Blue = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_blue);
+        seekBar_Red = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_red);
+        seekBar_Green = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_green);
+        seekBar_Blue = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_blue);
 
-        final EditText textBox_Red = dlg_color.findViewById(R.id.textView_red_color);
-        final EditText textBox_Green = dlg_color.findViewById(R.id.textView_green_color);
-        final EditText textBox_Blue = dlg_color.findViewById(R.id.textView_blue_color);
+        textBox_Red = dlg_color.findViewById(R.id.textView_red_color);
+        textBox_Green = dlg_color.findViewById(R.id.textView_green_color);
+        textBox_Blue = dlg_color.findViewById(R.id.textView_blue_color);
 
         final EditText textBox_Hex = dlg_color.findViewById(R.id.textView_hex_color);
 
@@ -262,5 +270,17 @@ public class ColorPicker {
         });
     }
 
+    public int getColor()
+    {
+        int red = this.seekBar_Red.getProgress();
+        int green = this.seekBar_Green.getProgress();
+        int blue = this.seekBar_Blue.getProgress();
+        return Color.argb(255, red, green, blue);
+    }
+    
+    public void show()
+    {
+        dlg_color.show();
+    }
 
 }
