@@ -1,38 +1,36 @@
 package at.tugraz.ist.swe;
 
-import android.app.Application;
+
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-
-
+import android.widget.FrameLayout;
 import org.zakariya.flyoutmenu.FlyoutMenuView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     public List<Integer> tools = new ArrayList<>();
-
-    private int selected_tool;
-
-    public boolean setTool(int id)
-    {
-        if(!tools.contains(id))
-            return false;
-        this.selected_tool = id;
-        return true;
-    }
+    public FrameLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /*Tool add_photo = new Tool(R.drawable.ic_outline_add_a_photo_24px);
+        Tool add_photo_alternate = new Tool(R.drawable.ic_outline_add_photo_alternate_24px);
+        Tool brush = new Tool(R.drawable.ic_outline_brush_24px);
+        Tool color_picker = new Tool(R.drawable.ic_outline_color_lens_24px);
+        Tool square = new Tool(R.drawable.ic_outline_crop_square_24px);
+        Tool bucket = new Tool(R.drawable.ic_si_glyph_bucket);
+        Tool circle = new Tool(R.drawable.ic_si_glyph_circle);
+        Tool erase = new Tool(R.drawable.ic_si_glyph_erase);
+        Tool line = new Tool(R.drawable.ic_si_glyph_line_two_angle_point);*/
 
         tools.add(R.drawable.ic_outline_add_a_photo_24px);
         tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
@@ -45,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
 
         this.setupToolbar();
+
+        layout=(FrameLayout)findViewById(R.id.main_canvas_view);
+
+
+        setupToolbar();
+
     }
 
     private void setupToolbar() {
@@ -80,13 +84,24 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(FlyoutMenuView flyoutMenuView, FlyoutMenuView.MenuItem item) {
 
                 FlyoutToolbar.MenuItemImage selected = (FlyoutToolbar.MenuItemImage) item;
-                if(!setTool(selected.getID()))
-                    return;
+
+                showTool(tools.get(selected.getID()));
             }
 
             @Override
             public void onDismissWithoutSelection(FlyoutMenuView flyoutMenuView) {
             }
         });
+    }
+
+    public void showTool(int shown_tool)
+    {
+        DrawPointView drawPointView = new DrawPointView(MainActivity.this);
+        drawPointView.setId(R.id.draw_point_view);
+
+        if(shown_tool == R.drawable.ic_outline_brush_24px)
+        {
+            layout.addView(drawPointView);
+        }
     }
 }
