@@ -33,6 +33,11 @@ public class DrawPointView extends View {
 
     }
 
+    public List<Point> getPoint_list()
+    {
+        return point_list;
+    }
+
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             float x = event.getX();

@@ -19,17 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     FrameLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        layout=(FrameLayout)findViewById(R.id.main_canvas_view);
-        layout.addView(new DrawPointView(MainActivity.this));
-        setupToolbar();
 
+        layout=(FrameLayout)findViewById(R.id.main_canvas_view);
+
+        DrawPointView drawPointView = new DrawPointView(MainActivity.this);
+        drawPointView.setId(R.id.draw_point_view);
+        layout.addView(drawPointView);
+        setupToolbar();
     }
 
 
