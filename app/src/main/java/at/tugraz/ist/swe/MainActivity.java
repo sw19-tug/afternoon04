@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ColorPicker foreground = new ColorPicker(this);
+        foreground.show();
 
     }
 
