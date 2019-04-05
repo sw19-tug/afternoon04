@@ -2,8 +2,6 @@ package at.tugraz.ist.swe;
 
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
@@ -21,16 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /*Tool add_photo = new Tool(R.drawable.ic_outline_add_a_photo_24px);
-        Tool add_photo_alternate = new Tool(R.drawable.ic_outline_add_photo_alternate_24px);
-        Tool brush = new Tool(R.drawable.ic_outline_brush_24px);
-        Tool color_picker = new Tool(R.drawable.ic_outline_color_lens_24px);
-        Tool square = new Tool(R.drawable.ic_outline_crop_square_24px);
-        Tool bucket = new Tool(R.drawable.ic_si_glyph_bucket);
-        Tool circle = new Tool(R.drawable.ic_si_glyph_circle);
-        Tool erase = new Tool(R.drawable.ic_si_glyph_erase);
-        Tool line = new Tool(R.drawable.ic_si_glyph_line_two_angle_point);*/
 
         tools.add(R.drawable.ic_outline_add_a_photo_24px);
         tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
