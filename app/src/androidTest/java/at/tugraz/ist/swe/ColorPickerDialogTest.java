@@ -71,6 +71,18 @@ public class ColorPickerDialogTest {
     }
 
     @Test
+    public void testRGBLabelsVisible(){
+        onView(withId(R.id.color_picker_label_r)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withId(R.id.color_picker_label_g)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withId(R.id.color_picker_label_b)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testColorPreviewVisible(){
+        onView(withId(R.id.color_picker_preview)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testTextBoxShowsSeekBarProgress() {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
         onView(withId(R.id.textView_red_color)).check(matches(withText("0")));
