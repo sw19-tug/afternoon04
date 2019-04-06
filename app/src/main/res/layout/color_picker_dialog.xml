@@ -3,13 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+   >
 
     <View
         android:id="@+id/color_picker_preview"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:background="#FF000000">
+        android:background="#FF000000"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
     </View>
 
     <LinearLayout

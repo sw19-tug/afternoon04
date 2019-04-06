@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.renderscript.ScriptGroup;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -29,13 +31,18 @@ public class ColorPicker {
     private EditText textBox_Hex;
     private Context context;
 
+    private View background_color;
+
     private int color_r;
     private int color_g;
     private int color_b;
 
+    private InputMethodManager manager;
+
     public ColorPicker(Context context)
     {
         this.context = context;
+        this.manager = (InputMethodManager)this.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         AlertDialog.Builder bld_ColorPicker = new AlertDialog.Builder(context);
         color_r = 0;
         color_g = 0;
@@ -82,6 +89,8 @@ public class ColorPicker {
     {
         dlg_color.show();
 
+        background_color = (View) dlg_color.findViewById(R.id.color_picker_preview);
+
         seekBar_Red = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_red);
         seekBar_Green = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_green);
         seekBar_Blue = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_blue);
@@ -98,6 +107,7 @@ public class ColorPicker {
         dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(context.getResources().getColor(R.color.colorResetButtons));
         dlg_color.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
 
+        dlg_color.setCanceledOnTouchOutside(false);
 
         textBox_Hex.addTextChangedListener(new TextWatcher() {
             @Override
@@ -139,7 +149,6 @@ public class ColorPicker {
             }
         });
 
-
         seekBar_Red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -147,8 +156,7 @@ public class ColorPicker {
 
                 String green_blue_value = textBox_Hex.getText().toString().substring(2);
                 textBox_Hex.setText(String.format("%02X", Integer.parseInt(textBox_Red.getText().toString())) + green_blue_value);
-                View preview = (View) dlg_color.findViewById(R.id.color_picker_preview);
-                preview.setBackgroundColor(getColor());
+                background_color.setBackgroundColor(getColor());
             }
 
             @Override
@@ -171,8 +179,7 @@ public class ColorPicker {
                 String blue_value = textBox_Hex.getText().toString().substring(4,6);
                 String green_value = String.format("%02X", Integer.parseInt(textBox_Green.getText().toString()));
                 textBox_Hex.setText(red_value + green_value + blue_value);
-                View preview = (View) dlg_color.findViewById(R.id.color_picker_preview);
-                preview.setBackgroundColor(getColor());
+                background_color.setBackgroundColor(getColor());
             }
 
             @Override
@@ -186,7 +193,6 @@ public class ColorPicker {
             }
         });
 
-
         seekBar_Blue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -194,8 +200,7 @@ public class ColorPicker {
 
                 String red_green_value = textBox_Hex.getText().toString().substring(0,4);
                 textBox_Hex.setText(red_green_value + String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString())));
-                View preview = (View) dlg_color.findViewById(R.id.color_picker_preview);
-                preview.setBackgroundColor(getColor());
+                background_color.setBackgroundColor(getColor());
             }
 
             @Override
@@ -258,90 +263,156 @@ public class ColorPicker {
         textBox_Red.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(Integer.parseInt(textBox_Red.getText().toString()) > 255)
-                {
-                    textBox_Red.setText("255");
-                }
                 if(textBox_Red.getText().length() == 0)
                 {
                     textBox_Red.setText("0");
                 }
+                if(Integer.parseInt(textBox_Red.getText().toString()) > 255)
+                {
+                    textBox_Red.setText("255");
+                }
                 seekBar_Red.setProgress(Integer.parseInt(textBox_Red.getText().toString()));
+                background_color.requestFocus();
+                manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
                 return false;
             }
         });
 
         textBox_Green.addTextChangedListener(new TextWatcher() {
+            private int start_position;
+            private int end_position;
+            private int length_before_change;
+            private boolean marked = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                start_position = textBox_Green.getSelectionStart();
+                end_position = textBox_Green.getSelectionEnd();
+
+                if (start_position != end_position)
+                    marked = true;
+
+                length_before_change = s.length();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
+                int len = s.length();
+                if(!marked) {
+                    if (len > length_before_change) {
+                        //added char
+                        if (start_position + 1 <= 3)
+                            textBox_Green.setSelection(start_position + 1);
+                        else
+                            textBox_Green.setSelection(3);
+                    }
+                    else if (len < length_before_change) {
+                        //deleted char
+                        if (start_position - 1 >= 0)
+                            textBox_Green.setSelection(start_position - 1);
+                        else
+                            textBox_Green.setSelection(0);
+                    }
+                }
+            }
+        });
 
-                if(TextUtils.isEmpty(text))
+        textBox_Green.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(textBox_Green.getText().length() == 0)
                 {
                     textBox_Green.setText("0");
-                    text = "0";
                 }
-
-                if(Integer.parseInt(text) > 255)
+                if(Integer.parseInt(textBox_Green.getText().toString()) > 255)
                 {
                     textBox_Green.setText("255");
-                    text = "255";
                 }
-
-                seekBar_Green.setProgress(Integer.parseInt(text));
-                textBox_Green.setSelection(textBox_Green.getText().length());
+                seekBar_Green.setProgress(Integer.parseInt(textBox_Green.getText().toString()));
+                background_color.requestFocus();
+                manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
+                return false;
             }
         });
 
         textBox_Blue.addTextChangedListener(new TextWatcher() {
+            private int start_position;
+            private int end_position;
+            private int length_before_change;
+            private boolean marked = false;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                start_position = textBox_Blue.getSelectionStart();
+                end_position = textBox_Blue.getSelectionEnd();
 
+                if (start_position != end_position)
+                    marked = true;
+
+                length_before_change = s.length();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
+                int len = s.length();
+                if(!marked) {
+                    if (len > length_before_change) {
+                        //added char
+                        if (start_position + 1 <= 3)
+                            textBox_Blue.setSelection(start_position + 1);
+                        else
+                            textBox_Blue.setSelection(3);
+                    }
+                    else if (len < length_before_change) {
+                        //deleted char
+                        if (start_position - 1 >= 0)
+                            textBox_Blue.setSelection(start_position - 1);
+                        else
+                            textBox_Blue.setSelection(0);
+                    }
+                }
+            }
+        });
 
-                if(TextUtils.isEmpty(text))
+        textBox_Blue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(textBox_Blue.getText().length() == 0)
                 {
                     textBox_Blue.setText("0");
-                    text = "0";
                 }
-
-                if(Integer.parseInt(text) > 255)
+                if(Integer.parseInt(textBox_Blue.getText().toString()) > 255)
                 {
                     textBox_Blue.setText("255");
-                    text = "255";
                 }
-
-                seekBar_Blue.setProgress(Integer.parseInt(text));
-                textBox_Blue.setSelection(textBox_Blue.getText().length());
-
+                seekBar_Blue.setProgress(Integer.parseInt(textBox_Blue.getText().toString()));
+                background_color.requestFocus();
+                manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
+                return false;
             }
         });
 
         Button neutral = dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL);
         neutral.setOnClickListener(new View.OnClickListener(){
-        @Override
-        public void onClick(View view) {
-            seekBar_Red.setProgress(color_r);
-            seekBar_Green.setProgress(color_g);
-            seekBar_Blue.setProgress(color_b);
-        }
-    });
+            @Override
+            public void onClick(View view) {
+                seekBar_Red.setProgress(color_r);
+                seekBar_Green.setProgress(color_g);
+                seekBar_Blue.setProgress(color_b);
+            }
+        });
 
         Button apply = dlg_color.getButton(AlertDialog.BUTTON_POSITIVE);
         apply.setOnClickListener(new View.OnClickListener(){
