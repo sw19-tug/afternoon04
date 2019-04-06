@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
@@ -102,6 +103,26 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
 
         onView(withId(R.id.color_picker_preview)).check(matches(withBackgroundColor(Color.argb(255, 0, 100, 255))));
+
+    }
+
+    @Test
+    public void testResetButton() {
+        onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
+        onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
+        onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
+
+        onView(withText("Apply")).inRoot(isDialog()).perform(click());
+
+        onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(200));
+        onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(0));
+        onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(20));
+
+        onView(withText("Reset")).inRoot(isDialog()).perform(click());
+
+        onView(withId(R.id.color_picker_seekbar_red)).check(matches(withProgress(0)));
+        onView(withId(R.id.color_picker_seekbar_green)).check(matches(withProgress(100)));
+        onView(withId(R.id.color_picker_seekbar_blue)).check(matches(withProgress(255)));
 
     }
 
