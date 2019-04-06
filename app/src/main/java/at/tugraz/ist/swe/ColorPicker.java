@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -29,10 +30,17 @@ public class ColorPicker {
     private EditText textBox_Hex;
     private Context context;
 
+    private int color_old_r;
+    private int color_old_g;
+    private int color_old_b;
+
     public ColorPicker(Context context)
     {
         this.context = context;
         AlertDialog.Builder bld_ColorPicker = new AlertDialog.Builder(context);
+        color_old_r = 0;
+        color_old_g = 0;
+        color_old_b = 0;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dlg_view = inflater.inflate(R.layout.color_picker_dialog,null);
@@ -326,6 +334,14 @@ public class ColorPicker {
             }
         });
 
+        Button neutral = dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL);
+        neutral.setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View view) {
+            seekBar_Red.setProgress(color_old_r);
+            seekBar_Green.setProgress(color_old_g);
+            seekBar_Blue.setProgress(color_old_b);
+        }
+    });
     }
-
 }
