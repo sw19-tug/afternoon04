@@ -1,6 +1,8 @@
 package at.tugraz.ist.swe;
 
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.SeekBar;
@@ -92,6 +94,15 @@ public class ColorPickerDialogTest {
 
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(256));
         onView(withId(R.id.textView_blue_color)).check(matches(withText("255")));
+    }
+    @Test
+    public void testCorrectColorPreview() {
+        onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
+        onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
+        onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
+
+        onView(withId(R.id.color_picker_preview)).check(matches(withBackgroundColor(Color.argb(255, 0, 100, 255))));
+
     }
 
     @Test
@@ -185,4 +196,20 @@ public class ColorPickerDialogTest {
             }
         };
     }
+
+    public static Matcher<View> withBackgroundColor(final int expectedColor) {
+        return new BoundedMatcher<View, View>(View.class) {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("expected: ");
+                description.appendText(""+expectedColor);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return expectedColor == ((ColorDrawable) view.getBackground()).getColor();
+            }
+        };
+    }
+
 }
