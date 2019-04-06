@@ -9,4 +9,5 @@
     <color name="colorSeekbarRed">#FF0000</color>
     <color name="colorSeekbarGreen">#00FF00</color>
     <color name="colorSeekbarBlue">#0000FF</color>
+    <color name="colorAcceptDisabled">#29412A</color>
 </resources>

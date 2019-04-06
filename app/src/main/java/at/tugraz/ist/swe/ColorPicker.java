@@ -38,6 +38,9 @@ public class ColorPicker {
     private int color_b;
 
     private InputMethodManager manager;
+    Button btnApply;
+    Button btnReset;
+    Button btnCancel;
 
     public ColorPicker(Context context)
     {
@@ -88,6 +91,9 @@ public class ColorPicker {
     public void show()
     {
         dlg_color.show();
+        btnApply = dlg_color.getButton(AlertDialog.BUTTON_POSITIVE);
+        btnReset = dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL);
+        btnCancel = dlg_color.getButton(AlertDialog.BUTTON_NEGATIVE);
 
         background_color = (View) dlg_color.findViewById(R.id.color_picker_preview);
 
@@ -103,51 +109,11 @@ public class ColorPicker {
 
 
         // set button color
-        dlg_color.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.colorCancelButtons));
-        dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(context.getResources().getColor(R.color.colorResetButtons));
-        dlg_color.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
+        btnCancel.setTextColor(context.getResources().getColor(R.color.colorCancelButtons));
+        btnReset.setTextColor(context.getResources().getColor(R.color.colorResetButtons));
+        btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
 
         dlg_color.setCanceledOnTouchOutside(false);
-
-        textBox_Hex.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(textBox_Hex.getText().toString().length() < 6) {
-                    seekBar_Red.setEnabled(false);
-                    seekBar_Green.setEnabled(false);
-                    seekBar_Blue.setEnabled(false);
-                    textBox_Blue.setEnabled(false);
-                    textBox_Green.setEnabled(false);
-                    textBox_Red.setEnabled(false);
-                    textBox_Hex.setTextColor(Color.RED);
-                    return;
-                }
-                String text = textBox_Hex.getText().toString().toUpperCase();
-                Integer red = Integer.parseInt(text.substring(0,2), 16);
-                Integer green = Integer.parseInt(text.substring(2,4), 16);
-                Integer blue = Integer.parseInt(text.substring(4,6), 16);
-                seekBar_Red.setProgress(red);
-                seekBar_Green.setProgress(green);
-                seekBar_Blue.setProgress(blue);
-                seekBar_Red.setEnabled(true);
-                seekBar_Green.setEnabled(true);
-                seekBar_Blue.setEnabled(true);
-                textBox_Blue.setEnabled(true);
-                textBox_Green.setEnabled(true);
-                textBox_Red.setEnabled(true);
-                textBox_Hex.setTextColor(Color.BLACK);
-            }
-        });
 
         seekBar_Red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -213,6 +179,61 @@ public class ColorPicker {
 
             }
         });
+        textBox_Hex.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(textBox_Hex.getText().toString().length() < 6) {
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                    textBox_Blue.setEnabled(false);
+                    textBox_Green.setEnabled(false);
+                    textBox_Red.setEnabled(false);
+                    textBox_Hex.setTextColor(Color.RED);
+                    btnApply.setEnabled(false);
+                    btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptDisabled));
+                    return;
+                }
+                btnApply.setEnabled(true);
+                btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
+                String text = textBox_Hex.getText().toString().toUpperCase();
+                Integer red = Integer.parseInt(text.substring(0,2), 16);
+                Integer green = Integer.parseInt(text.substring(2,4), 16);
+                Integer blue = Integer.parseInt(text.substring(4,6), 16);
+                seekBar_Red.setProgress(red);
+                seekBar_Green.setProgress(green);
+                seekBar_Blue.setProgress(blue);
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+                textBox_Blue.setEnabled(true);
+                textBox_Green.setEnabled(true);
+                textBox_Red.setEnabled(true);
+                textBox_Hex.setTextColor(Color.BLACK);
+            }
+        });
+
+        textBox_Hex.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                background_color.requestFocus();
+                manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
+                return false;
+            }
+        });
+
 
         textBox_Red.addTextChangedListener(new TextWatcher() {
 
@@ -404,18 +425,24 @@ public class ColorPicker {
             }
         });
 
-        Button neutral = dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL);
-        neutral.setOnClickListener(new View.OnClickListener(){
+        btnReset.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 seekBar_Red.setProgress(color_r);
                 seekBar_Green.setProgress(color_g);
                 seekBar_Blue.setProgress(color_b);
+
+                String red = String.format("%02X", color_r);
+                String green = String.format("%02X", color_g);
+                String blue = String.format("%02X", color_b);
+                textBox_Hex.setText(red + green + blue);
+                background_color.setBackgroundColor(getColor());
+
             }
         });
 
-        Button apply = dlg_color.getButton(AlertDialog.BUTTON_POSITIVE);
-        apply.setOnClickListener(new View.OnClickListener(){
+
+        btnApply.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 color_r = seekBar_Red.getProgress();

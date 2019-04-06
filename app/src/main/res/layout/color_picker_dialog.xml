@@ -133,6 +133,7 @@
             android:maxLength="6"
             android:layout_weight="0.70"
             android:inputType="textNoSuggestions"
+            android:singleLine="true"
             android:digits="0123456789ABCDEFabcdef"
             android:text="000000"
             android:imeOptions="actionDone"/>
