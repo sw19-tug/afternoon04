@@ -82,10 +82,7 @@ public class ColorPicker {
 
     public int getColor()
     {
-        int red = this.seekBar_Red.getProgress();
-        int green = this.seekBar_Green.getProgress();
-        int blue = this.seekBar_Blue.getProgress();
-        return Color.argb(255, red, green, blue);
+        return Color.argb(255, this.color_r, this.color_g, this.color_b);
     }
 
     public void show()
@@ -181,9 +178,11 @@ public class ColorPicker {
         });
         textBox_Hex.addTextChangedListener(new TextWatcher() {
 
+            private int start_position;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                start_position = textBox_Hex.getSelectionStart();
             }
 
             @Override
@@ -193,6 +192,7 @@ public class ColorPicker {
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if(textBox_Hex.getText().toString().length() < 6) {
                     seekBar_Red.setEnabled(false);
                     seekBar_Green.setEnabled(false);
@@ -221,6 +221,11 @@ public class ColorPicker {
                 textBox_Green.setEnabled(true);
                 textBox_Red.setEnabled(true);
                 textBox_Hex.setTextColor(Color.BLACK);
+                if(!s.toString().equals(s.toString().toUpperCase()))
+                {
+                    textBox_Hex.setText(s.toString().toUpperCase());
+                }
+                textBox_Hex.setSelection(start_position);
             }
         });
 
@@ -453,6 +458,9 @@ public class ColorPicker {
             }
         });
 
+        seekBar_Red.setProgress(color_r);
+        seekBar_Green.setProgress(color_g);
+        seekBar_Blue.setProgress(color_b);
 
     }
 }
