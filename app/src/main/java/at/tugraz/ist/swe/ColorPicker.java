@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -30,17 +29,17 @@ public class ColorPicker {
     private EditText textBox_Hex;
     private Context context;
 
-    private int color_old_r;
-    private int color_old_g;
-    private int color_old_b;
+    private int color_r;
+    private int color_g;
+    private int color_b;
 
     public ColorPicker(Context context)
     {
         this.context = context;
         AlertDialog.Builder bld_ColorPicker = new AlertDialog.Builder(context);
-        color_old_r = 0;
-        color_old_g = 0;
-        color_old_b = 0;
+        color_r = 0;
+        color_g = 0;
+        color_b = 0;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dlg_view = inflater.inflate(R.layout.color_picker_dialog,null);
@@ -338,10 +337,24 @@ public class ColorPicker {
         neutral.setOnClickListener(new View.OnClickListener(){
         @Override
         public void onClick(View view) {
-            seekBar_Red.setProgress(color_old_r);
-            seekBar_Green.setProgress(color_old_g);
-            seekBar_Blue.setProgress(color_old_b);
+            seekBar_Red.setProgress(color_r);
+            seekBar_Green.setProgress(color_g);
+            seekBar_Blue.setProgress(color_b);
         }
     });
+
+        Button apply = dlg_color.getButton(AlertDialog.BUTTON_POSITIVE);
+        apply.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                color_r = seekBar_Red.getProgress();
+                color_g = seekBar_Green.getProgress();
+                color_b = seekBar_Blue.getProgress();
+
+                dlg_color.dismiss();
+            }
+        });
+
+
     }
 }
