@@ -3,8 +3,12 @@ package at.tugraz.ist.swe;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.test.espresso.Root;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.MotionEvents;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.MotionEvent;
 import android.widget.SeekBar;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.UiController;
@@ -17,16 +21,24 @@ import org.hamcrest.Description;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.zakariya.flyoutmenu.FlyoutMenuView;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.isTouchable;
 import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.core.AllOf.allOf;
+
+
 import android.support.test.espresso.matcher.ViewMatchers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -38,10 +50,26 @@ public class ColorPickerDialogTest {
     @Test
     public void testDialogVisible()
     {
+        onView(withId(R.id.toolFlyoutMenu)).perform(click());
+        activityTestRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
+                for(int counter = 0; 0 < amount_items; counter++)
+                {
+                    FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
+                    if(((FlyoutToolbar.MenuItemImage)result).getID() == R.drawable.ic_outline_color_lens_24px)
+                    {
+                        activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
+                        break;
+                    }
+                }
+            }
+        });
         onView(withText(R.string.color_picker_title)).check(matches(isDisplayed()));
     }
 
-
+    /*
     @Test
     public void testDialogButtonsVisible()
     {
@@ -232,5 +260,6 @@ public class ColorPickerDialogTest {
             }
         };
     }
+    */
 
 }

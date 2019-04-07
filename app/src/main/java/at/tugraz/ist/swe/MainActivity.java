@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     public List<Integer> tools = new ArrayList<>();
     public FrameLayout layout;
     public ColorPicker foreground;
+    public FlyoutMenuView toolFlyoutMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupToolbar() {
-        FlyoutMenuView toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
+        toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
 
         List<FlyoutToolbar.MenuItemImage> menuItemsImages = new ArrayList<>();
 
         for (int item : this.tools)
         {
-            menuItemsImages.add(new FlyoutToolbar.MenuItemImage(menuItemsImages.size(), item, this.getApplicationContext()));
+            menuItemsImages.add(new FlyoutToolbar.MenuItemImage(item, item, this.getApplicationContext()));
         }
         DisplayMetrics display;
         display = this.getApplicationContext().getResources().getDisplayMetrics();
@@ -87,7 +89,11 @@ public class MainActivity extends AppCompatActivity {
 
                 FlyoutToolbar.MenuItemImage selected = (FlyoutToolbar.MenuItemImage) item;
 
-                showTool(tools.get(selected.getID()));
+                for(int counter = 0; counter < tools.size(); counter++)
+                {
+                    if(tools.get(counter) == selected.getID());
+                        showTool(selected.getID());
+                }
             }
 
             @Override
