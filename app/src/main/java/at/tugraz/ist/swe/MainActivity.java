@@ -42,12 +42,15 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
 
-        this.setupToolbar();
+        //this.setupToolbar();
 
         layout=(FrameLayout)findViewById(R.id.main_canvas_view);
 
 
         setupToolbar();
+
+        ColorPicker foreground = new ColorPicker(this);
+        foreground.show();
 
     }
 

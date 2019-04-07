@@ -166,6 +166,18 @@ public class ColorPicker {
 
             }
         });
+
+        textBox_Hex.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(textBox_Hex.getText().length() == 6 && hasFocus) {
+                    seekBar_Red.setEnabled(true);
+                    seekBar_Green.setEnabled(true);
+                    seekBar_Blue.setEnabled(true);
+                }
+            }
+        });
+
         textBox_Hex.addTextChangedListener(new TextWatcher() {
 
             private int start_position;
@@ -262,6 +274,27 @@ public class ColorPicker {
             }
         });
 
+        textBox_Red.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                }
+
+                if(textBox_Red.getText().length() == 0)
+                {
+                    textBox_Red.setText("0");
+                }
+                if(Integer.parseInt(textBox_Red.getText().toString()) > 255)
+                {
+                    textBox_Red.setText("255");
+                }
+                seekBar_Red.setProgress(Integer.parseInt(textBox_Red.getText().toString()));
+            }
+        });
+
 
         textBox_Red.addTextChangedListener(new TextWatcher() {
 
@@ -312,6 +345,10 @@ public class ColorPicker {
         textBox_Red.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+
                 if(textBox_Red.getText().length() == 0)
                 {
                     textBox_Red.setText("0");
@@ -324,6 +361,27 @@ public class ColorPicker {
                 background_color.requestFocus();
                 manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
                 return false;
+            }
+        });
+
+        textBox_Green.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                }
+
+                if(textBox_Green.getText().length() == 0)
+                {
+                    textBox_Green.setText("0");
+                }
+                if(Integer.parseInt(textBox_Green.getText().toString()) > 255)
+                {
+                    textBox_Green.setText("255");
+                }
+                seekBar_Green.setProgress(Integer.parseInt(textBox_Green.getText().toString()));
             }
         });
 
@@ -375,6 +433,10 @@ public class ColorPicker {
         textBox_Green.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+
                 if(textBox_Green.getText().length() == 0)
                 {
                     textBox_Green.setText("0");
@@ -387,6 +449,27 @@ public class ColorPicker {
                 background_color.requestFocus();
                 manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
                 return false;
+            }
+        });
+
+        textBox_Blue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                }
+
+                if(textBox_Blue.getText().length() == 0)
+                {
+                    textBox_Blue.setText("0");
+                }
+                if(Integer.parseInt(textBox_Blue.getText().toString()) > 255)
+                {
+                    textBox_Blue.setText("255");
+                }
+                seekBar_Blue.setProgress(Integer.parseInt(textBox_Blue.getText().toString()));
             }
         });
 
@@ -438,6 +521,10 @@ public class ColorPicker {
         textBox_Blue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+
                 if(textBox_Blue.getText().length() == 0)
                 {
                     textBox_Blue.setText("0");
@@ -456,6 +543,10 @@ public class ColorPicker {
         btnReset.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+
+                background_color.requestFocus();
+                manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
+
                 seekBar_Red.setProgress(color_r);
                 seekBar_Green.setProgress(color_g);
                 seekBar_Blue.setProgress(color_b);
