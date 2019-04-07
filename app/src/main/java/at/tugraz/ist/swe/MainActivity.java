@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Integer> tools = new ArrayList<>();
     public FrameLayout layout;
+    public ColorPicker foreground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        ColorPicker foreground = new ColorPicker(this);
-        foreground.show();
-
+        foreground = new ColorPicker(this);
     }
 
     private void setupToolbar() {
@@ -102,9 +101,13 @@ public class MainActivity extends AppCompatActivity {
         DrawPointView drawPointView = new DrawPointView(MainActivity.this);
         drawPointView.setId(R.id.draw_point_view);
 
-        if(shown_tool == R.drawable.ic_outline_brush_24px)
-        {
-            layout.addView(drawPointView);
+        switch(shown_tool) {
+            case R.drawable.ic_si_glyph_circle:
+                layout.addView(drawPointView);
+                break;
+            case R.drawable.ic_outline_color_lens_24px:
+                foreground.show();
+                break;
         }
     }
 }
