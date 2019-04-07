@@ -323,7 +323,7 @@ public class ColorPicker {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 int len = s.length();
-                if(!marked) {
+                if(!marked && textBox_Red.isFocused()) {
                     if (len > length_before_change) {
                         //added char
                         if (start_position + 1 < 3)
@@ -411,7 +411,7 @@ public class ColorPicker {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 int len = s.length();
-                if(!marked) {
+                if(!marked && textBox_Green.isFocused()) {
                     if (len > length_before_change) {
                         //added char
                         if (start_position + 1 < 3)
@@ -499,7 +499,7 @@ public class ColorPicker {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 int len = s.length();
-                if(!marked) {
+                if(!marked && textBox_Blue.isFocused()) {
                     if (len > length_before_change) {
                         //added char
                         if (start_position + 1 < 3)
@@ -547,10 +547,10 @@ public class ColorPicker {
                 background_color.requestFocus();
                 manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
 
+
                 seekBar_Red.setProgress(color_r);
                 seekBar_Green.setProgress(color_g);
                 seekBar_Blue.setProgress(color_b);
-
                 String red = String.format("%02X", color_r);
                 String green = String.format("%02X", color_g);
                 String blue = String.format("%02X", color_b);
