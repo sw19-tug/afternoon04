@@ -1,12 +1,14 @@
 package at.tugraz.ist.swe;
 
 
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,26 +16,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public List<Integer> tools = new ArrayList<>();
-    public FrameLayout layout;
+    public LinearLayout layout;
     public ColorPicker foreground;
     public FlyoutMenuView toolFlyoutMenu;
-
+    public DrawArea drawingArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /*Tool add_photo = new Tool(R.drawable.ic_outline_add_a_photo_24px);
-        Tool add_photo_alternate = new Tool(R.drawable.ic_outline_add_photo_alternate_24px);
-        Tool brush = new Tool(R.drawable.ic_outline_brush_24px);
-        Tool color_picker = new Tool(R.drawable.ic_outline_color_lens_24px);
-        Tool square = new Tool(R.drawable.ic_outline_crop_square_24px);
-        Tool bucket = new Tool(R.drawable.ic_si_glyph_bucket);
-        Tool circle = new Tool(R.drawable.ic_si_glyph_circle);
-        Tool erase = new Tool(R.drawable.ic_si_glyph_erase);
-        Tool line = new Tool(R.drawable.ic_si_glyph_line_two_angle_point);*/
 
         tools.add(R.drawable.ic_outline_add_a_photo_24px);
         tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
@@ -45,14 +37,21 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
 
-        //this.setupToolbar();
-
-        layout=(FrameLayout)findViewById(R.id.main_canvas_view);
+        layout=findViewById(R.id.main_canvas_view);
 
 
         setupToolbar();
 
         foreground = new ColorPicker(this);
+        foreground.setOnColorAppliedListener(new ColorPicker.ColorAppliedListener() {
+            @Override
+            public void onColorApplied(int color) {
+                drawingArea.setColor(color);
+            }
+        });
+        drawingArea = new DrawArea(this);
+
+        layout.addView(drawingArea);
     }
 
     private void setupToolbar() {
@@ -104,15 +103,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void showTool(int shown_tool)
     {
-        DrawPointView drawPointView = new DrawPointView(MainActivity.this);
-        drawPointView.setId(R.id.draw_point_view);
-
         switch(shown_tool) {
             case R.drawable.ic_si_glyph_circle:
-                layout.addView(drawPointView);
+                drawingArea.setTool(R.drawable.ic_si_glyph_circle);
                 break;
             case R.drawable.ic_outline_color_lens_24px:
                 foreground.show();
+                break;
+            default:
+                drawingArea.setTool(0);
                 break;
         }
     }

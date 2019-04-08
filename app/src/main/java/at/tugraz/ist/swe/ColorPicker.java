@@ -20,6 +20,13 @@ import android.widget.TextView;
 
 public class ColorPicker {
 
+    public interface ColorAppliedListener
+    {
+        public void onColorApplied(int color);
+    }
+
+    private ColorAppliedListener listener;
+
     private SeekBar seekBar_Red;
     private SeekBar seekBar_Green;
     private SeekBar seekBar_Blue;
@@ -43,6 +50,8 @@ public class ColorPicker {
     Button btnReset;
     Button btnCancel;
 
+
+
     public ColorPicker(Context context)
     {
         this.context = context;
@@ -51,6 +60,8 @@ public class ColorPicker {
         color_r = 0;
         color_g = 0;
         color_b = 0;
+
+        this.listener = null;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View dlg_view = inflater.inflate(R.layout.color_picker_dialog,null);
@@ -70,6 +81,10 @@ public class ColorPicker {
     public int getColor()
     {
         return Color.argb(255, this.color_r, this.color_g, this.color_b);
+    }
+
+    public void setOnColorAppliedListener(ColorAppliedListener listener){
+        this.listener = listener;
     }
 
     private int getPreviewColor() {
@@ -567,7 +582,7 @@ public class ColorPicker {
                 color_r = seekBar_Red.getProgress();
                 color_g = seekBar_Green.getProgress();
                 color_b = seekBar_Blue.getProgress();
-
+                listener.onColorApplied(getColor());
                 dlg_color.dismiss();
             }
         });
