@@ -1,5 +1,6 @@
 package at.tugraz.ist.swe;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,9 +27,9 @@ public class ColorPicker {
     private EditText textBox_Red;
     private EditText textBox_Green;
     private EditText textBox_Blue;
+    private EditText textBox_Hex;
 
     private AlertDialog dlg_color;
-    private EditText textBox_Hex;
     private Context context;
 
     private View background_color;
@@ -57,25 +58,11 @@ public class ColorPicker {
         bld_ColorPicker.setTitle(R.string.color_picker_title);
         bld_ColorPicker.setView(dlg_view);
 
-        bld_ColorPicker.setNegativeButton(R.string.color_picker_button_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        bld_ColorPicker.setNegativeButton(R.string.color_picker_button_cancel, null);
 
-            }
-        });
+        bld_ColorPicker.setPositiveButton(R.string.color_picker_button_apply, null);
 
-        bld_ColorPicker.setPositiveButton(R.string.color_picker_button_apply, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        bld_ColorPicker.setNeutralButton(R.string.color_picker_button_reset, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        bld_ColorPicker.setNeutralButton(R.string.color_picker_button_reset, null);
 
         dlg_color = bld_ColorPicker.create();
     }
@@ -85,6 +72,10 @@ public class ColorPicker {
         return Color.argb(255, this.color_r, this.color_g, this.color_b);
     }
 
+    private int getPreviewColor() {
+        return Color.argb(255, seekBar_Red.getProgress(), seekBar_Green.getProgress(), seekBar_Blue.getProgress());
+    }
+
     public void show()
     {
         dlg_color.show();
@@ -92,11 +83,11 @@ public class ColorPicker {
         btnReset = dlg_color.getButton(AlertDialog.BUTTON_NEUTRAL);
         btnCancel = dlg_color.getButton(AlertDialog.BUTTON_NEGATIVE);
 
-        background_color = (View) dlg_color.findViewById(R.id.color_picker_preview);
+        background_color = dlg_color.findViewById(R.id.color_picker_preview);
 
-        seekBar_Red = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_red);
-        seekBar_Green = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_green);
-        seekBar_Blue = (SeekBar) dlg_color.findViewById(R.id.color_picker_seekbar_blue);
+        seekBar_Red = dlg_color.findViewById(R.id.color_picker_seekbar_red);
+        seekBar_Green = dlg_color.findViewById(R.id.color_picker_seekbar_green);
+        seekBar_Blue = dlg_color.findViewById(R.id.color_picker_seekbar_blue);
 
         textBox_Red = dlg_color.findViewById(R.id.textView_red_color);
         textBox_Green = dlg_color.findViewById(R.id.textView_green_color);
@@ -119,7 +110,7 @@ public class ColorPicker {
 
                 String green_blue_value = textBox_Hex.getText().toString().substring(2);
                 textBox_Hex.setText(String.format("%02X", Integer.parseInt(textBox_Red.getText().toString())) + green_blue_value);
-                background_color.setBackgroundColor(getColor());
+                background_color.setBackgroundColor(getPreviewColor());
             }
 
             @Override
@@ -142,7 +133,7 @@ public class ColorPicker {
                 String blue_value = textBox_Hex.getText().toString().substring(4,6);
                 String green_value = String.format("%02X", Integer.parseInt(textBox_Green.getText().toString()));
                 textBox_Hex.setText(red_value + green_value + blue_value);
-                background_color.setBackgroundColor(getColor());
+                background_color.setBackgroundColor(getPreviewColor());
             }
 
             @Override
@@ -163,7 +154,7 @@ public class ColorPicker {
 
                 String red_green_value = textBox_Hex.getText().toString().substring(0,4);
                 textBox_Hex.setText(red_green_value + String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString())));
-                background_color.setBackgroundColor(getColor());
+                background_color.setBackgroundColor(getPreviewColor());
             }
 
             @Override
@@ -176,13 +167,34 @@ public class ColorPicker {
 
             }
         });
+
+        textBox_Hex.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(textBox_Hex.getText().length() == 6 && hasFocus) {
+                    seekBar_Red.setEnabled(true);
+                    seekBar_Green.setEnabled(true);
+                    seekBar_Blue.setEnabled(true);
+                }
+            }
+        });
+
         textBox_Hex.addTextChangedListener(new TextWatcher() {
 
             private int start_position;
+            private int end_position;
+            private int length_before_change;
+            private boolean marked = false;
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 start_position = textBox_Hex.getSelectionStart();
+                end_position = textBox_Hex.getSelectionEnd();
+
+                if (start_position != end_position)
+                    marked = true;
+
+                length_before_change = s.length();
             }
 
             @Override
@@ -192,6 +204,11 @@ public class ColorPicker {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                textBox_Hex.removeTextChangedListener(this);
+
+                String text = s.toString();
+                int len = s.length();
 
                 if(textBox_Hex.getText().toString().length() < 6) {
                     seekBar_Red.setEnabled(false);
@@ -203,11 +220,12 @@ public class ColorPicker {
                     textBox_Hex.setTextColor(Color.RED);
                     btnApply.setEnabled(false);
                     btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptDisabled));
+                    textBox_Hex.addTextChangedListener(this);
                     return;
                 }
                 btnApply.setEnabled(true);
                 btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
-                String text = textBox_Hex.getText().toString().toUpperCase();
+                text = textBox_Hex.getText().toString().toUpperCase();
                 Integer red = Integer.parseInt(text.substring(0,2), 16);
                 Integer green = Integer.parseInt(text.substring(2,4), 16);
                 Integer blue = Integer.parseInt(text.substring(4,6), 16);
@@ -225,7 +243,25 @@ public class ColorPicker {
                 {
                     textBox_Hex.setText(s.toString().toUpperCase());
                 }
-                textBox_Hex.setSelection(start_position);
+
+                if(!marked) {
+                    if (len > length_before_change) {
+                        //added char
+                        if (start_position + 1 < 6)
+                            textBox_Hex.setSelection(start_position + 1);
+                        else
+                            textBox_Hex.setSelection(6);
+                    }
+                    else if (len < length_before_change) {
+                        //deleted char
+                        if (start_position - 1 > 0)
+                            textBox_Hex.setSelection(start_position - 1);
+                        else
+                            textBox_Hex.setSelection(0);
+                    }
+                }
+
+                textBox_Hex.addTextChangedListener(this);
             }
         });
 
@@ -236,6 +272,27 @@ public class ColorPicker {
                 background_color.requestFocus();
                 manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
                 return false;
+            }
+        });
+
+        textBox_Red.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                }
+
+                if(textBox_Red.getText().length() == 0)
+                {
+                    textBox_Red.setText("0");
+                }
+                if(Integer.parseInt(textBox_Red.getText().toString()) > 255)
+                {
+                    textBox_Red.setText("255");
+                }
+                seekBar_Red.setProgress(Integer.parseInt(textBox_Red.getText().toString()));
             }
         });
 
@@ -267,17 +324,17 @@ public class ColorPicker {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 int len = s.length();
-                if(!marked) {
+                if(!marked && textBox_Red.isFocused()) {
                     if (len > length_before_change) {
                         //added char
-                        if (start_position + 1 <= 3)
+                        if (start_position + 1 < 3)
                             textBox_Red.setSelection(start_position + 1);
                         else
                             textBox_Red.setSelection(3);
                     }
                     else if (len < length_before_change) {
                         //deleted char
-                        if (start_position - 1 >= 0)
+                        if (start_position - 1 > 0)
                             textBox_Red.setSelection(start_position - 1);
                         else
                             textBox_Red.setSelection(0);
@@ -289,6 +346,10 @@ public class ColorPicker {
         textBox_Red.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+
                 if(textBox_Red.getText().length() == 0)
                 {
                     textBox_Red.setText("0");
@@ -301,6 +362,27 @@ public class ColorPicker {
                 background_color.requestFocus();
                 manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
                 return false;
+            }
+        });
+
+        textBox_Green.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                }
+
+                if(textBox_Green.getText().length() == 0)
+                {
+                    textBox_Green.setText("0");
+                }
+                if(Integer.parseInt(textBox_Green.getText().toString()) > 255)
+                {
+                    textBox_Green.setText("255");
+                }
+                seekBar_Green.setProgress(Integer.parseInt(textBox_Green.getText().toString()));
             }
         });
 
@@ -330,17 +412,17 @@ public class ColorPicker {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 int len = s.length();
-                if(!marked) {
+                if(!marked && textBox_Green.isFocused()) {
                     if (len > length_before_change) {
                         //added char
-                        if (start_position + 1 <= 3)
+                        if (start_position + 1 < 3)
                             textBox_Green.setSelection(start_position + 1);
                         else
                             textBox_Green.setSelection(3);
                     }
                     else if (len < length_before_change) {
                         //deleted char
-                        if (start_position - 1 >= 0)
+                        if (start_position - 1 > 0)
                             textBox_Green.setSelection(start_position - 1);
                         else
                             textBox_Green.setSelection(0);
@@ -352,6 +434,10 @@ public class ColorPicker {
         textBox_Green.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+
                 if(textBox_Green.getText().length() == 0)
                 {
                     textBox_Green.setText("0");
@@ -364,6 +450,27 @@ public class ColorPicker {
                 background_color.requestFocus();
                 manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
                 return false;
+            }
+        });
+
+        textBox_Blue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    seekBar_Red.setEnabled(false);
+                    seekBar_Green.setEnabled(false);
+                    seekBar_Blue.setEnabled(false);
+                }
+
+                if(textBox_Blue.getText().length() == 0)
+                {
+                    textBox_Blue.setText("0");
+                }
+                if(Integer.parseInt(textBox_Blue.getText().toString()) > 255)
+                {
+                    textBox_Blue.setText("255");
+                }
+                seekBar_Blue.setProgress(Integer.parseInt(textBox_Blue.getText().toString()));
             }
         });
 
@@ -393,17 +500,17 @@ public class ColorPicker {
             public void afterTextChanged(Editable s) {
                 String text = s.toString();
                 int len = s.length();
-                if(!marked) {
+                if(!marked && textBox_Blue.isFocused()) {
                     if (len > length_before_change) {
                         //added char
-                        if (start_position + 1 <= 3)
+                        if (start_position + 1 < 3)
                             textBox_Blue.setSelection(start_position + 1);
                         else
                             textBox_Blue.setSelection(3);
                     }
                     else if (len < length_before_change) {
                         //deleted char
-                        if (start_position - 1 >= 0)
+                        if (start_position - 1 > 0)
                             textBox_Blue.setSelection(start_position - 1);
                         else
                             textBox_Blue.setSelection(0);
@@ -415,6 +522,10 @@ public class ColorPicker {
         textBox_Blue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                seekBar_Red.setEnabled(true);
+                seekBar_Green.setEnabled(true);
+                seekBar_Blue.setEnabled(true);
+
                 if(textBox_Blue.getText().length() == 0)
                 {
                     textBox_Blue.setText("0");
@@ -433,10 +544,14 @@ public class ColorPicker {
         btnReset.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+
+                background_color.requestFocus();
+                manager.hideSoftInputFromWindow(background_color.getWindowToken(), 0);
+
+
                 seekBar_Red.setProgress(color_r);
                 seekBar_Green.setProgress(color_g);
                 seekBar_Blue.setProgress(color_b);
-
                 String red = String.format("%02X", color_r);
                 String green = String.format("%02X", color_g);
                 String blue = String.format("%02X", color_b);
@@ -445,7 +560,6 @@ public class ColorPicker {
 
             }
         });
-
 
         btnApply.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -458,9 +572,16 @@ public class ColorPicker {
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+                dlg_color.dismiss();
+            }
+        });
+
         seekBar_Red.setProgress(color_r);
         seekBar_Green.setProgress(color_g);
         seekBar_Blue.setProgress(color_b);
-
     }
 }

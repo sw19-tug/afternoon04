@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
 
     public List<Integer> tools = new ArrayList<>();
     public FrameLayout layout;
+    public ColorPicker foreground;
+    public FlyoutMenuView toolFlyoutMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +45,24 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
 
-        this.setupToolbar();
+        //this.setupToolbar();
 
         layout=(FrameLayout)findViewById(R.id.main_canvas_view);
 
 
         setupToolbar();
 
+        foreground = new ColorPicker(this);
     }
 
     private void setupToolbar() {
-        FlyoutMenuView toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
+        toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
 
         List<FlyoutToolbar.MenuItemImage> menuItemsImages = new ArrayList<>();
 
         for (int item : this.tools)
         {
-            menuItemsImages.add(new FlyoutToolbar.MenuItemImage(menuItemsImages.size(), item, this.getApplicationContext()));
+            menuItemsImages.add(new FlyoutToolbar.MenuItemImage(item, item, this.getApplicationContext()));
         }
         DisplayMetrics display;
         display = this.getApplicationContext().getResources().getDisplayMetrics();
@@ -85,7 +89,11 @@ public class MainActivity extends AppCompatActivity {
 
                 FlyoutToolbar.MenuItemImage selected = (FlyoutToolbar.MenuItemImage) item;
 
-                showTool(tools.get(selected.getID()));
+                for(int counter = 0; counter < tools.size(); counter++)
+                {
+                    if(tools.get(counter) == selected.getID());
+                        showTool(selected.getID());
+                }
             }
 
             @Override
@@ -99,9 +107,13 @@ public class MainActivity extends AppCompatActivity {
         DrawPointView drawPointView = new DrawPointView(MainActivity.this);
         drawPointView.setId(R.id.draw_point_view);
 
-        if(shown_tool == R.drawable.ic_outline_brush_24px)
-        {
-            layout.addView(drawPointView);
+        switch(shown_tool) {
+            case R.drawable.ic_si_glyph_circle:
+                layout.addView(drawPointView);
+                break;
+            case R.drawable.ic_outline_color_lens_24px:
+                foreground.show();
+                break;
         }
     }
 }

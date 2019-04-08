@@ -19,11 +19,11 @@ import org.zakariya.flyoutmenu.FlyoutMenuView;
 
 public class FlyoutToolbar {
 
+
+
     static String getEmojiByUnicode(int unicode){
         return new String(Character.toChars(unicode));
     }
-
-
 
     public static class MenuItemImage extends FlyoutMenuView.MenuItem {
 
