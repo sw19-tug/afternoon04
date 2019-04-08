@@ -90,8 +90,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for(int counter = 0; counter < tools.size(); counter++)
                 {
-                    if(tools.get(counter) == selected.getID());
+                    if(tools.get(counter) == selected.getID()) {
                         showTool(selected.getID());
+                        break;
+                    }
                 }
             }
 
