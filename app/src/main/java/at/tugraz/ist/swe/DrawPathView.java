@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -22,14 +21,15 @@ public class DrawPathView extends View {
 
         paint = new Paint();
         paint.setColor(Color.BLUE);
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(12);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         //super.onDraw(canvas);
-        for(Point p : point_list)
-            canvas.drawCircle(p.x, p.y, 10, paint);
+        for(Point p : point_list) {
+          canvas.drawLine(p.getPreviousX(), p.getPreviousY(), p.getX(), p.getY(),paint);
+        }
 
     }
 
@@ -39,23 +39,29 @@ public class DrawPathView extends View {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                float x = event.getX();
-                float y = event.getY();
-                Point input_point = new Point((int)x, (int)y);
-                point_list.add(input_point);
 
-                invalidate();
+        switch (event.getAction()){
+          case MotionEvent.ACTION_DOWN: float x = event.getX();
+                                        float y = event.getY();
+                                        float previous_x = event.getX();
+                                        float previous_y = event.getY();
+                                        Point input_point = new Point((int) x, (int) y, (int) previous_x, (int) previous_y);
+                                        point_list.add(input_point);
+                                        invalidate();
+                                        break;
 
-            case MotionEvent.ACTION_MOVE:
-                float move_x = event.getX();
-                float move_y = event.getY();
-                Point move_point = new Point((int)move_x, (int)move_y);
-                point_list.add(move_point);
-
-                invalidate();
+           case MotionEvent.ACTION_MOVE :   float move_x = event.getX();
+                                            float move_y = event.getY();
+                                            event.getHistorySize();
+                                            float move_previous_x = event.getHistoricalX((int) move_x);
+                                            float move_previous_y = event.getHistoricalY((int) move_y);
+                                            Point move_point = new Point((int) move_x, (int) move_y, (int) move_previous_x, (int) move_previous_y);
+                                            point_list.add(move_point);
+                                            invalidate();
+                                            break;
+            case MotionEvent.ACTION_UP : break;
         }
-        return false;
+
+        return true;
     }
 }

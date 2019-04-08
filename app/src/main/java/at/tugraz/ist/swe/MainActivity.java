@@ -84,15 +84,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void showTool(int shown_tool)
     {
-        DrawPointView drawPointView = new DrawPointView(MainActivity.this);
-        drawPointView.setId(R.id.draw_point_view);
+        /*DrawPointView drawPointView = new DrawPointView(MainActivity.this);
+        drawPointView.setId(R.id.draw_point_view);*/
         DrawPathView drawPathView = new DrawPathView(MainActivity.this);
         drawPathView.setId(R.id.draw_path_view);
 
-        if(shown_tool == R.drawable.ic_si_glyph_circle)
+        /*if(shown_tool == R.drawable.ic_si_glyph_circle)
         {
             layout.addView(drawPointView);
-        }
+        }*/
 
         if(shown_tool == R.drawable.ic_outline_brush_24px)
         {
