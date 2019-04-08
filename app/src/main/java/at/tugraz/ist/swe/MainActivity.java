@@ -1,12 +1,9 @@
 package at.tugraz.ist.swe;
 
 
-import android.graphics.Canvas;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
@@ -90,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for(int counter = 0; counter < tools.size(); counter++)
                 {
-                    if(tools.get(counter) == selected.getID());
+                    if(tools.get(counter) == selected.getID()) {
                         showTool(selected.getID());
+                        break;
+                    }
                 }
             }
 
