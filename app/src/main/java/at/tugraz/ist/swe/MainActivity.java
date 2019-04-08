@@ -1,12 +1,9 @@
 package at.tugraz.ist.swe;
 
 
-import android.graphics.Canvas;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
