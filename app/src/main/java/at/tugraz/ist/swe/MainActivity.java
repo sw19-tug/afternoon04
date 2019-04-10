@@ -36,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
         foreground.setOnColorAppliedListener(new ColorPicker.ColorAppliedListener() {
             @Override
             public void onColorApplied(int color) {
-                drawingArea.setColor(color);
+                drawingArea.getPaintingTool().setColor(color);
             }
         });
+
         drawingArea = new DrawArea(this);
 
         layout.addView(drawingArea);
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 foreground.show();
                 break;
             default:
-                drawingArea.setTool(0);
+                drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
         }
     }

@@ -4,28 +4,23 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawArea extends View {
 
-    private int size;
-    private int color;
-    private Paint oldColor;
-    private int tool;
+
+    public PaintingTool getPaintingTool() {
+        return paintingTool;
+    }
+
     private PaintingTool paintingTool;
-    private Point position;
     private Bitmap oldBitmap;
-    private boolean generate;
-    private boolean applied;
 
     public DrawArea(Context context)
     {
         super(context);
-        this.size = 10;
-        this.tool = 0;
+        this.paintingTool = new Circle(Color.BLACK, 10);
     }
 
     protected void onDraw(Canvas canvas) {
@@ -33,13 +28,17 @@ public class DrawArea extends View {
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
+
         paintingTool.drawTool(canvas);
+
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        oldBitmap = getBitmap();
         paintingTool.handleEvent(event);
         invalidate();
+        oldBitmap = getBitmap();
+
         return false;
     }
 

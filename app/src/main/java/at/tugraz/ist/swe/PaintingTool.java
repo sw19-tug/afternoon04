@@ -11,4 +11,6 @@ public abstract class PaintingTool
 
     public abstract void drawTool(Canvas canvas);
     public abstract void handleEvent(MotionEvent event);
+    public abstract void setColor(int color);
+    public abstract void setSize(int size);
 }
