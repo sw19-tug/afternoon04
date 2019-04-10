@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 
 public class Circle extends PaintingTool {
 
-    Point position;
+    private Point position;
 
     public Circle(int color, int size)
     {
