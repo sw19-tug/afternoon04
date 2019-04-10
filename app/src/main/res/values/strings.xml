@@ -5,4 +5,5 @@
     <string name="color_picker_button_apply">Apply</string>
     <string name="color_picker_button_reset">Reset</string>
     <string name="color_picker_button_cancel">Cancel</string>
+    <string name="stroke_width_title">Stroke width</string>
 </resources>
