@@ -36,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
         foreground.setOnColorAppliedListener(new ColorPicker.ColorAppliedListener() {
             @Override
             public void onColorApplied(int color) {
-                drawingArea.setColor(color);
+                drawingArea.getPaintingTool().setColor(color);
             }
         });
+
         drawingArea = new DrawArea(this);
 
         layout.addView(drawingArea);
@@ -97,13 +98,13 @@ public class MainActivity extends AppCompatActivity {
     {
         switch(shown_tool) {
             case R.drawable.ic_si_glyph_circle:
-                drawingArea.setTool(R.drawable.ic_si_glyph_circle);
+                drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
             case R.drawable.ic_outline_color_lens_24px:
                 foreground.show();
                 break;
             default:
-                drawingArea.setTool(0);
+                drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
         }
     }
