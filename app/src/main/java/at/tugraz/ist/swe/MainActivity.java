@@ -24,15 +24,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tools.add(R.drawable.ic_outline_add_a_photo_24px);
-        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
-        tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_outline_color_lens_24px);
-        tools.add(R.drawable.ic_outline_crop_square_24px);
-        tools.add(R.drawable.ic_si_glyph_bucket);
         tools.add(R.drawable.ic_si_glyph_circle);
-        tools.add(R.drawable.ic_si_glyph_erase);
-        tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
 
         layout=findViewById(R.id.main_canvas_view);
 
