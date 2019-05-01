@@ -22,7 +22,7 @@ import java.util.List;
 
 import android.graphics.Point;
 
-
+/*
 @RunWith(AndroidJUnit4.class)
 public class DrawPointTest {
 
@@ -110,3 +110,5 @@ public class DrawPointTest {
         };
     }
 }
+
+*/
