@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         tools.add(R.drawable.ic_outline_color_lens_24px);
         tools.add(R.drawable.ic_si_glyph_circle);
+        tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -99,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
         switch(shown_tool) {
             case R.drawable.ic_si_glyph_circle:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
+                break;
+            case R.drawable.ic_si_glyph_line_two_angle_point:
+                drawingArea.setTool(new Line(foreground.getColor(), 10));
                 break;
             case R.drawable.ic_outline_color_lens_24px:
                 foreground.show();

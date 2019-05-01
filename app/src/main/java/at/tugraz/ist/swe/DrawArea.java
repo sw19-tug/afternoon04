@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -28,18 +29,19 @@ public class DrawArea extends View {
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
-
         paintingTool.drawTool(canvas);
-
-
     }
 
     public boolean onTouchEvent(MotionEvent event) {
+        Log.d("TEST", MotionEvent.actionToString(event.getAction()));
         paintingTool.handleEvent(event);
         invalidate();
-        oldBitmap = getBitmap();
-
-        return false;
+        if(event.getAction() != MotionEvent.ACTION_MOVE)
+        {
+            oldBitmap = getBitmap();
+            paintingTool.cleanUp();
+        }
+        return true;
     }
 
     private Bitmap getBitmap()
