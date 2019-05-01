@@ -33,15 +33,17 @@ public class DrawArea extends View {
 
 
     }
-
     public boolean onTouchEvent(MotionEvent event) {
+
         paintingTool.handleEvent(event);
         invalidate();
-        oldBitmap = getBitmap();
-
-        return false;
+        if(event.getAction() != MotionEvent.ACTION_MOVE)
+        {
+            oldBitmap = getBitmap();
+            paintingTool.cleanUp();
+        }
+        return true;
     }
-
     private Bitmap getBitmap()
     {
         this.setDrawingCacheEnabled(true);

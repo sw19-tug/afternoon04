@@ -34,4 +34,6 @@ public class Circle extends PaintingTool {
             this.position = new Point((int)x, (int)y);
         }
     }
+    @Override
+    public void cleanUp() {}
 }
