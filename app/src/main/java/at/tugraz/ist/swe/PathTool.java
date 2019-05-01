@@ -10,6 +10,7 @@ public class PathTool extends PaintingTool {
     private float oldX;
     private float oldY;
     private static final int TOUCH_TOLERANCE = 5;
+    private boolean in_use;
     
     public PathTool(int color, int size)
     {
@@ -19,7 +20,7 @@ public class PathTool extends PaintingTool {
         this.size = size;
         realColor.setStrokeWidth(size);
         this.color = realColor;
-
+        this.in_use = false;
     }
 
     @Override
@@ -37,12 +38,13 @@ public class PathTool extends PaintingTool {
 
         if(event.getAction()==  MotionEvent.ACTION_DOWN)
         {
+            in_use = true;
             path = new Path();
-
             path.reset();
             path.moveTo(x, y);
             oldX = x;
             oldY = y;
+
         }
         if(event.getAction()==  MotionEvent.ACTION_MOVE)
         {
@@ -58,13 +60,14 @@ public class PathTool extends PaintingTool {
         if(event.getAction() == MotionEvent.ACTION_UP)
         {
             path.lineTo(oldX, oldY);
+            in_use = false;
         }
 
     }
 
     @Override
     public void cleanUp() {
-        path = null;
-
+        if(!in_use)
+            path = null;
     }
 }
