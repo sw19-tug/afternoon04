@@ -32,6 +32,6 @@ public class ToolbarTest {
     @Test
     public void testToolbarButtons()
     {
-        onView(withId(R.id.smileyFlyoutMenu)).check(matches(isDisplayed()));
+        onView(withId(R.id.toolFlyoutMenu)).check(matches(isDisplayed()));
     }
 }

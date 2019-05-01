@@ -7,4 +7,11 @@
     <color name="smileyMenuSelectionColor">#33303030</color>
     <color name="alphaCheckerColor">#FFD6D6D6</color>
     <color name="toolSelectionBackgroundColor">#66FF4081</color>
+    <color name="colorCancelButtons">#FF0000</color>
+    <color name="colorAcceptButtons">#26C100</color>
+    <color name="colorResetButtons">#939393</color>
+    <color name="colorSeekbarRed">#FF0000</color>
+    <color name="colorSeekbarGreen">#00FF00</color>
+    <color name="colorSeekbarBlue">#0000FF</color>
+    <color name="colorAcceptDisabled">#29412A</color>
 </resources>

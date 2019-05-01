@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="draw_point_view" type="id"/>
+    <item name="color_picker_seekbar_red" type="id"/>
+    <item name="color_picker_seekbar_green" type="id"/>
+    <item name="color_picker_seekbar_blue" type="id"/>
+    <item name="textView_red_color" type="id"/>
+    <item name="textView_green_color" type="id"/>
+    <item name="textView_blue_color" type="id"/>
+</resources>
