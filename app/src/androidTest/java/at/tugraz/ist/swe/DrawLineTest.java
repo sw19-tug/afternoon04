@@ -1,13 +1,22 @@
 package at.tugraz.ist.swe;
 
 import android.graphics.Paint;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.core.internal.deps.guava.base.Preconditions;
+import android.support.test.espresso.idling.CountingIdlingResource;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
+import android.view.View;
+import android.widget.SeekBar;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +26,9 @@ import org.zakariya.flyoutmenu.FlyoutMenuView;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class DrawLineTest {
@@ -28,15 +39,6 @@ public class DrawLineTest {
     @Test
     public void testSelectedTool()
     {
-        selectLineTool();
-        PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
-
-        //assert(tool.toString().equals(Line.class.toString()));
-        isLineClass(tool);
-    }
-
-    public void selectLineTool()
-    {
         onView(withId(R.id.toolFlyoutMenu)).perform(click());
         activityTestRule.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -45,42 +47,16 @@ public class DrawLineTest {
                 for(int counter = 0; 0 < amount_items; counter++)
                 {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if(((FlyoutToolbar.MenuItemImage)result).getID() == R.drawable.ic_si_glyph_circle)
+                    if(((FlyoutToolbar.MenuItemImage)result).getID() == R.drawable.ic_si_glyph_line_two_angle_point)
                     {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
                 }
+                PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
+                Log.d("TEST", tool.toString());
+                assertEquals(Line.class.toString(), tool.getClass().toString());
             }
         });
     }
-    public static Matcher<Object> isLineClass(PaintingTool tool) {
-        // use preconditions to fail fast when a test is creating an invalid matcher.
-        Preconditions.checkArgument(!(tool.equals(null)));
-        return isLineClass(equalTo(tool));
-    }
-
-    public static Matcher<Object> isLineClass (final Matcher<PaintingTool> objectToMatch) {
-        Preconditions.checkNotNull(objectToMatch);
-        return new TypeSafeMatcher<Object>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Expected class: " + Line.class.toString());
-            }
-
-            @Override
-            public void describeMismatchSafely(Object item, Description description) {
-                description.appendText("Actual class: " + item.getClass().toString());
-            }
-
-            @Override
-            public boolean matchesSafely(Object item) {
-
-
-                return false;
-            }
-
-        };
-    }
-
 }
