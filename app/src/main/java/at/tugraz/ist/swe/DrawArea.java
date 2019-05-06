@@ -21,6 +21,7 @@ public class DrawArea extends View {
     {
         super(context);
         this.paintingTool = new Circle(Color.BLACK, 10);
+        this.setId(R.id.draw_point_view);
     }
 
     protected void onDraw(Canvas canvas) {
@@ -42,7 +43,7 @@ public class DrawArea extends View {
         return false;
     }
 
-    private Bitmap getBitmap()
+    public Bitmap getBitmap()
     {
         this.setDrawingCacheEnabled(true);
         this.buildDrawingCache();
