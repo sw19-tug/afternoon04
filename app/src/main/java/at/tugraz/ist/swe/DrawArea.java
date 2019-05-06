@@ -44,7 +44,7 @@ public class DrawArea extends View {
         return true;
     }
 
-    private Bitmap getBitmap()
+    public Bitmap getBitmap()
     {
         this.setDrawingCacheEnabled(true);
         this.buildDrawingCache();
