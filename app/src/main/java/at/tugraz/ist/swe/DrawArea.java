@@ -32,6 +32,7 @@ public class DrawArea extends View {
         this.oldColor.setColor(Color.BLACK);
         this.oldColor.setStyle(Paint.Style.FILL);
         this.applied = false;
+        this.setId(R.id.draw_point_view);
     }
 
     protected void onDraw(Canvas canvas) {
@@ -70,7 +71,7 @@ public class DrawArea extends View {
         return false;
     }
 
-    private Bitmap getBitmap()
+    public Bitmap getBitmap()
     {
         generate = true;
         this.setDrawingCacheEnabled(true);
