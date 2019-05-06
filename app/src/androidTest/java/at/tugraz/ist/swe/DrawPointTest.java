@@ -120,11 +120,12 @@ public class DrawPointTest {
                 DrawArea temp = (DrawArea) item;
                 Bitmap tool_bitmap = temp.getBitmap();
 
-                int red_color = Color.red(tool_bitmap.getPixel(50,50));
-                int green_color = Color.green(tool_bitmap.getPixel(10,10));
-                int blue_color = Color.blue(tool_bitmap.getPixel(900,900));
+                int alpha_color = Color.alpha(tool_bitmap.getPixel((int )x, (int) y));
+                int red_color = Color.red(tool_bitmap.getPixel((int) x,(int) y));
+                int green_color = Color.green(tool_bitmap.getPixel((int) x,(int) y));
+                int blue_color = Color.blue(tool_bitmap.getPixel((int) x,(int) y));
 
-                if(Color.BLACK == Color.argb(255, red_color, green_color, blue_color))
+                if(Color.BLACK == Color.argb(alpha_color, red_color, green_color, blue_color))
                     return true;
 
 
