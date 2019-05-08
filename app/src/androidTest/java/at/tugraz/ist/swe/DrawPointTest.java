@@ -1,3 +1,4 @@
+/*
 package at.tugraz.ist.swe;
 
 import android.support.test.rule.ActivityTestRule;
@@ -86,7 +87,7 @@ public class DrawPointTest {
 
             @Override
             public boolean matches(Object item) {
-                DrawPointView temp = (DrawPointView) item;
+                DrawArea temp = (Draw) item;
                 List<Point> temp_array = temp.getPoint_list();
 
                 for(int i = 0; i< temp_array.size(); i++)
@@ -110,3 +111,4 @@ public class DrawPointTest {
         };
     }
 }
+*/
