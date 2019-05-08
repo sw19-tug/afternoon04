@@ -6,59 +6,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="horizontal">
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/main_canvas_view"
-        android:orientation="horizontal">
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="0.7"
-            android:orientation="horizontal">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:orientation="vertical">
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:text="Size"
-                android:padding="15dip"
-                android:layout_weight="0.2"
-                android:textAlignment="viewEnd"
+                android:padding="0dp"
+                android:layout_weight="0.3"
+                android:layout_gravity="center_horizontal"
+                android:gravity="bottom"
                 />
-           <Button
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:text="+"
-               android:layout_weight="0.1"/>
             <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:layout_weight="0.1"/>
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:text="+"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:text="-"/>
             <EditText
                 android:id="@+id/textView_red_color"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:maxLength="3"
-                android:layout_weight="0.1"
-                android:text="10"
+                android:text="0"
                 android:layout_gravity="center"/>
-        </LinearLayout>
         <org.zakariya.flyoutmenu.FlyoutMenuView
             android:id="@+id/toolFlyoutMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:padding="@dimen/flyout_menu_button_padding"
             app:fmButtonSize="@dimen/flyout_menu_button_size"
             app:fmDialogMode="true"
@@ -69,4 +55,12 @@
             app:fmSelectedItemBackgroundColor="@color/smileyMenuSelectionColor"
             app:fmShieldVisible="true" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/main_canvas_view"
+        android:orientation="vertical">
+    </LinearLayout>
+
 </LinearLayout>
