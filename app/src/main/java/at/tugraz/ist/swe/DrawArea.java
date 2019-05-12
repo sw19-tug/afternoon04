@@ -54,5 +54,6 @@ public class DrawArea extends View {
 
     public void setTool(PaintingTool tool) {
         this.paintingTool = tool;
+        this.paintingTool.oldBitmap = this.oldBitmap;
     }
 }

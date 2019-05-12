@@ -104,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_outline_color_lens_24px:
                 foreground.show();
                 break;
+            case R.drawable.ic_si_glyph_bucket:
+                drawingArea.setTool(new FillBucket(foreground.getColor(),10,drawingArea.oldBitmap));
+                break;
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
