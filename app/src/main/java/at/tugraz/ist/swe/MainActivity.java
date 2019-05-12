@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         tools.add(R.drawable.ic_outline_color_lens_24px);
         tools.add(R.drawable.ic_si_glyph_circle);
+        tools.add(R.drawable.ic_si_glyph_bucket);
 
         layout=findViewById(R.id.main_canvas_view);
 

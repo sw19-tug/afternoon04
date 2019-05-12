@@ -15,7 +15,7 @@ public class DrawArea extends View {
     }
 
     private PaintingTool paintingTool;
-    private Bitmap oldBitmap;
+    public Bitmap oldBitmap;
 
     public DrawArea(Context context)
     {
