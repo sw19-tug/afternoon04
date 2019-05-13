@@ -1,6 +1,9 @@
 package at.tugraz.ist.swe;
 
 
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -22,6 +25,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Bitmap oldActivity = BitmapCache.mMemoryCache.get("oldBitmap");
+
+        if(oldActivity != null)
+        {
+            Matrix matrix = new Matrix();
+            int orientation = getResources().getConfiguration().orientation;
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                // In landscape
+                matrix.postRotate(90);
+            } else {
+                // In portrait
+                matrix.postRotate(-90);
+            }
+
+            BitmapCache.mMemoryCache.put("oldBitmap", Bitmap.createBitmap(oldActivity,0,0,oldActivity.getWidth(),oldActivity.getHeight(), matrix,true));
+
+        }
 
         super.onCreate(savedInstanceState);
 
