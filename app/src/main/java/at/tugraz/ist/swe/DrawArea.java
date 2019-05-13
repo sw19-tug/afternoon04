@@ -25,7 +25,8 @@ public class DrawArea extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (oldBitmap != null)
+        oldBitmap = BitmapCache.mMemoryCache.get("oldBitmap");
+        if (BitmapCache.mMemoryCache.get("oldBitmap") != null)
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
@@ -38,8 +39,7 @@ public class DrawArea extends View {
     public boolean onTouchEvent(MotionEvent event) {
         paintingTool.handleEvent(event);
         invalidate();
-        oldBitmap = getBitmap();
-
+        BitmapCache.mMemoryCache.put("oldBitmap", getBitmap());
         return false;
     }
 
