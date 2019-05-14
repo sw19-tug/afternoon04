@@ -7,13 +7,18 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.view.View.X;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         drawingArea = new DrawArea(this);
 
         layout.addView(drawingArea);
+
+
     }
 
     private void setupToolbar() {
@@ -133,5 +140,25 @@ public class MainActivity extends AppCompatActivity {
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
         }
+    }
+
+    public void increaseStrokeWidth(View element)
+    {
+        EditText strokeWidth = findViewById(R.id.strokewidth_text);
+
+        int strokeWidthNr = Integer.parseInt(strokeWidth.getText().toString());
+        strokeWidthNr++;
+
+        strokeWidth.setText(String.format("%02X",strokeWidthNr));
+    }
+
+    public void decreaseStrokeWidth(View element)
+    {
+        EditText strokeWidth = findViewById(R.id.strokewidth_text);
+
+        int strokeWidthNr = Integer.parseInt(strokeWidth.getText().toString());
+        strokeWidthNr--;
+
+        strokeWidth.setText(String.format("%02X",strokeWidthNr));
     }
 }

@@ -36,14 +36,18 @@
                android:layout_width="0dp"
                android:layout_height="wrap_content"
                android:text="+"
-               android:layout_weight="0.1"/>
+               android:id="@+id/strokewidth_plus"
+               android:layout_weight="0.1"
+               android:onClick="increaseStrokeWidth"/>
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="-"
-                android:layout_weight="0.1"/>
+                android:id="@+id/strokewidth_minus"
+                android:layout_weight="0.1"
+                android:onClick="decreaseStrokeWidth"/>
             <EditText
-                android:id="@+id/textView_red_color"
+                android:id="@+id/strokewidth_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
