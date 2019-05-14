@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public ColorPicker foreground;
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
+    private EditText strokeWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         layout.addView(drawingArea);
 
+        strokeWidth = findViewById(R.id.strokewidth_text);
 
     }
 
@@ -144,21 +148,37 @@ public class MainActivity extends AppCompatActivity {
 
     public void increaseStrokeWidth(View element)
     {
-        EditText strokeWidth = findViewById(R.id.strokewidth_text);
-
         int strokeWidthNr = Integer.parseInt(strokeWidth.getText().toString());
         strokeWidthNr++;
-
-        strokeWidth.setText(String.format("%02X",strokeWidthNr));
+        strokeWidthNr = checkStrokeWidthNumber(strokeWidthNr);
+        strokeWidth.setText(String.format("%02d",strokeWidthNr));
+        PaintingTool tool = drawingArea.getPaintingTool();
+        tool.setSize(strokeWidthNr);
+        drawingArea.setTool(tool);
     }
 
     public void decreaseStrokeWidth(View element)
     {
-        EditText strokeWidth = findViewById(R.id.strokewidth_text);
-
         int strokeWidthNr = Integer.parseInt(strokeWidth.getText().toString());
         strokeWidthNr--;
+        strokeWidthNr = checkStrokeWidthNumber(strokeWidthNr);
+        strokeWidth.setText(String.format("%02d",strokeWidthNr));
+        PaintingTool tool = drawingArea.getPaintingTool();
+        tool.setSize(strokeWidthNr);
+        drawingArea.setTool(tool);
+    }
 
-        strokeWidth.setText(String.format("%02X",strokeWidthNr));
+    public int checkStrokeWidthNumber(int new_number)
+    {
+        if(new_number <= 0)
+        {
+            return 1;
+        }
+        else if(new_number >= 100)
+        {
+            return 99;
+        }
+        else
+            return new_number;
     }
 }
