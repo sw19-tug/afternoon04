@@ -13,6 +13,7 @@ public abstract class PaintingTool
 
     public abstract void drawTool(Canvas canvas);
     public abstract void handleEvent(MotionEvent event);
+    public abstract void cleanUp();
     public void setColor(int color)
     {
         this.color.setColor(color);
