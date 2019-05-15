@@ -19,18 +19,15 @@ public class QueueLinearFloodFiller {
         protected boolean[] pixelsChecked;
         protected Queue<FloodFillRange> ranges;
 
-        // Construct using an image and a copy will be made to fill into,
         // Construct with BufferedImage and flood fill will write directly to
         // provided BufferedImage
-        public QueueLinearFloodFiller(Bitmap img) {
-            copyImage(img);
-        }
 
-        public QueueLinearFloodFiller(Bitmap img, int targetColor, int newColor) {
+        public QueueLinearFloodFiller(Bitmap img, int targetColor, int newColor,Canvas canvas) {
             useImage(img);
 
             setFillColor(newColor);
             setTargetColor(targetColor);
+            canvas.drawBitmap(image, 0, 0, null);
         }
 
         public void setTargetColor(int targetColor) {
@@ -63,21 +60,6 @@ public class QueueLinearFloodFiller {
             return image;
         }
 
-        public void copyImage(Bitmap img) {
-            // Copy data from provided Image to a BufferedImage to write flood fill
-            // to, use getImage to retrieve
-            // cache data in member variables to decrease overhead of property calls
-            width = img.getWidth();
-            height = img.getHeight();
-
-            image = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(image);
-            canvas.drawBitmap(img, 0, 0, null);
-
-            pixels = new int[width * height];
-
-            image.getPixels(pixels, 0, width, 1, 1, width - 1, height - 1);
-        }
 
         public void useImage(Bitmap img) {
             // Use a pre-existing provided BufferedImage and write directly to it

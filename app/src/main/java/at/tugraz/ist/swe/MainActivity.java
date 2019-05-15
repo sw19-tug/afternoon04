@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 drawingArea.setTool(new PathTool(foreground.getColor(), 10));
                 break;
             case R.drawable.ic_si_glyph_bucket:
-                drawingArea.setTool(new FillBucket(foreground.getColor(),10,drawingArea.oldBitmap));
+                drawingArea.setTool(new FillBucket(foreground.getColor(),10,drawingArea.createBitmap()));
                 break;
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
