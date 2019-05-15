@@ -51,7 +51,7 @@ public class DrawLineTest {
                     }
                 }
                 PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
-                Log.d("TEST", tool.toString());
+
                 assertEquals(Line.class.toString(), tool.getClass().toString());
             }
         });
