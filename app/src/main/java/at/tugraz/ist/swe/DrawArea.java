@@ -29,10 +29,7 @@ public class DrawArea extends View {
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
-
         paintingTool.drawTool(canvas);
-
-
     }
     public boolean onTouchEvent(MotionEvent event) {
 
