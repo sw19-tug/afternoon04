@@ -34,22 +34,29 @@ public class DrawArea extends View {
 
 
     }
-
     public boolean onTouchEvent(MotionEvent event) {
+
         paintingTool.handleEvent(event);
         invalidate();
-        oldBitmap = getBitmap();
-
-        return false;
+        if(event.getAction() != MotionEvent.ACTION_MOVE)
+        {
+            oldBitmap = createBitmap();
+            paintingTool.cleanUp();
+        }
+        return true;
     }
-
-    public Bitmap getBitmap()
+    private Bitmap createBitmap()
     {
         this.setDrawingCacheEnabled(true);
         this.buildDrawingCache();
         Bitmap current = Bitmap.createBitmap(this.getDrawingCache());
         this.setDrawingCacheEnabled(false);
         return current;
+    }
+
+    public Bitmap getBitmap()
+    {
+        return this.oldBitmap;
     }
 
     public void setTool(PaintingTool tool) {

@@ -2,7 +2,6 @@ package at.tugraz.ist.swe;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -22,12 +21,7 @@ import android.support.test.espresso.UiController;
 import android.support.test.espresso.action.MotionEvents;
 import org.hamcrest.Matcher;
 import org.zakariya.flyoutmenu.FlyoutMenuView;
-
 import android.view.MotionEvent;
-
-import android.graphics.Canvas;
-
-
 
 @RunWith(AndroidJUnit4.class)
 public class DrawPointTest {
