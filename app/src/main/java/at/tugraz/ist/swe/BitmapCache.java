@@ -7,6 +7,8 @@ public class BitmapCache {
 
     private static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
     private static int cacheSize = maxMemory / 8;
+    public static int rotation = 0;
+    public static int oldRotation = 0;
 
     public BitmapCache()
     {
@@ -21,7 +23,5 @@ public class BitmapCache {
             return bitmap.getByteCount() / 1024;
         }
     };
-
-
 
 }
