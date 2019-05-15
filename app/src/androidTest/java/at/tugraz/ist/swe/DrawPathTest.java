@@ -5,10 +5,8 @@ import android.graphics.Color;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.MotionEvents;
-import android.support.test.espresso.action.Swipe;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -49,7 +47,6 @@ public class DrawPathTest {
                     }
                 }
                 PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
-                Log.d("TEST", tool.toString());
                 assertEquals(PathTool.class.toString(), tool.getClass().toString());
             }
         });
@@ -78,7 +75,6 @@ public class DrawPathTest {
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 75)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(450, 375)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699)));
-        //onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(200, 50)));
     }
 
     public static Matcher<View> checkCoordinates(final float x_check, final float y_check) {
