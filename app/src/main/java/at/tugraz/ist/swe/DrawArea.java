@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -34,7 +33,6 @@ public class DrawArea extends View {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d("TEST", MotionEvent.actionToString(event.getAction()));
         paintingTool.handleEvent(event);
         invalidate();
         if(event.getAction() != MotionEvent.ACTION_MOVE)

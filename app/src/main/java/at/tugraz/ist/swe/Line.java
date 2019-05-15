@@ -3,7 +3,6 @@ package at.tugraz.ist.swe;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class Line extends PaintingTool {
