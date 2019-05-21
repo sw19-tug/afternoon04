@@ -6,20 +6,20 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 
-public class RectangleTool extends PaintingTool {
+public class ShapeTool extends PaintingTool {
 
     private PointF first;
     private PointF second;
-    private boolean in_use;
+    private String shape_type;
 
-
-    public RectangleTool(int color) {
+    public ShapeTool(int color, String shape_type) {
         Paint realColor = new Paint();
         realColor.setColor(color);
         realColor.setStyle(Paint.Style.FILL);
         this.color = realColor;
         this.first = null;
         this.second = null;
+        this.shape_type = shape_type;
 
     }
 
@@ -47,9 +47,11 @@ public class RectangleTool extends PaintingTool {
                 right = first.x;
             }
 
-            canvas.drawRect(left, top, right, bottom, color);
-            //first = null;
-            //second = null;
+            if (shape_type == "rect")
+                canvas.drawRect(left, top, right, bottom, color);
+            if (shape_type == "oval")
+                canvas.drawOval(left, top, right, bottom, color);
+
         }
 
 
