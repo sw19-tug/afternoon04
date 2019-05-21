@@ -48,7 +48,8 @@ public class RectangleTool extends PaintingTool {
             }
 
             canvas.drawRect(left, top, right, bottom, color);
-
+            //first = null;
+            //second = null;
         }
 
 
@@ -60,6 +61,7 @@ public class RectangleTool extends PaintingTool {
             float x = event.getX();
             float y = event.getY();
             this.first = new PointF(x, y);
+            this.second = new PointF(x, y);
 
 
         }

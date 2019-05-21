@@ -47,7 +47,7 @@ public class DrawRectTest {
                     }
                 }
                 PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
-                assertEquals(PathTool.class.toString(), tool.getClass().toString());
+                assertEquals(RectangleTool.class.toString(), tool.getClass().toString());
             }
         });
     }
@@ -68,9 +68,9 @@ public class DrawRectTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(700, 700));
 
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 50)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 700)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(700, 50)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(700, 700)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 699)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 50)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699)));
 
     }
 
