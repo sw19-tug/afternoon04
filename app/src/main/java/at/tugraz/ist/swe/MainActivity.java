@@ -1,6 +1,7 @@
 package at.tugraz.ist.swe;
 
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -11,10 +12,12 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Display screen;
     private Matrix matrix;
     private Bitmap oldActivity;
+    private InputMethodManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         layout=findViewById(R.id.main_canvas_view);
 
+        manager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 
         setupToolbar();
 
@@ -113,11 +118,52 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
         rotation.enable();
+        strokeWidth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                drawingArea.setHandleToucheEvents(!hasFocus);
+            }
+        });
 
+        strokeWidth.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(strokeWidth.getText().length() == 0)
+                {
+                    strokeWidth.setText("10");
+                    drawingArea.getPaintingTool().setSize(10);
+                }
+                else if(Integer.parseInt(strokeWidth.getText().toString()) > 255)
+                {
+                    strokeWidth.setText("255");
+                    drawingArea.getPaintingTool().setSize(255);
+                }
+                else
+                {
+                    drawingArea.getPaintingTool().setSize(Integer.parseInt(strokeWidth.getText().toString()));
+                }
+                drawingArea.requestFocus();
+                manager.hideSoftInputFromWindow(strokeWidth.getWindowToken(), 0);
+                return false;
+            }
+        });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle state)
+    {
+        super.onSaveInstanceState(state);
+        state.putInt("stroke_width", drawingArea.getPaintingTool().size);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state)
+    {
+        super.onRestoreInstanceState(state);
+        drawingArea.getPaintingTool().setSize(state.getInt("stroke_width", 10));
+        strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
+    }
 
     private void setupToolbar() {
         toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
@@ -172,14 +218,14 @@ public class MainActivity extends AppCompatActivity {
     {
         switch(shown_tool) {
             case R.drawable.ic_si_glyph_circle:
-                drawingArea.setTool(new Circle(foreground.getColor(), 10));
+                drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
                 break;
             case R.drawable.ic_outline_color_lens_24px:
                 foreground.show();
                 break;
             default:
-                drawingArea.setTool(new Circle(foreground.getColor(), 10));
-                break;
+                drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
+            break;
         }
     }
 
