@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class DrawRectTest {
+public class DrawOvalTest {
 
     private static MotionEvent down_;
 
@@ -41,7 +41,7 @@ public class DrawRectTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_crop_square_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_add_photo_alternate_24px) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
@@ -65,12 +65,12 @@ public class DrawRectTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
-        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(700, 700));
+        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(150, 150));
 
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 50)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 699)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 50)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 100)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 100)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(100, 150)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 100)));
 
     }
 
@@ -120,7 +120,7 @@ public class DrawRectTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_crop_square_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_add_photo_alternate_24px) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
