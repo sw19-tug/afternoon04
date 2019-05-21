@@ -67,10 +67,10 @@ public class DrawOvalTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(150, 150));
 
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 100)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 100)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(100, 150)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 100)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(51, 100)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(51, 100)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(100, 149)));
+        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(149, 100)));
 
     }
 
