@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 public class ShapeTool extends PaintingTool {
     public static final String TYPE_RECT = "rect";
     public static final String TYPE_OVAL = "oval";
+    private boolean in_use;
+
 
 
     private PointF first;
@@ -78,14 +80,22 @@ public class ShapeTool extends PaintingTool {
             float x = event.getX();
             float y = event.getY();
             this.first = new PointF(x, y);
-            this.second = new PointF(x, y);
+            //this.second = new PointF(x, y);
+            this.in_use = true;
 
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_UP) {
+            float x = event.getX();
+            float y = event.getY();
+            this.second =  new PointF(x, y);
         }
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
             float x = event.getX();
             float y = event.getY();
             this.second = new PointF(x, y);
+            this.in_use = false;
 
         }
 
@@ -94,7 +104,10 @@ public class ShapeTool extends PaintingTool {
     @Override
     public void cleanUp()
     {
-
+        if(!in_use)
+        {
+            this.second = null;
+        }
 
     }
 }
