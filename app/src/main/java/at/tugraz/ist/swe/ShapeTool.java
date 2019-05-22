@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 
 
@@ -60,7 +61,11 @@ public class ShapeTool extends PaintingTool {
             if (shape_type.equals(TYPE_RECT))
                 canvas.drawRect(left, top, right, bottom, color);
             if (shape_type.equals(TYPE_OVAL))
-                canvas.drawOval(left, top, right, bottom, color);
+            {
+                RectF rect = new RectF(left, top, right, bottom);
+                canvas.drawOval(rect, color);
+            }
+
 
         }
 
@@ -75,8 +80,8 @@ public class ShapeTool extends PaintingTool {
             this.first = new PointF(x, y);
             this.second = new PointF(x, y);
 
-
         }
+
         if (event.getAction() == MotionEvent.ACTION_UP) {
             float x = event.getX();
             float y = event.getY();
