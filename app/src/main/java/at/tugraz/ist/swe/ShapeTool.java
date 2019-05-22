@@ -6,7 +6,12 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 
+
+
 public class ShapeTool extends PaintingTool {
+    public static final String TYPE_RECT = "rect";
+    public static final String TYPE_OVAL = "oval";
+
 
     private PointF first;
     private PointF second;
@@ -32,24 +37,29 @@ public class ShapeTool extends PaintingTool {
 
         if (first != null && second != null) {
 
-            bottom = first.y;
-            top = second.y;
-            if (bottom < top) {
+            if (second.y > first.y) {
                 top = first.y;
                 bottom = second.y;
             }
-
-            left = first.x;
-            right = second.x;
-
-            if (left < right) {
-                left = second.x;
-                right = first.x;
+            else
+            {
+                bottom = first.y;
+                top = second.y;
             }
 
-            if (shape_type == "rect")
+            if (second.x > first.x) {
+                right = second.x;
+                left = first.x;
+            }
+            else
+            {
+                right = first.x;
+                left = second.x;
+            }
+
+            if (shape_type.equals(TYPE_RECT))
                 canvas.drawRect(left, top, right, bottom, color);
-            if (shape_type == "oval")
+            if (shape_type.equals(TYPE_OVAL))
                 canvas.drawOval(left, top, right, bottom, color);
 
         }
