@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
+import java.util.Random;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -66,8 +68,39 @@ public class FillBucketTest {
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
 
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50,50)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(0,0)));
+       // onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50,50)));
+        Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        for(int x=1;x<bitmap.getHeight()-1;x++)
+        {
+            for(int y=1;y<bitmap.getWidth()-1;y++)
+            {
+                onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(y,x)));
+            }
+        }
+       // onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(0,0)));
+
+
+    }
+    @Test
+    public void testDrawboardUserActionFillBucket() {
+        openDialog(R.drawable.ic_si_glyph_bucket);
+
+        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
+        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
+
+        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
+
+        // onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50,50)));
+        Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        int height = bitmap.getHeight()-1;
+        int width = bitmap.getWidth()-1;
+        for(int i=0;i<100;i++) {
+            Random randomGenerator = new Random();
+            int x = randomGenerator.nextInt(width) + 1;
+            int y = randomGenerator.nextInt(height) + 1;
+            onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(x,y)));
+        }
+
 
     }
 
