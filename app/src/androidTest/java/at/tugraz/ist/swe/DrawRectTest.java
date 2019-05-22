@@ -41,7 +41,7 @@ public class DrawRectTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_crop_square_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_rect) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
@@ -120,7 +120,7 @@ public class DrawRectTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_crop_square_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_rect) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }

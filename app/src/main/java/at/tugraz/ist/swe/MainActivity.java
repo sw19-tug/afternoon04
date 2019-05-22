@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
-        tools.add(R.drawable.ic_outline_crop_square_24px);
-        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
+        tools.add(R.drawable.ic_rect);
+        tools.add(R.drawable.ic_oval);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -113,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_outline_brush_24px:
                 drawingArea.setTool(new PathTool(foreground.getColor(), 10));
                 break;
-            case R.drawable.ic_outline_crop_square_24px:
+            case R.drawable.ic_rect:
                 drawingArea.setTool(new ShapeTool(foreground.getColor(), "rect"));
                 break;
-            case R.drawable.ic_outline_add_photo_alternate_24px:
+            case R.drawable.ic_oval:
                 drawingArea.setTool(new ShapeTool(foreground.getColor(), "oval"));
                 break;
             default:

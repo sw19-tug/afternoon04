@@ -41,7 +41,7 @@ public class DrawOvalTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_add_photo_alternate_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_oval) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
@@ -120,7 +120,7 @@ public class DrawOvalTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_add_photo_alternate_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_oval) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
