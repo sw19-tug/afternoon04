@@ -32,7 +32,7 @@ public class ColorPicker {
     private EditText textBox_Blue;
     private EditText textBox_Hex;
 
-    private AlertDialog dlg_color;
+    public AlertDialog dlg_color;
     private Context context;
 
     private View background_color;

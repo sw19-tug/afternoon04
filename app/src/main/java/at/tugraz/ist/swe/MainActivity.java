@@ -1,6 +1,7 @@
 package at.tugraz.ist.swe;
 
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -92,6 +93,15 @@ public class MainActivity extends AppCompatActivity {
             public void onDismissWithoutSelection(FlyoutMenuView flyoutMenuView) {
             }
         });
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            foreground.dlg_color.dismiss();
+        }
     }
 
     public void showTool(int shown_tool)
