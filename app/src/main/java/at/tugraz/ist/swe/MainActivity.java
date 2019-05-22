@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
+        tools.add(R.drawable.ic_si_save);
 
         layout=findViewById(R.id.main_canvas_view);
 
