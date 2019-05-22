@@ -1,13 +1,22 @@
 package at.tugraz.ist.swe;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -112,9 +121,30 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_outline_brush_24px:
                 drawingArea.setTool(new PathTool(foreground.getColor(), 10));
                 break;
+            case R.drawable.ic_si_save:
+                Toast.makeText(this,"Image saved", Toast.LENGTH_SHORT).show();
+                MediaStore.Images.Media.insertImage(getContentResolver(), drawingArea.createBitmap(), "PrintZ" , "");
+                //this.saveImage(drawingArea.createBitmap(), "test");
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
+        }
+    }
+
+
+    private void saveImage(Bitmap finalBitmap, String image_name) {
+        File root = Environment.getExternalStorageDirectory();
+        File file = new File(root.getAbsolutePath()+"/DCIM/Camera/img"+new Date().toString()+".png");
+        try
+        {
+            file.createNewFile();
+            FileOutputStream ostream = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
+            ostream.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }
