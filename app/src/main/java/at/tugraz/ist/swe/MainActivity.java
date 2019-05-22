@@ -94,13 +94,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            foreground.dlg_color.dismiss();
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if ( foreground.dlg_color!=null && foreground.dlg_color.isShowing() ){
+            foreground.dlg_color.cancel();
         }
     }
 
