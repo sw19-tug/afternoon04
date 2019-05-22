@@ -53,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
             int locale = TextUtils.getLayoutDirectionFromLocale(getResources().getConfiguration().locale);
 
-            if(locale == 0)
+            if(locale == 0 && (BitmapCache.rotation == 0 || BitmapCache.rotation == 2))
             {
                 ((Button)findViewById(R.id.strokewidth_left)).setText("+");
                 ((Button)findViewById(R.id.strokewidth_right)).setText("-");
             }
-            else if(locale == 1)
+            else if(locale == 1 && (BitmapCache.rotation == 0 || BitmapCache.rotation == 2))
             {
                 ((Button)findViewById(R.id.strokewidth_left)).setText("-");
                 ((Button)findViewById(R.id.strokewidth_right)).setText("+");
@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity {
                             } else if (BitmapCache.rotation == 3) {
                                 matrix = new Matrix();
                                 matrix.postRotate(90);
+                            } else if(BitmapCache.rotation == 2)
+                            {
+                                matrix = new Matrix();
+                                matrix.postRotate(180);
                             }
                         } else if (BitmapCache.oldRotation == 1) {
                             if (BitmapCache.rotation == 0) {
@@ -127,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
                                 matrix = new Matrix();
                                 matrix.postRotate(180);
                             }
+                            else if(BitmapCache.rotation == 2)
+                            {
+                                matrix = new Matrix();
+                                matrix.postRotate(-90);
+                            }
                         } else if (BitmapCache.oldRotation == 3) {
                             if (BitmapCache.rotation == 0) {
                                 matrix = new Matrix();
@@ -135,7 +144,32 @@ public class MainActivity extends AppCompatActivity {
                                 matrix = new Matrix();
                                 matrix.postRotate(180);
                             }
+                            else if(BitmapCache.rotation == 2)
+                            {
+                                matrix = new Matrix();
+                                matrix.postRotate(90);
+                            }
                         }
+                        else if(BitmapCache.oldRotation == 2)
+                        {
+                            if(BitmapCache.rotation == 1)
+                            {
+                                matrix = new Matrix();
+                                matrix.postRotate(90);
+                            }
+                            else if(BitmapCache.rotation == 0)
+                            {
+                                matrix = new Matrix();
+                                matrix.postRotate(180);
+                            }
+                            if(BitmapCache.rotation == 3)
+                            {
+                                matrix = new Matrix();
+                                matrix.postRotate(-90);
+                            }
+
+                        }
+
                         BitmapCache.mMemoryCache.put("oldBitmap", Bitmap.createBitmap(oldActivity, 0, 0, oldActivity.getWidth(), oldActivity.getHeight(), matrix, true));
                     }
                 }
@@ -179,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED);
         registerReceiver(localeReceiver, filter);
 
-        if(locale == 0)
+        if(locale == 0 && (BitmapCache.rotation == 0 || BitmapCache.rotation == 2))
         {
             ((Button)findViewById(R.id.strokewidth_left)).setText("+");
             ((Button)findViewById(R.id.strokewidth_right)).setText("-");

@@ -7,54 +7,52 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical">
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/main_canvas_view"
-        android:orientation="horizontal">
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
+        android:layout_height="match_parent">
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/toolFlyoutMenu"
+            android:id="@+id/main_canvas_view"
+            android:orientation="horizontal"
+        />
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="0.7"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_toStartOf="@id/toolFlyoutMenu"
+            android:layout_alignParentBottom="true"
+            >
             <EditText
                 android:id="@+id/strokewidth_text"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:digits="0123456789"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:maxLength="3"
-                android:layout_weight="0.1"
                 android:text="10"
-                android:textAlignment="viewEnd"/>
-           <Button
-               android:layout_width="0dp"
-               android:layout_height="wrap_content"
-               android:text="+"
-               android:id="@+id/strokewidth_left"
-               android:layout_weight="0.1"
-               android:onClick="changeStrokeWidth"/>
+                android:layout_gravity="center"/>
             <Button
-                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="+"
+                android:id="@+id/strokewidth_left"
+                android:onClick="changeStrokeWidth"/>
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
                 android:id="@+id/strokewidth_right"
-                android:layout_weight="0.1"
                 android:onClick="changeStrokeWidth"/>
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Size"
                 android:padding="15dip"
-                android:layout_weight="0.2"
                 android:textAlignment="viewStart"
                 />
         </LinearLayout>
@@ -62,7 +60,7 @@
             android:id="@+id/toolFlyoutMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="end"
             android:padding="@dimen/flyout_menu_button_padding"
             app:fmButtonSize="@dimen/flyout_menu_button_size"
             app:fmDialogMode="true"
@@ -71,6 +69,8 @@
             app:fmItemWidth="@dimen/smiley_menu_item_size"
             app:fmMenuAnchor="bottom"
             app:fmSelectedItemBackgroundColor="@color/smileyMenuSelectionColor"
-            app:fmShieldVisible="true" />
-    </LinearLayout>
+            app:fmShieldVisible="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 </LinearLayout>
