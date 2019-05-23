@@ -1,6 +1,7 @@
 package at.tugraz.ist.swe;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
+        tools.add(R.drawable.ic_si_glyph_erase);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -110,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.drawable.ic_outline_brush_24px:
                 drawingArea.setTool(new PathTool(foreground.getColor(), 10));
+                break;
+            case R.drawable.ic_si_glyph_erase:
+                drawingArea.setTool(new PathTool(Color.WHITE, 10));
                 break;
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
