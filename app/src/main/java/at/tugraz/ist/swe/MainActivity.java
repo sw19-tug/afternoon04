@@ -1,12 +1,20 @@
 package at.tugraz.ist.swe;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     public ColorPicker foreground;
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
+    public static final int FILE_SELECT_CODE = 123;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         tools.add(R.drawable.ic_outline_color_lens_24px);
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
+        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -45,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
         drawingArea = new DrawArea(this);
 
         layout.addView(drawingArea);
+
     }
+
 
     private void setupToolbar() {
         toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
@@ -111,9 +125,48 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_outline_brush_24px:
                 drawingArea.setTool(new PathTool(foreground.getColor(), 10));
                 break;
+            case R.drawable.ic_outline_add_photo_alternate_24px:
+                showFileChooser();
+
+                break;
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
         }
     }
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a image"), FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "Please install a file manager.",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+
+                    Uri uri = data.getData();
+                    try {
+                        Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        drawingArea.setTool(new ImageImportTool(selected_image));
+
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                break;
+        }
+    }
+
 }
