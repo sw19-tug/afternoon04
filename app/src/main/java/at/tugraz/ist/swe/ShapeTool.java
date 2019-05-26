@@ -2,7 +2,6 @@ package at.tugraz.ist.swe;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.MotionEvent;
@@ -80,7 +79,6 @@ public class ShapeTool extends PaintingTool {
             float x = event.getX();
             float y = event.getY();
             this.first = new PointF(x, y);
-            //this.second = new PointF(x, y);
             this.in_use = true;
 
         }
