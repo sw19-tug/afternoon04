@@ -11,28 +11,27 @@ public class TextTool extends PaintingTool {
     private Point position;
 
     public TextTool(int color, int size, String text) {
-
+        this.size = size;
         this.text = text;
         Paint newColor = new Paint();
         newColor.setColor(color);
         newColor.setTextSize(size);
+        newColor.setTextAlign(Paint.Align.CENTER);
+        this.color = newColor;
     }
 
     @Override
     public void drawTool(Canvas canvas) {
-        if(position != null)
+        if(this.position != null)
         {
             this.color.setTextSize(size);
-            canvas.drawText(text, position.x - (color.measureText(text) / 2), position.y, color);
+            canvas.drawText(text, this.position.x, this.position.y, color);
         }
     }
 
     @Override
     public void handleEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE)
-        {
-            position = new Point((int)event.getX(), (int)event.getY());
-        }
+            this.position = new Point((int)event.getX(), (int)event.getY());
     }
 
     @Override

@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle state)
     {
         super.onSaveInstanceState(state);
-        state.putInt("stroke_width", drawingArea.getPaintingTool().size);
+        state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
     }
 
     @Override
@@ -300,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_baseline_text_fields_24px:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new TextTool(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), "Hello World!"));
+                break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));

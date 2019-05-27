@@ -53,8 +53,9 @@ public class DrawArea extends View {
             if (event.getAction() != MotionEvent.ACTION_MOVE) {
                 oldBitmap = createBitmap();
                 paintingTool.cleanUp();
-                BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
             }
+            if(event.getAction() == MotionEvent.ACTION_UP)
+                BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
         }
         return true;
     }
