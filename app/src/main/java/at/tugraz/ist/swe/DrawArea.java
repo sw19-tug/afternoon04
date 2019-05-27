@@ -17,15 +17,15 @@ public class DrawArea extends View {
     private PaintingTool paintingTool;
     private Bitmap oldBitmap;
     private boolean handleEvents;
+    private boolean drawCurrentTool;
 
     public DrawArea(Context context)
     {
         super(context);
-        this.paintingTool = new Circle(Color.BLACK, 244);
+        this.paintingTool = new Circle(Color.BLACK, 10);
         this.setId(R.id.draw_point_view);
         this.handleEvents = true;
-        //this.setFocusable(true);
-        this.setFocusableInTouchMode(true);
+        this.drawCurrentTool = true;
     }
 
     protected void onDraw(Canvas canvas) {
@@ -34,10 +34,8 @@ public class DrawArea extends View {
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
-
-        paintingTool.drawTool(canvas);
-
-
+        if(drawCurrentTool)
+            paintingTool.drawTool(canvas);
     }
 
     public void setHandleToucheEvents(boolean bool)
@@ -48,6 +46,7 @@ public class DrawArea extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if(handleEvents)
         {
+            this.drawCurrentTool = true;
             paintingTool.handleEvent(event);
             invalidate();
             BitmapCache.mMemoryCache.put("oldBitmap", getBitmap());
@@ -66,5 +65,11 @@ public class DrawArea extends View {
 
     public void setTool(PaintingTool tool) {
         this.paintingTool = tool;
+    }
+
+    public void setSize(int size)
+    {
+        this.paintingTool.setSize(size);
+        this.drawCurrentTool = false;
     }
 }

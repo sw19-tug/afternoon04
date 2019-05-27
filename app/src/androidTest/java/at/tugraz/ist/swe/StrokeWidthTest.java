@@ -34,49 +34,15 @@ public class StrokeWidthTest {
         @Rule
         public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-
         @Test
-        public void testDialogVisible()
-        {
+        public void testStrokeWidthElementsVisible(){
             openDialog();
-            onView(withText(R.string.stroke_width_title)).check(matches(isDisplayed()));
+            onView(withId(R.id.strokeWidthLayout)).check(matches(isDisplayed()));
+            onView(withId(R.id.strokewidth_left)).check(matches(isDisplayed()));
+            onView(withId(R.id.strokewidth_right)).check(matches(isDisplayed()));
+            onView(withId(R.id.strokewidth_text)).check(matches(isDisplayed()));
         }
-
-
-        @Test
-        public void testDialogSliderVisible()
-        {
-            //SeekBar = Slider
-            openDialog();
-            onView(withId(R.id.color_picker_seekbar_red)).inRoot(isDialog()).check(matches(isDisplayed()));
-            onView(withId(R.id.color_picker_seekbar_green)).inRoot(isDialog()).check(matches(isDisplayed()));
-            onView(withId(R.id.color_picker_seekbar_blue)).inRoot(isDialog()).check(matches(isDisplayed()));
-        }
-
-
-        @Test
-        public void testTextViewVisible(){
-            openDialog();
-            onView(withId(R.id.textView_red_color)).inRoot(isDialog()).check(matches(isDisplayed()));
-            onView(withId(R.id.textView_green_color)).inRoot(isDialog()).check(matches(isDisplayed()));
-            onView(withId(R.id.textView_blue_color)).inRoot(isDialog()).check(matches(isDisplayed()));
-        }
-
-
-        @Test
-        public void testTextBoxShowsSeekBarProgress() {
-            openDialog();
-            onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
-            onView(withId(R.id.textView_red_color)).check(matches(withText("0")));
-
-            onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
-            onView(withId(R.id.textView_green_color)).check(matches(withText("100")));
-
-            onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(256));
-            onView(withId(R.id.textView_blue_color)).check(matches(withText("255")));
-        }
-
-
+        
         @Test
         public void testSeekbarShowsTextBoxValue() {
             openDialog();

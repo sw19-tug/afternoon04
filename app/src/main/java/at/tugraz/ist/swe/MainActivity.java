@@ -1,20 +1,13 @@
 package at.tugraz.ist.swe;
 
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
@@ -30,9 +23,6 @@ import android.widget.TextView;
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import static android.view.View.X;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,25 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private Matrix matrix;
     private Bitmap oldActivity;
     private InputMethodManager manager;
-
-    private BroadcastReceiver localeReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            int locale = TextUtils.getLayoutDirectionFromLocale(getResources().getConfiguration().locale);
-
-            if(locale == 0 && (BitmapCache.rotation == 0 || BitmapCache.rotation == 2))
-            {
-                ((Button)findViewById(R.id.strokewidth_left)).setText("+");
-                ((Button)findViewById(R.id.strokewidth_right)).setText("-");
-            }
-            else if(locale == 1 && (BitmapCache.rotation == 0 || BitmapCache.rotation == 2))
-            {
-                ((Button)findViewById(R.id.strokewidth_left)).setText("-");
-                ((Button)findViewById(R.id.strokewidth_right)).setText("+");
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
                         BitmapCache.mMemoryCache.put("oldBitmap", Bitmap.createBitmap(oldActivity, 0, 0, oldActivity.getWidth(), oldActivity.getHeight(), matrix, true));
                     }
                 }
-                if(BitmapCache.oldRotation == 3 && BitmapCache.rotation == 1 || BitmapCache.oldRotation == 1 && BitmapCache.rotation == 3)
+                if((BitmapCache.oldRotation == 3 && BitmapCache.rotation == 1) || (BitmapCache.oldRotation == 1 && BitmapCache.rotation == 3) ||
+                   (BitmapCache.oldRotation == 0 && BitmapCache.rotation == 2) || (BitmapCache.oldRotation == 2 && BitmapCache.rotation == 0))
                     drawingArea.invalidate();
             }
         };
@@ -191,27 +163,25 @@ public class MainActivity extends AppCompatActivity {
                 if(strokeWidth.getText().length() == 0)
                 {
                     strokeWidth.setText("10");
-                    drawingArea.getPaintingTool().setSize(10);
+                    drawingArea.setSize(10);
                 }
                 else if(Integer.parseInt(strokeWidth.getText().toString()) > 255)
                 {
                     strokeWidth.setText("255");
-                    drawingArea.getPaintingTool().setSize(255);
+                    drawingArea.setSize(255);
                 }
                 else
                 {
-                    drawingArea.getPaintingTool().setSize(Integer.parseInt(strokeWidth.getText().toString()));
+                    drawingArea.setSize(Integer.parseInt(strokeWidth.getText().toString()));
                 }
-                drawingArea.requestFocus();
+                LinearLayout layout = findViewById(R.id.strokeWidthLayout);
+                layout.requestFocus();
                 manager.hideSoftInputFromWindow(strokeWidth.getWindowToken(), 0);
                 return false;
             }
         });
 
         int locale = TextUtils.getLayoutDirectionFromLocale(getResources().getConfiguration().locale);
-
-        IntentFilter filter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED);
-        registerReceiver(localeReceiver, filter);
 
         if(locale == 0 && (BitmapCache.rotation == 0 || BitmapCache.rotation == 2))
         {
@@ -236,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state)
     {
         super.onRestoreInstanceState(state);
-        drawingArea.getPaintingTool().setSize(state.getInt("stroke_width", 10));
+        drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
     }
 
@@ -328,9 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
         strokeWidthNr = checkStrokeWidthNumber(strokeWidthNr);
         strokeWidth.setText(String.format("%02d",strokeWidthNr));
-        PaintingTool tool = drawingArea.getPaintingTool();
-        tool.setSize(strokeWidthNr);
-        drawingArea.setTool(tool);
+        drawingArea.setSize(strokeWidthNr);
     }
 
     public int checkStrokeWidthNumber(int new_number)
