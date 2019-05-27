@@ -26,8 +26,10 @@ public class PathTool extends PaintingTool {
     @Override
     public void drawTool(Canvas canvas) {
         if(path != null)
+        {
+            this.color.setStrokeWidth(this.size);
             canvas.drawPath(this.path, this.color);
-
+        }
     }
 
 

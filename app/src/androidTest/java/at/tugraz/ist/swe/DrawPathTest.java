@@ -182,7 +182,6 @@ public class DrawPathTest {
                 view.getLocationOnScreen(location);
 
                 float[] coordinates_up = new float[]{x_up + location[0], y_up + location[1]};
-                float[] precision = new float[]{1f, 1f};
 
                 MotionEvents.sendUp(uiController, down_, coordinates_up);
                 uiController.loopMainThreadForAtLeast(500); // wait
@@ -209,7 +208,6 @@ public class DrawPathTest {
                 view.getLocationOnScreen(location);
 
                 float[] coordinates_move = new float[]{x_move + location[0], y_move + location[1]};
-                float[] precision = new float[]{1f, 1f};
 
                 MotionEvents.sendMovement(uiController, down_, coordinates_move);
                 uiController.loopMainThreadForAtLeast(500); // wait
