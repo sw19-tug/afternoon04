@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
         tools.add(R.drawable.ic_oval);
+        tools.add(R.drawable.ic_baseline_text_fields_24px);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -296,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 drawingArea.setTool(new ShapeTool(foreground.getColor(), "oval"));
                 break;
+            case R.drawable.ic_baseline_text_fields_24px:
+                strokeWidthLayout.setVisibility(View.VISIBLE);
+                drawingArea.setTool(new TextTool(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), "Hello World!"));
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
