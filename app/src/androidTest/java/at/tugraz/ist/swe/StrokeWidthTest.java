@@ -51,20 +51,16 @@ public class StrokeWidthTest {
         @Test
         public void testCorrectPointSize() {
             selectTool(R.drawable.ic_si_glyph_circle);
+            onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150)); // click to close menu
 
             onView(withId(R.id.strokewidth_text)).perform(setText("30"), pressImeActionButton());
-
-            onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150)); // click to close menu
 
             onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150)); // click to draw
             onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50)); // click to draw
 
             onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50,50, 30)));
             onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150,150, 30)));
-
-
         }
-
 
         // helper function to set value on edit text
         public static ViewAction setText(final String value){
@@ -164,65 +160,38 @@ public class StrokeWidthTest {
                 DrawArea temp = (DrawArea) item;
                 Bitmap tool_bitmap = temp.getBitmap();
 
-                int alpha_color = Color.alpha(tool_bitmap.getPixel((int )x, (int) y));
-                int red_color = Color.red(tool_bitmap.getPixel((int) x,(int) y));
-                int green_color = Color.green(tool_bitmap.getPixel((int) x,(int) y));
-                int blue_color = Color.blue(tool_bitmap.getPixel((int) x,(int) y));
+                int alpha_color_top = Color.alpha(tool_bitmap.getPixel((int )x, (int) y - size));
+                int red_color_top = Color.red(tool_bitmap.getPixel((int )x , (int) y - size));
+                int green_color_top = Color.green(tool_bitmap.getPixel((int )x, (int) y - size));
+                int blue_color_top = Color.blue(tool_bitmap.getPixel((int )x, (int) y - size));
 
-                if(size % 2 == 1)
-                {
-                    int offset = (size - 1) / 2;
+                int top = Color.argb(alpha_color_top, red_color_top, green_color_top, blue_color_top);
 
-                    int alpha_color_top = Color.alpha(tool_bitmap.getPixel((int )x, (int) y - offset));
-                    int red_color_top = Color.red(tool_bitmap.getPixel((int )x , (int) y - offset));
-                    int green_color_top = Color.green(tool_bitmap.getPixel((int )x, (int) y - offset));
-                    int blue_color_top = Color.blue(tool_bitmap.getPixel((int )x, (int) y - offset));
+                int alpha_color_bottom = Color.alpha(tool_bitmap.getPixel((int )x, (int) y + size - 1));
+                int red_color_bottom = Color.red(tool_bitmap.getPixel((int )x, (int) y + size - 1));
+                int green_color_bottom = Color.green(tool_bitmap.getPixel((int )x, (int) y + size - 1));
+                int blue_color_bottom = Color.blue(tool_bitmap.getPixel((int )x, (int) y + size - 1));
 
-                    int alpha_color_bottom = Color.alpha(tool_bitmap.getPixel((int )x, (int) y + offset));
-                    int red_color_bottom = Color.red(tool_bitmap.getPixel((int )x, (int) y + offset));
-                    int green_color_bottom = Color.green(tool_bitmap.getPixel((int )x, (int) y + offset));
-                    int blue_color_bottom = Color.blue(tool_bitmap.getPixel((int )x, (int) y + offset));
+                int bottom = Color.argb(alpha_color_bottom, red_color_bottom, green_color_bottom, blue_color_bottom);
 
-                    int alpha_color_left = Color.alpha(tool_bitmap.getPixel((int )x - offset, (int) y));
-                    int red_color_left = Color.red(tool_bitmap.getPixel((int )x - offset, (int) y));
-                    int green_color_left = Color.green(tool_bitmap.getPixel((int )x - offset, (int) y));
-                    int blue_color_left = Color.blue(tool_bitmap.getPixel((int )x - offset, (int) y));
+                int alpha_color_left = Color.alpha(tool_bitmap.getPixel((int )x - size, (int) y));
+                int red_color_left = Color.red(tool_bitmap.getPixel((int )x - size, (int) y));
+                int green_color_left = Color.green(tool_bitmap.getPixel((int )x - size, (int) y));
+                int blue_color_left = Color.blue(tool_bitmap.getPixel((int )x - size, (int) y));
 
-                    int alpha_color_right = Color.alpha(tool_bitmap.getPixel((int )x + offset, (int) y));
-                    int red_color_right = Color.red(tool_bitmap.getPixel((int )x + offset, (int) y));
-                    int green_color_right = Color.green(tool_bitmap.getPixel((int )x + offset, (int) y));
-                    int blue_color_right = Color.blue(tool_bitmap.getPixel((int )x + offset, (int) y));
-                }
-                else
-                {
-                    int offset = size / 2;
+                int left = Color.argb(alpha_color_left, red_color_left, green_color_left, blue_color_left);
 
-                    int alpha_color_top = Color.alpha(tool_bitmap.getPixel((int )x, (int) y - offset));
-                    int red_color_top = Color.red(tool_bitmap.getPixel((int )x , (int) y - offset));
-                    int green_color_top = Color.green(tool_bitmap.getPixel((int )x, (int) y - offset));
-                    int blue_color_top = Color.blue(tool_bitmap.getPixel((int )x, (int) y - offset));
+                int alpha_color_right = Color.alpha(tool_bitmap.getPixel((int )x + size - 1, (int) y));
+                int red_color_right = Color.red(tool_bitmap.getPixel((int )x + size - 1, (int) y));
+                int green_color_right = Color.green(tool_bitmap.getPixel((int )x + size - 1, (int) y));
+                int blue_color_right = Color.blue(tool_bitmap.getPixel((int )x + size - 1, (int) y));
 
-                    int alpha_color_bottom = Color.alpha(tool_bitmap.getPixel((int )x, (int) y + offset));
-                    int red_color_bottom = Color.red(tool_bitmap.getPixel((int )x, (int) y + offset));
-                    int green_color_bottom = Color.green(tool_bitmap.getPixel((int )x, (int) y + offset));
-                    int blue_color_bottom = Color.blue(tool_bitmap.getPixel((int )x, (int) y + offset));
+                int right = Color.argb(alpha_color_right, red_color_right, green_color_right, blue_color_right);
 
-                    int alpha_color_left = Color.alpha(tool_bitmap.getPixel((int )x - offset, (int) y));
-                    int red_color_left = Color.red(tool_bitmap.getPixel((int )x - offset, (int) y));
-                    int green_color_left = Color.green(tool_bitmap.getPixel((int )x - offset, (int) y));
-                    int blue_color_left = Color.blue(tool_bitmap.getPixel((int )x - offset, (int) y));
-
-                    int alpha_color_right = Color.alpha(tool_bitmap.getPixel((int )x + offset, (int) y));
-                    int red_color_right = Color.red(tool_bitmap.getPixel((int )x + offset, (int) y));
-                    int green_color_right = Color.green(tool_bitmap.getPixel((int )x + offset, (int) y));
-                    int blue_color_right = Color.blue(tool_bitmap.getPixel((int )x + offset, (int) y));
-                }
-
-                if(Color.BLACK == Color.argb(alpha_color, red_color, green_color, blue_color))
+                if(Color.BLACK == top && Color.BLACK == bottom && Color.BLACK == left && Color.BLACK == right)
                     return true;
 
                 return false;
-
             }
 
             @Override
