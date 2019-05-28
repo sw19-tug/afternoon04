@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public ColorPicker foreground;
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
-    public static final int FILE_SELECT_CODE = 123;
+    public static final int IMAGE_CHOOSER = 123;
 
 
     @Override
@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.drawable.ic_outline_add_photo_alternate_24px:
                 showFileChooser();
-
                 break;
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
@@ -136,12 +135,13 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a image"), FILE_SELECT_CODE);
+            startActivityForResult(Intent.createChooser(intent, "Select an image"), IMAGE_CHOOSER);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(this, "Please install a file manager.",Toast.LENGTH_SHORT).show();
         }
@@ -150,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case FILE_SELECT_CODE:
+
+            if(requestCode == IMAGE_CHOOSER) {
                 if (resultCode == RESULT_OK) {
 
                     Uri uri = data.getData();
@@ -159,14 +159,14 @@ public class MainActivity extends AppCompatActivity {
                         Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
                         drawingArea.setTool(new ImageImportTool(selected_image));
 
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 }
-                break;
+            }
+
         }
-    }
+
 
 }
