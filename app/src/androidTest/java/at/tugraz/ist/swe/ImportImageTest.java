@@ -9,6 +9,7 @@ import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.MotionEvents;
 import android.support.test.rule.ActivityTestRule;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,9 +32,6 @@ import java.io.InputStream;
 
 public class ImportImageTest {
 
-    Context context;
-    InputStream ims = null;
-
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -44,32 +42,18 @@ public class ImportImageTest {
     }
 
     @Test
-    public void testOpenImage()
-    {
-        openPicture();
-    }
-
-    public void ImportImageTest(Context context)
-    {
-        this.context = context;
-
-    }
-    static{
-        System.loadLibrary("tensorflow_inference");
-    }
     public void openPicture() {
+
         try {
-            ims = context.getAssets().open("demo_img.png");
-            Bitmap bitmap = null;
-
-            bitmap = BitmapFactory.decodeStream(ims);
-        }
+            InputStream is = activityTestRule.getActivity().getResources().getAssets().open("demo_img.png");
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            //Log.d("TEST", "Width:" + bitmap.getWidth());
+            }
         catch (IOException e){
-
+            e.printStackTrace();
         }
 
     }
-
 
     public static ViewAction performTouch(final float x, final float y) {
         return new ViewAction() {

@@ -2,11 +2,9 @@ package at.tugraz.ist.swe;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.PointF;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
-import android.widget.Toast;
+
 
 
 public class ImageImportTool extends PaintingTool {
@@ -25,19 +23,19 @@ public class ImageImportTool extends PaintingTool {
     public void drawTool(Canvas canvas) {
         float pos_x = 0.0f;
         float pos_y = 0.0f;
+        int c_width = canvas.getWidth();
+        int c_height = canvas.getHeight();
 
         if (image != null && position != null) {
-            int canvas_width = canvas.getClipBounds().width();
-            int canvas_height = canvas.getClipBounds().height();
+
+            if (image.getHeight() > c_height || image.getWidth() > c_width) {
+                image = scaleDownBitmap(image, c_height, c_width);
+                overwrite_full_canvas = true;
+            }
 
             if (!overwrite_full_canvas) {
                 pos_x = position.x - image.getWidth() / 2.f;
                 pos_y = position.y - image.getHeight() / 2.f;
-            }
-            if (image.getHeight() > canvas_height || image.getWidth() > canvas_width) {
-                image = scaleDownBitmap(image, canvas_height, canvas_width);
-                overwrite_full_canvas = true;
-
             }
             canvas.drawBitmap(image, pos_x, pos_y, null);
         }
