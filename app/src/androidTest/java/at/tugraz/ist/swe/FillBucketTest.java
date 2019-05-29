@@ -69,13 +69,8 @@ public class FillBucketTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
 
         Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
-        for(int x=1;x<bitmap.getHeight()-1;x++)
-        {
-            for(int y=1;y<bitmap.getWidth()-1;y++)
-            {
-                onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(y,x)));
-            }
-        }
+
+        onView(withId(R.id.draw_point_view)).check(matches(checkBitmap(bitmap, 255, 0, 0, 0)));
 
 
     }
@@ -99,6 +94,43 @@ public class FillBucketTest {
         }
 
 
+    }
+
+    public static Matcher<View> checkBitmap(final Bitmap test, final int alpha, final int red, final int green, final int blue)
+    {
+        final int test_color = Color.argb(alpha, red, green, blue);
+
+        return new Matcher<View>() {
+            @Override
+            public boolean matches(Object item) {
+                for(int x = 1; x < test.getWidth(); x++)
+                {
+                    for(int y = 1; y < test.getHeight(); y++)
+                    {
+                        if(test.getPixel(x, y) != test_color)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public void describeMismatch(Object item, Description mismatchDescription) {
+
+            }
+
+            @Override
+            public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
+
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        };
     }
 
     public static Matcher<View> checkCoordinates(final float x_check, final float y_check) {
