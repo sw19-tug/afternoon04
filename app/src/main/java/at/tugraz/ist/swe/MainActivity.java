@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
+        tools.add(R.drawable.ic_si_glyph_bucket);
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
         tools.add(R.drawable.ic_oval);
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle state)
     {
         super.onSaveInstanceState(state);
-        state.putInt("stroke_width", drawingArea.getPaintingTool().size);
+        state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
     }
 
     @Override
@@ -295,6 +296,10 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_oval:
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 drawingArea.setTool(new ShapeTool(foreground.getColor(), "oval"));
+                break;
+            case R.drawable.ic_si_glyph_bucket:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                drawingArea.setTool(new FillBucket(foreground.getColor()));
                 break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);

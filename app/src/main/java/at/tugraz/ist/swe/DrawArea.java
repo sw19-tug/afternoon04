@@ -18,6 +18,7 @@ public class DrawArea extends View {
     private Bitmap oldBitmap;
     private boolean handleEvents;
     private boolean drawCurrentTool;
+    private boolean prepareBitmap;
 
     public DrawArea(Context context)
     {
@@ -27,6 +28,7 @@ public class DrawArea extends View {
         this.setBackgroundColor(Color.WHITE);
         this.handleEvents = true;
         this.drawCurrentTool = true;
+        this.prepareBitmap = true;
     }
 
     protected void onDraw(Canvas canvas) {
@@ -34,6 +36,12 @@ public class DrawArea extends View {
         if (BitmapCache.mMemoryCache.get("oldBitmap") != null)
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
+        }
+        else if(prepareBitmap)
+        {
+            prepareBitmap = false;
+            oldBitmap = this.createBitmap();
+            BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
         }
         if(drawCurrentTool)
             paintingTool.drawTool(canvas);
