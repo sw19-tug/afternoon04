@@ -207,6 +207,17 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onSaveInstanceState(state);
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
+        state.putBoolean("color", false);
+        if(foreground.isShowing())
+        {
+            state.putBoolean("color", true);
+            state.putInt("tool", drawingArea.getPaintingTool().getId());
+        }
+        else if(toolFlyoutMenu.getSelectedMenuItem() != null)
+            state.putInt("tool", toolFlyoutMenu.getSelectedMenuItem().getId());
+        else
+            state.putInt("tool", R.drawable.ic_si_glyph_circle);
+
     }
 
     @Override
@@ -215,6 +226,21 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(state);
         drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
+        int id = state.getInt("tool");
+        int amount_items = toolFlyoutMenu.getAdapter().getCount();
+        for(int counter = 0; 0 < amount_items; counter++)
+        {
+            FlyoutMenuView.MenuItem result = toolFlyoutMenu.getAdapter().getItem(counter);
+            if(((FlyoutToolbar.MenuItemImage)result).getID() == id)
+            {
+                toolFlyoutMenu.setSelectedMenuItem(result);
+                break;
+            }
+        }
+        if(state.getBoolean("color"))
+        {
+            foreground.show();
+        }
     }
 
     private void setupToolbar() {

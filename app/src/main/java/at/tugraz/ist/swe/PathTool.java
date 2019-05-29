@@ -72,4 +72,9 @@ public class PathTool extends PaintingTool {
         if(!in_use)
             path = null;
     }
+
+    @Override
+    public int getId() {
+        return R.drawable.ic_outline_brush_24px;
+    }
 }

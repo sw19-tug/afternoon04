@@ -20,4 +20,5 @@ public abstract class PaintingTool
     {
         this.size = size;
     }
+    public abstract int getId();
 }

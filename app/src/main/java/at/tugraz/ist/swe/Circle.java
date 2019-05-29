@@ -37,4 +37,9 @@ public class Circle extends PaintingTool {
 
     @Override
     public void cleanUp() {}
+
+    @Override
+    public int getId() {
+        return R.drawable.ic_si_glyph_circle;
+    }
 }
