@@ -124,27 +124,9 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_si_save:
                 Toast.makeText(this,"Image saved", Toast.LENGTH_SHORT).show();
                 MediaStore.Images.Media.insertImage(getContentResolver(), drawingArea.createBitmap(), "PrintZ" , "");
-                //this.saveImage(drawingArea.createBitmap(), "test");
             default:
                 drawingArea.setTool(new Circle(foreground.getColor(), 10));
                 break;
-        }
-    }
-
-
-    private void saveImage(Bitmap finalBitmap, String image_name) {
-        File root = Environment.getExternalStorageDirectory();
-        File file = new File(root.getAbsolutePath()+"/DCIM/Camera/img"+new Date().toString()+".png");
-        try
-        {
-            file.createNewFile();
-            FileOutputStream ostream = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream);
-            ostream.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
         }
     }
 }
