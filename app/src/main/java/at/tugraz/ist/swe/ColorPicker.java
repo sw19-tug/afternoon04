@@ -595,4 +595,11 @@ public class ColorPicker {
         seekBar_Green.setProgress(color_g);
         seekBar_Blue.setProgress(color_b);
     }
+
+    public boolean isShowing()
+    {
+        if(dlg_color != null)
+            return dlg_color.isShowing();
+        return false;
+    }
 }
