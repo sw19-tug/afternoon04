@@ -56,4 +56,9 @@ public class Line extends PaintingTool {
             this.end_position = null;
         }
     }
+
+    @Override
+    public int getId() {
+        return R.drawable.ic_si_glyph_line_two_angle_point;
+    }
 }

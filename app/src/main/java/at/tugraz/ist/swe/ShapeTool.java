@@ -108,4 +108,13 @@ public class ShapeTool extends PaintingTool {
         }
 
     }
+
+    @Override
+    public int getId() {
+        if(shape_type.equals(TYPE_RECT))
+            return R.drawable.ic_rect;
+        else if(shape_type.equals(TYPE_OVAL))
+            return R.drawable.ic_oval;
+        return 0;
+    }
 }

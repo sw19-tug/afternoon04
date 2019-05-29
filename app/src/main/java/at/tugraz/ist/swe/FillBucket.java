@@ -49,5 +49,10 @@ public class FillBucket extends PaintingTool {
 
     }
 
+    @Override
+    public int getId() {
+        return R.drawable.ic_si_glyph_bucket;
+    }
+
 
 }
