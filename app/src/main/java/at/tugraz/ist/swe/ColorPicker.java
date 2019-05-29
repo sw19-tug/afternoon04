@@ -206,10 +206,7 @@ public class ColorPicker {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(textBox_Hex.getText().length() == 8 && hasFocus) {
-                    seekBar_Red.setEnabled(true);
-                    seekBar_Green.setEnabled(true);
-                    seekBar_Blue.setEnabled(true);
-                    seekBar_Alpha.setEnabled(true);
+                    enableSeekBar();
                 }
             }
         });
@@ -246,14 +243,7 @@ public class ColorPicker {
                 int len = s.length();
 
                 if(textBox_Hex.getText().toString().length() < 8) {
-                    seekBar_Red.setEnabled(false);
-                    seekBar_Green.setEnabled(false);
-                    seekBar_Blue.setEnabled(false);
-                    seekBar_Alpha.setEnabled(false);
-                    textBox_Blue.setEnabled(false);
-                    textBox_Green.setEnabled(false);
-                    textBox_Red.setEnabled(false);
-                    textBox_Alpha.setEnabled(false);
+                    disableSeekBar();
                     textBox_Hex.setTextColor(Color.RED);
                     btnApply.setEnabled(false);
                     btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptDisabled));
@@ -272,16 +262,6 @@ public class ColorPicker {
                 seekBar_Green.setProgress(green);
                 seekBar_Blue.setProgress(blue);
                 seekBar_Alpha.setProgress(alpha);
-
-                seekBar_Red.setEnabled(true);
-                seekBar_Green.setEnabled(true);
-                seekBar_Blue.setEnabled(true);
-                seekBar_Alpha.setEnabled(true);
-
-                textBox_Blue.setEnabled(true);
-                textBox_Green.setEnabled(true);
-                textBox_Red.setEnabled(true);
-                textBox_Alpha.setEnabled(true);
 
                 textBox_Hex.setTextColor(Color.BLACK);
                 if(!s.toString().equals(s.toString().toUpperCase()))
@@ -324,10 +304,7 @@ public class ColorPicker {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
-                    seekBar_Red.setEnabled(false);
-                    seekBar_Green.setEnabled(false);
-                    seekBar_Blue.setEnabled(false);
-                    seekBar_Alpha.setEnabled(false);
+                    disableSeekBar();
                 }
 
                 if(textBox_Red.getText().length() == 0)
@@ -392,10 +369,7 @@ public class ColorPicker {
         textBox_Red.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                seekBar_Red.setEnabled(true);
-                seekBar_Green.setEnabled(true);
-                seekBar_Blue.setEnabled(true);
-                seekBar_Alpha.setEnabled(true);
+                enableSeekBar();
 
                 if(textBox_Red.getText().length() == 0)
                 {
@@ -416,10 +390,7 @@ public class ColorPicker {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
-                    seekBar_Red.setEnabled(false);
-                    seekBar_Green.setEnabled(false);
-                    seekBar_Blue.setEnabled(false);
-                    seekBar_Alpha.setEnabled(false);
+                   disableSeekBar();
                 }
 
                 if(textBox_Green.getText().length() == 0)
@@ -482,10 +453,7 @@ public class ColorPicker {
         textBox_Green.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                seekBar_Red.setEnabled(true);
-                seekBar_Green.setEnabled(true);
-                seekBar_Blue.setEnabled(true);
-                seekBar_Alpha.setEnabled(true);
+                enableSeekBar();
 
                 if(textBox_Green.getText().length() == 0)
                 {
@@ -506,10 +474,7 @@ public class ColorPicker {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
-                    seekBar_Red.setEnabled(false);
-                    seekBar_Green.setEnabled(false);
-                    seekBar_Blue.setEnabled(false);
-                    seekBar_Alpha.setEnabled(false);
+                    disableSeekBar();
                 }
 
                 if(textBox_Blue.getText().length() == 0)
@@ -572,10 +537,7 @@ public class ColorPicker {
         textBox_Blue.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                seekBar_Red.setEnabled(true);
-                seekBar_Green.setEnabled(true);
-                seekBar_Blue.setEnabled(true);
-                seekBar_Alpha.setEnabled(true);
+                enableSeekBar();
 
                 if(textBox_Blue.getText().length() == 0)
                 {
@@ -596,10 +558,7 @@ public class ColorPicker {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
-                    seekBar_Red.setEnabled(false);
-                    seekBar_Green.setEnabled(false);
-                    seekBar_Blue.setEnabled(false);
-                    seekBar_Alpha.setEnabled(false);
+                    disableSeekBar();
                 }
 
                 if(textBox_Alpha.getText().length() == 0)
@@ -662,10 +621,7 @@ public class ColorPicker {
         textBox_Alpha.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                seekBar_Red.setEnabled(true);
-                seekBar_Green.setEnabled(true);
-                seekBar_Blue.setEnabled(true);
-                seekBar_Alpha.setEnabled(true);
+               enableSeekBar();
 
                 if(textBox_Alpha.getText().length() == 0)
                 {
@@ -728,6 +684,30 @@ public class ColorPicker {
         seekBar_Green.setProgress(color_g);
         seekBar_Blue.setProgress(color_b);
         seekBar_Alpha.setProgress(color_a);
+    }
+
+    private void disableSeekBar(){
+        seekBar_Red.setEnabled(false);
+        seekBar_Green.setEnabled(false);
+        seekBar_Blue.setEnabled(false);
+        seekBar_Alpha.setEnabled(false);
+
+        textBox_Blue.setEnabled(false);
+        textBox_Green.setEnabled(false);
+        textBox_Red.setEnabled(false);
+        textBox_Alpha.setEnabled(false);
+    }
+
+    private  void enableSeekBar(){
+        seekBar_Red.setEnabled(true);
+        seekBar_Green.setEnabled(true);
+        seekBar_Blue.setEnabled(true);
+        seekBar_Alpha.setEnabled(true);
+
+        textBox_Blue.setEnabled(true);
+        textBox_Green.setEnabled(true);
+        textBox_Red.setEnabled(true);
+        textBox_Alpha.setEnabled(true);
     }
 
     private String parseColorString() {
