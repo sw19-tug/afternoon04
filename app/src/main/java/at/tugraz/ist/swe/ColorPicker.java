@@ -125,8 +125,8 @@ public class ColorPicker {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 textBox_Red.setText(String.valueOf(progress));
 
-                String green_blue_value = textBox_Hex.getText().toString().substring(2);
-                textBox_Hex.setText(String.format("%02X", Integer.parseInt(textBox_Red.getText().toString())) + green_blue_value);
+                textBox_Hex.setText(parseColorString());
+
                 background_color.setBackgroundColor(getPreviewColor());
             }
 
@@ -146,10 +146,7 @@ public class ColorPicker {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 textBox_Green.setText(String.valueOf(progress));
 
-                String red_value = textBox_Hex.getText().toString().substring(0,2);
-                String blue_value = textBox_Hex.getText().toString().substring(4,6);
-                String green_value = String.format("%02X", Integer.parseInt(textBox_Green.getText().toString()));
-                textBox_Hex.setText(red_value + green_value + blue_value);
+                textBox_Hex.setText(parseColorString());
                 background_color.setBackgroundColor(getPreviewColor());
             }
 
@@ -169,29 +166,7 @@ public class ColorPicker {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
                 textBox_Blue.setText(String.valueOf(progress));
 
-                String red_green_value = textBox_Hex.getText().toString().substring(0,4);
-                textBox_Hex.setText(red_green_value + String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString())));
-                background_color.setBackgroundColor(getPreviewColor());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
-        seekBar_Blue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                textBox_Blue.setText(String.valueOf(progress));
-
-                String red_green_value = textBox_Hex.getText().toString().substring(0,4);
-                textBox_Hex.setText(red_green_value + String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString())));
+                textBox_Hex.setText(parseColorString());
                 background_color.setBackgroundColor(getPreviewColor());
             }
 
@@ -292,6 +267,7 @@ public class ColorPicker {
                 Integer green = Integer.parseInt(text.substring(2,4), 16);
                 Integer blue = Integer.parseInt(text.substring(4,6), 16);
                 Integer alpha = Integer.parseInt(text.substring(6,8), 16);
+
                 seekBar_Red.setProgress(red);
                 seekBar_Green.setProgress(green);
                 seekBar_Blue.setProgress(blue);
@@ -533,6 +509,7 @@ public class ColorPicker {
                     seekBar_Red.setEnabled(false);
                     seekBar_Green.setEnabled(false);
                     seekBar_Blue.setEnabled(false);
+                    seekBar_Alpha.setEnabled(false);
                 }
 
                 if(textBox_Blue.getText().length() == 0)
@@ -751,5 +728,14 @@ public class ColorPicker {
         seekBar_Green.setProgress(color_g);
         seekBar_Blue.setProgress(color_b);
         seekBar_Alpha.setProgress(color_a);
+    }
+
+    private String parseColorString() {
+        String red_value = String.format("%02X", Integer.parseInt(textBox_Red.getText().toString()));
+        String green_value = String.format("%02X", Integer.parseInt(textBox_Green.getText().toString()));
+        String blue_value = String.format("%02X", Integer.parseInt(textBox_Blue.getText().toString()));
+        String alpha_value = String.format("%02X", Integer.parseInt(textBox_Alpha.getText().toString()));
+
+        return (red_value + green_value + blue_value + alpha_value);
     }
 }
