@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.drawable.ic_baseline_text_fields_24px:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
-                drawingArea.setTool(new TextTool(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), "Hello World!"));
+                drawingArea.setTool(new TextTool(this.getApplicationContext(), foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), "Hello World!"));
                 break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
