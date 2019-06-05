@@ -16,29 +16,53 @@ public class DrawArea extends View {
 
     private PaintingTool paintingTool;
     private Bitmap oldBitmap;
+    private boolean handleEvents;
+    private boolean drawCurrentTool;
+    private boolean prepareBitmap;
 
     public DrawArea(Context context)
     {
         super(context);
         this.paintingTool = new Circle(Color.BLACK, 10);
         this.setId(R.id.draw_point_view);
+        this.setBackgroundColor(Color.WHITE);
+        this.handleEvents = true;
+        this.drawCurrentTool = true;
+        this.prepareBitmap = true;
     }
 
     protected void onDraw(Canvas canvas) {
-        if (oldBitmap != null)
+        oldBitmap = BitmapCache.mMemoryCache.get("oldBitmap");
+        if (BitmapCache.mMemoryCache.get("oldBitmap") != null)
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
-        paintingTool.drawTool(canvas);
+        else if(prepareBitmap)
+        {
+            prepareBitmap = false;
+            oldBitmap = this.createBitmap();
+            BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
+        }
+        if(drawCurrentTool)
+            paintingTool.drawTool(canvas);
     }
+
+    public void setHandleToucheEvents(boolean bool)
+    {
+        handleEvents = bool;
+    }
+
     public boolean onTouchEvent(MotionEvent event) {
 
-        paintingTool.handleEvent(event);
-        invalidate();
-        if(event.getAction() != MotionEvent.ACTION_MOVE)
-        {
-            oldBitmap = createBitmap();
-            paintingTool.cleanUp();
+        if(handleEvents) {
+            this.drawCurrentTool = true;
+            paintingTool.handleEvent(event);
+            invalidate();
+            if (event.getAction() != MotionEvent.ACTION_MOVE) {
+                oldBitmap = createBitmap();
+                paintingTool.cleanUp();
+                BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
+            }
         }
         return true;
     }
@@ -58,5 +82,11 @@ public class DrawArea extends View {
 
     public void setTool(PaintingTool tool) {
         this.paintingTool = tool;
+    }
+
+    public void setSize(int size)
+    {
+        this.paintingTool.setSize(size);
+        this.drawCurrentTool = false;
     }
 }

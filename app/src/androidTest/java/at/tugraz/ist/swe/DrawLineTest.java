@@ -8,7 +8,6 @@ import android.support.test.espresso.action.MotionEvents;
 import android.support.test.espresso.action.Swipe;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 

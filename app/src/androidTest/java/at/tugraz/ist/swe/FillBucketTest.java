@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
+import java.util.Random;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -25,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class DrawPathTest {
+public class FillBucketTest {
 
     private static MotionEvent down_;
 
@@ -41,13 +43,13 @@ public class DrawPathTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_outline_brush_24px) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == R.drawable.ic_si_glyph_bucket) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
                 }
                 PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
-                assertEquals(PathTool.class.toString(), tool.getClass().toString());
+                assertEquals(FillBucket.class.toString(), tool.getClass().toString());
             }
         });
     }
@@ -59,56 +61,79 @@ public class DrawPathTest {
 
     @Test
     public void testDrawboardUserAction() {
-        openDialog(R.drawable.ic_outline_brush_24px);
+        openDialog(R.drawable.ic_si_glyph_bucket);
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
-        onView(withId(R.id.main_canvas_view)).perform(performMove(100, 100)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performMove(200, 50)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performMove(700, 700)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(700, 700));
 
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 50, Color.BLACK)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(75, 75, Color.BLACK)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 75, Color.BLACK)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(450, 375, Color.BLACK)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699, Color.BLACK)));
+        Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+
+        onView(withId(R.id.draw_point_view)).check(matches(checkBitmap(bitmap, 255, 0, 0, 0)));
+
+
     }
-
     @Test
-    public void testEraser() {
-        openDialog(R.drawable.ic_outline_brush_24px);
+    public void testDrawboardUserActionFillBucket() {
+        openDialog(R.drawable.ic_si_glyph_bucket);
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
-        onView(withId(R.id.main_canvas_view)).perform(performMove(100, 100)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performMove(200, 50)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performMove(700, 700)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(700, 700));
 
-        openDialog(R.drawable.ic_si_glyph_erase);
+        Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        int height = bitmap.getHeight()-1;
+        int width = bitmap.getWidth()-1;
+        for(int i=0;i<100;i++) {
+            Random randomGenerator = new Random();
+            int x = randomGenerator.nextInt(width) + 1;
+            int y = randomGenerator.nextInt(height) + 1;
+            onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(x,y)));
+        }
 
-        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
-        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
 
-        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
-        onView(withId(R.id.main_canvas_view)).perform(performMove(100, 100)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performMove(200, 50)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performMove(700, 700)); // click to move
-        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(700, 700));
-
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 50, Color.WHITE)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(75, 75, Color.WHITE)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 75, Color.WHITE)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(450, 375, Color.WHITE)));
-        onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699, Color.WHITE)));
     }
 
-    public static Matcher<View> checkCoordinates(final float x_check, final float y_check, final int color) {
+    public static Matcher<View> checkBitmap(final Bitmap test, final int alpha, final int red, final int green, final int blue)
+    {
+        final int test_color = Color.argb(alpha, red, green, blue);
+
+        return new Matcher<View>() {
+            @Override
+            public boolean matches(Object item) {
+                for(int x = 1; x < test.getWidth(); x++)
+                {
+                    for(int y = 1; y < test.getHeight(); y++)
+                    {
+                        if(test.getPixel(x, y) != test_color)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public void describeMismatch(Object item, Description mismatchDescription) {
+
+            }
+
+            @Override
+            public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
+
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        };
+    }
+
+    public static Matcher<View> checkCoordinates(final float x_check, final float y_check) {
         return new Matcher<View>() {
             @Override
             public void describeTo(Description description) {
@@ -120,13 +145,12 @@ public class DrawPathTest {
                 DrawArea temp = (DrawArea) item;
                 Bitmap tool_bitmap = temp.getBitmap();
 
-
                 int alpha_color = Color.alpha(tool_bitmap.getPixel((int) x_check, (int) y_check));
                 int red_color = Color.red(tool_bitmap.getPixel((int) x_check, (int) y_check));
                 int green_color = Color.green(tool_bitmap.getPixel((int) x_check, (int) y_check));
                 int blue_color = Color.blue(tool_bitmap.getPixel((int) x_check, (int) y_check));
 
-                if (color != Color.argb(alpha_color, red_color, green_color, blue_color)) {
+                if (Color.BLACK != Color.argb(alpha_color, red_color, green_color, blue_color)) {
                     return false;
                 }
 
@@ -146,7 +170,7 @@ public class DrawPathTest {
 
     }
 
-    public void openDialog(final int tool) {
+    public void openDialog(final int id) {
         onView(withId(R.id.toolFlyoutMenu)).perform(click());
         activityTestRule.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -154,7 +178,7 @@ public class DrawPathTest {
                 int amount_items = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getCount();
                 for (int counter = 0; 0 < amount_items; counter++) {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if (((FlyoutToolbar.MenuItemImage) result).getID() == tool) {
+                    if (((FlyoutToolbar.MenuItemImage) result).getID() == id) {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }

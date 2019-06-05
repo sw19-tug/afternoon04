@@ -15,22 +15,44 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/toolFlyoutMenu"
+            android:layout_toEndOf="@id/toolFlyoutMenu"
             android:id="@+id/main_canvas_view"
-            android:orientation="horizontal"
-            android:background="@color/drawingAreaBackground"
-        />
+            android:orientation="vertical"
+            android:background="@color/drawingAreaBackground">
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:layout_toStartOf="@id/toolFlyoutMenu"
-            android:layout_alignParentBottom="true"
-            android:clickable="true"
-            android:focusableInTouchMode="true"
+            android:orientation="vertical"
             android:id="@+id/strokeWidthLayout"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Size"
+                android:padding="0dp"
+                android:layout_weight="0.3"
+                android:layout_gravity="center_horizontal"
+                android:gravity="bottom"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/strokewidth_left"
+                android:onClick="changeStrokeWidth"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/strokewidth_right"
+                android:onClick="changeStrokeWidth"/>
             <EditText
                 android:id="@+id/strokewidth_text"
                 android:layout_width="wrap_content"
@@ -39,43 +61,39 @@
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
                 android:maxLength="3"
-                android:text="10"
+                android:text="0"
                 android:layout_gravity="center"/>
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="+"
-                android:id="@+id/strokewidth_left"
-                android:onClick="changeStrokeWidth"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:id="@+id/strokewidth_right"
-                android:onClick="changeStrokeWidth"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Size"
-                android:padding="15dip"
-                android:textAlignment="viewStart"
-                />
         </LinearLayout>
         <org.zakariya.flyoutmenu.FlyoutMenuView
             android:id="@+id/toolFlyoutMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:padding="@dimen/flyout_menu_button_padding"
-            app:fmButtonSize="@dimen/flyout_menu_button_size"
+            android:padding="16dp"
+            app:fmButtonSize="54dp"
             app:fmDialogMode="true"
-            app:fmItemHeight="@dimen/smiley_menu_item_size"
-            app:fmItemMargin="@dimen/smiley_menu_item_margin"
-            app:fmItemWidth="@dimen/smiley_menu_item_size"
+            app:fmItemHeight="66dp"
+            app:fmItemMargin="8dp"
+            app:fmItemWidth="66dp"
             app:fmMenuAnchor="bottom"
             app:fmSelectedItemBackgroundColor="@color/smileyMenuSelectionColor"
             app:fmShieldVisible="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            />
+
     </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:orientation="vertical"
+        android:background="@color/menuBar"
+        >
+
+
+    </LinearLayout>
+
 </LinearLayout>

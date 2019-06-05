@@ -26,8 +26,10 @@ public class PathTool extends PaintingTool {
     @Override
     public void drawTool(Canvas canvas) {
         if(path != null)
+        {
+            this.color.setStrokeWidth(this.size);
             canvas.drawPath(this.path, this.color);
-
+        }
     }
 
 
@@ -69,5 +71,10 @@ public class PathTool extends PaintingTool {
     public void cleanUp() {
         if(!in_use)
             path = null;
+    }
+
+    @Override
+    public int getId() {
+        return R.drawable.ic_outline_brush_24px;
     }
 }

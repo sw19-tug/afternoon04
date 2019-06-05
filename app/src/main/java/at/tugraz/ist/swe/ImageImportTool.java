@@ -56,6 +56,11 @@ public class ImageImportTool extends PaintingTool {
 
     }
 
+    @Override
+    public int getId() {
+        return 0;
+    }
+
     private Bitmap scaleDownBitmap(Bitmap bm, int max_height, int max_width) {
 
         int new_height = bm.getHeight();
@@ -77,6 +82,7 @@ public class ImageImportTool extends PaintingTool {
                 bm, new_width, new_height, false);
 
     }
+
 
 
 }

@@ -14,4 +14,7 @@
     <color name="colorSeekbarGreen">#00FF00</color>
     <color name="colorSeekbarBlue">#0000FF</color>
     <color name="colorAcceptDisabled">#29412A</color>
+    <color name="menuBar">#C0C0C0</color>
+    <color name="drawingAreaBackground">#FFFFFF</color>
+    <color name="colorErase">#800000</color>
 </resources>
