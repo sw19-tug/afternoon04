@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -19,9 +20,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.TextView;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
         tools.add(R.drawable.ic_oval);
+        tools.add(R.drawable.ic_si_save);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -327,6 +331,9 @@ public class MainActivity extends AppCompatActivity {
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 drawingArea.setTool(new FillBucket(foreground.getColor()));
                 break;
+            case R.drawable.ic_si_save:
+                Toast.makeText(this,"Image saved", Toast.LENGTH_SHORT).show();
+                MediaStore.Images.Media.insertImage(getContentResolver(), drawingArea.getBitmap(), "PrintZ" , "");
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
