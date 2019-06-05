@@ -8,12 +8,13 @@ import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 public class TextPicker {
 
     public interface TextApprovedListener
     {
-        void onTextApproved(int color);
+        void onTextApproved(String text);
     }
 
     private TextApprovedListener listener;
@@ -23,6 +24,7 @@ public class TextPicker {
     private Context context;
 
     private String text;
+    private LinearLayout focus_text_view;
 
     private InputMethodManager manager;
     Button btnApply;
@@ -66,6 +68,7 @@ public class TextPicker {
     {
         dlg_text.show();
 
+        focus_text_view = dlg_text.findViewById(R.id.textPicker_view);
         btnApply = dlg_text.getButton(AlertDialog.BUTTON_POSITIVE);
         btnReset = dlg_text.getButton(AlertDialog.BUTTON_NEUTRAL);
         btnCancel = dlg_text.getButton(AlertDialog.BUTTON_NEGATIVE);
@@ -76,6 +79,36 @@ public class TextPicker {
         textBox_text = dlg_text.findViewById(R.id.textPicker_text);
 
         dlg_text.setCanceledOnTouchOutside(false);
+
+
+        btnReset.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+                focus_text_view.requestFocus();
+                manager.hideSoftInputFromWindow(focus_text_view.getWindowToken(), 0);
+
+                textBox_text.setText(text);
+
+            }
+        });
+
+        btnApply.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                text = textBox_text.getText().toString();
+                listener.onTextApproved(getText());
+                dlg_text.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                textBox_text.setText(text);
+                dlg_text.dismiss();
+            }
+        });
     }
 
 }

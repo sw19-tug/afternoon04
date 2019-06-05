@@ -79,8 +79,12 @@ public class MainActivity extends AppCompatActivity {
         textPicker = new TextPicker(this);
         textPicker.setOnTextAppliedListener(new TextPicker.TextApprovedListener() {
             @Override
-            public void onTextApproved(int color) {
-                drawingArea.setTool(new TextTool(getApplicationContext(), foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), textPicker.getText()));
+            public void onTextApproved(String text) {
+
+                LinearLayout strokeWidthLayout = findViewById(R.id.strokeWidthLayout);
+                drawingArea.setTool(new TextTool(getApplicationContext(), foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), text));
+                strokeWidthLayout.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -309,7 +313,6 @@ public class MainActivity extends AppCompatActivity {
                 drawingArea.setTool(new ShapeTool(foreground.getColor(), "oval"));
                 break;
             case R.drawable.ic_baseline_text_fields_24px:
-                strokeWidthLayout.setVisibility(View.VISIBLE);
                 textPicker.show();
                 break;
             default:
