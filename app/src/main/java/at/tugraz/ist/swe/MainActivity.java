@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private Matrix matrix;
     private Bitmap oldActivity;
     private InputMethodManager manager;
+    private String current_color = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onSaveInstanceState(state);
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
+        state.putString("current_color", current_color);
         state.putBoolean("color", false);
         if(foreground.isShowing())
         {
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state)
     {
         super.onRestoreInstanceState(state);
+        Log.d("MAINACTIV", current_color);
         drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
         int id = state.getInt("tool");
@@ -245,10 +249,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
+
         if(state.getBoolean("color"))
         {
             foreground.show();
         }
+        Log.d("MAINACTIV", current_color);
+        current_color = state.getString("current_color");
+        foreground.setHexString(current_color);
     }
 
     private void setupToolbar() {
@@ -302,8 +310,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy(){
+        current_color = foreground.getHexColorString();
         super.onDestroy();
+
         foreground.dismissDialogue();
+
 
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -729,5 +730,14 @@ public class ColorPicker {
     public void dismissDialogue() {
         if (dlg_color != null && dlg_color.isShowing())
             dlg_color.dismiss();
+    }
+
+    public String getHexColorString() {
+        return textBox_Hex.getText().toString();
+    }
+
+    public void setHexString(String hex) {
+        //Log.d("cpicker", "former string: " + textBox_Hex.getText().toString() + " string after destroy: " + hex);
+        //textBox_Hex.setText(hex);
     }
 }
