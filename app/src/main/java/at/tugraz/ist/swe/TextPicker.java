@@ -41,5 +41,26 @@ public class TextPicker {
 
         View dlg_view = inflater.inflate(R.layout.text_picker_dialog, null);
 
+        bld_TextPicker.setTitle(R.string.text_picker_title);
+        bld_TextPicker.setView(dlg_view);
+
+        bld_TextPicker.setNegativeButton(R.string.text_picker_button_cancel, null);
+
+        bld_TextPicker.setPositiveButton(R.string.text_picker_button_apply, null);
+
+        bld_TextPicker.setNeutralButton(R.string.text_picker_button_reset, null);
+
+        dlg_text = bld_TextPicker.create();
+
     }
+
+    public void setOnTextAppliedListener(TextApprovedListener listener){
+        this.listener = listener;
+    }
+
+    public void show()
+    {
+        dlg_text.show();
+    }
+
 }
