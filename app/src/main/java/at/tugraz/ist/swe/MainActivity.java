@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(state);
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
         state.putString("current_color", current_color);
+        Log.d("anna", "saveInstance_: "+current_color);
         state.putBoolean("color", false);
         if(foreground.isShowing())
         {
@@ -234,8 +235,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle state)
     {
+        Log.d("anna", "imRESTORE "+current_color);
         super.onRestoreInstanceState(state);
-        Log.d("MAINACTIV", current_color);
+
         drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
         int id = state.getInt("tool");
@@ -311,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         current_color = foreground.getHexColorString();
+        Log.d("anna", "im onDestroy "+current_color);
         super.onDestroy();
 
         foreground.dismissDialogue();

@@ -733,7 +733,13 @@ public class ColorPicker {
     }
 
     public String getHexColorString() {
-        return textBox_Hex.getText().toString();
+        if(textBox_Hex!=null)
+        {
+            Log.d("anna", textBox_Hex.getText().toString());
+            return textBox_Hex.getText().toString();
+        }
+        return "";
+
     }
 
     public void setHexString(String hex) {
