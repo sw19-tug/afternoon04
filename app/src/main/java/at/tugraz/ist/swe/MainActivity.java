@@ -7,14 +7,12 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
@@ -216,14 +214,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle state)
     {
         super.onSaveInstanceState(state);
+        current_color = foreground.getHexColorString();
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
-        state.putString("current_color", current_color);
-        Log.d("anna", "saveInstance_: "+current_color);
+
         state.putBoolean("color", false);
         if(foreground.isShowing())
         {
             state.putBoolean("color", true);
             state.putInt("tool", drawingArea.getPaintingTool().getId());
+            state.putString("current_color", current_color);
         }
         else if(toolFlyoutMenu.getSelectedMenuItem() != null)
             state.putInt("tool", toolFlyoutMenu.getSelectedMenuItem().getId());
@@ -235,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle state)
     {
-        Log.d("anna", "imRESTORE "+current_color);
         super.onRestoreInstanceState(state);
 
         drawingArea.setSize(state.getInt("stroke_width", 10));
@@ -256,9 +254,8 @@ public class MainActivity extends AppCompatActivity {
         {
             foreground.show();
         }
-        Log.d("MAINACTIV", current_color);
-        current_color = state.getString("current_color");
-        foreground.setHexString(current_color);
+        String oldColor = state.getString("current_color");
+        foreground.setHexString(oldColor);
     }
 
     private void setupToolbar() {
@@ -312,8 +309,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy(){
-        current_color = foreground.getHexColorString();
-        Log.d("anna", "im onDestroy "+current_color);
         super.onDestroy();
 
         foreground.dismissDialogue();
