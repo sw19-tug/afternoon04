@@ -1,13 +1,11 @@
 package at.tugraz.ist.swe;
 
-import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.Manifest;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-
-import org.hamcrest.Description;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class SaveImageTest {
 
+    @Rule public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
@@ -36,8 +35,6 @@ public class SaveImageTest {
 
         openDialog();
         SystemClock.sleep(1000);
-
-        int len_after_save = dir.listFiles().length;
 
         assertTrue(dir.listFiles().length == (len_before_save + 1));
     }
