@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private Matrix matrix;
     private Bitmap oldActivity;
     private InputMethodManager manager;
+    private String current_color = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,12 +214,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle state)
     {
         super.onSaveInstanceState(state);
+        current_color = foreground.getHexColorString();
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
+
         state.putBoolean("color", false);
         if(foreground.isShowing())
         {
             state.putBoolean("color", true);
             state.putInt("tool", drawingArea.getPaintingTool().getId());
+            state.putString("current_color", current_color);
         }
         else if(toolFlyoutMenu.getSelectedMenuItem() != null)
             state.putInt("tool", toolFlyoutMenu.getSelectedMenuItem().getId());
@@ -232,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state)
     {
         super.onRestoreInstanceState(state);
+
         drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
         int id = state.getInt("tool");
@@ -245,10 +249,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
+
         if(state.getBoolean("color"))
         {
             foreground.show();
         }
+        String oldColor = state.getString("current_color");
+        foreground.setHexString(oldColor);
     }
 
     private void setupToolbar() {
@@ -303,7 +310,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
+
         foreground.dismissDialogue();
+
 
     }
 

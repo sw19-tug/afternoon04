@@ -730,4 +730,17 @@ public class ColorPicker {
         if (dlg_color != null && dlg_color.isShowing())
             dlg_color.dismiss();
     }
+
+    public String getHexColorString() {
+        if(textBox_Hex!=null)
+        {
+            return textBox_Hex.getText().toString();
+        }
+        return "";
+
+    }
+
+    public void setHexString(String hex) {
+        textBox_Hex.setText(hex);
+    }
 }
