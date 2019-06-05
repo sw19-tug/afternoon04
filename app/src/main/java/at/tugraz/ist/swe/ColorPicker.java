@@ -18,7 +18,7 @@ public class ColorPicker {
 
     public interface ColorAppliedListener
     {
-        public void onColorApplied(int color);
+        void onColorApplied(int color);
     }
 
     private ColorAppliedListener listener;
@@ -601,5 +601,10 @@ public class ColorPicker {
         if(dlg_color != null)
             return dlg_color.isShowing();
         return false;
+    }
+
+    public void dismissDialogue() {
+        if (dlg_color != null && dlg_color.isShowing())
+            dlg_color.dismiss();
     }
 }

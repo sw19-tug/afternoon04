@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -294,6 +295,13 @@ public class MainActivity extends AppCompatActivity {
             public void onDismissWithoutSelection(FlyoutMenuView flyoutMenuView) {
             }
         });
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        foreground.dismissDialogue();
+
     }
 
     public void showTool(int shown_tool)
