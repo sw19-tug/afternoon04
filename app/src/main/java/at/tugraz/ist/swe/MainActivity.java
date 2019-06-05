@@ -1,13 +1,16 @@
 package at.tugraz.ist.swe;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -340,8 +343,17 @@ public class MainActivity extends AppCompatActivity {
                 drawingArea.setTool(new FillBucket(foreground.getColor()));
                 break;
             case R.drawable.ic_si_save:
-                Toast.makeText(this,"Image saved", Toast.LENGTH_SHORT).show();
-                MediaStore.Images.Media.insertImage(getContentResolver(), drawingArea.getBitmap(), "PrintZ" , "");
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this,"Unable to save Image! - Missing Permissions", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    String success = MediaStore.Images.Media.insertImage(getContentResolver(), drawingArea.getBitmap(), "PrintZ" , "");
+                    if(success!=null)
+                        Toast.makeText(this,"Image saved", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
+                }
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
