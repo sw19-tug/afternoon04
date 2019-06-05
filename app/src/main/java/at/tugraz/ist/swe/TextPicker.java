@@ -117,6 +117,8 @@ public class TextPicker {
                 dlg_text.dismiss();
             }
         });
+
+        textBox_text.requestFocus();
     }
 
     public boolean isShowing()
