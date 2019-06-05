@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public List<Integer> tools = new ArrayList<>();
     public LinearLayout layout;
     public ColorPicker foreground;
+    public TextPicker textPicker;
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
     private EditText strokeWidth;
@@ -70,8 +71,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         drawingArea = new DrawArea(this);
         drawingArea.setWillNotDraw(false);
+
+
+        textPicker = new TextPicker(this);
+        textPicker.setOnTextAppliedListener(new TextPicker.TextApprovedListener() {
+            @Override
+            public void onTextApproved(int color) {
+                drawingArea.setTool(new TextTool(getApplicationContext(), foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), textPicker.getText()));
+            }
+        });
 
         layout.addView(drawingArea);
 
@@ -299,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.drawable.ic_baseline_text_fields_24px:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
-                drawingArea.setTool(new TextTool(this.getApplicationContext(), foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), "Hello World!"));
+                textPicker.show();
                 break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);

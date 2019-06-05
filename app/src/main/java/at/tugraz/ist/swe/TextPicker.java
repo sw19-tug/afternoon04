@@ -58,9 +58,24 @@ public class TextPicker {
         this.listener = listener;
     }
 
+    public String getText() {
+        return text;
+    }
+
     public void show()
     {
         dlg_text.show();
+
+        btnApply = dlg_text.getButton(AlertDialog.BUTTON_POSITIVE);
+        btnReset = dlg_text.getButton(AlertDialog.BUTTON_NEUTRAL);
+        btnCancel = dlg_text.getButton(AlertDialog.BUTTON_NEGATIVE);
+        btnCancel.setTextColor(context.getResources().getColor(R.color.colorCancelButtons));
+        btnReset.setTextColor(context.getResources().getColor(R.color.colorResetButtons));
+        btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
+
+        textBox_text = dlg_text.findViewById(R.id.textPicker_text);
+
+        dlg_text.setCanceledOnTouchOutside(false);
     }
 
 }
