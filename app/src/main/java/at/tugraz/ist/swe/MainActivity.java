@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
         if(textPicker.isShowing())
         {
+            state.putString("reset", textPicker.getText());
             state.putBoolean("text", true);
         }
         String text = textPicker.dismissDialogue();
@@ -236,10 +237,15 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(state);
         drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
-        textPicker.setText(state.getString("textPicker"));
         if(state.getBoolean("text"))
         {
+            textPicker.setText(state.getString("reset"));
+            textPicker.setTextBox(state.getString("textPicker"));
             textPicker.show();
+        }
+        else
+        {
+          textPicker.setText(state.getString("textPicker"));
         }
     }
 

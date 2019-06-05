@@ -24,6 +24,7 @@ public class TextPicker {
     private Context context;
 
     private String text;
+    private String textBox = "";
     private LinearLayout focus_text_view;
 
     private InputMethodManager manager;
@@ -77,9 +78,16 @@ public class TextPicker {
         btnApply.setTextColor(context.getResources().getColor(R.color.colorAcceptButtons));
 
         textBox_text = dlg_text.findViewById(R.id.textPicker_text);
+        if(textBox.equals(""))
+        {
+            textBox_text.setText(text);
+        }
+        else
+        {
+            textBox_text.setText(textBox);
+        }
 
         dlg_text.setCanceledOnTouchOutside(false);
-
 
         btnReset.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -132,4 +140,8 @@ public class TextPicker {
         this.text = text;
     }
 
+    public void setTextBox(String text)
+    {
+        this.textBox = text;
+    }
 }

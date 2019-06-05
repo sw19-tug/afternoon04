@@ -5,7 +5,7 @@
     <string name="color_picker_button_cancel">Apply</string>
     <string name="color_picker_button_apply">Apply</string>
     <string name="color_picker_button_reset">Reset</string>
-    <string name="text_picker_title">Cancel</string>
+    <string name="text_picker_title">Write your text:</string>
     <string name="text_picker_button_cancel">Cancel</string>
     <string name="text_picker_button_apply">Apply</string>
     <string name="text_picker_button_reset">Reset</string>
