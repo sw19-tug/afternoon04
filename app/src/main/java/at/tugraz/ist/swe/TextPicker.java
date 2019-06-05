@@ -111,4 +111,25 @@ public class TextPicker {
         });
     }
 
+    public boolean isShowing()
+    {
+        if(dlg_text != null)
+            return dlg_text.isShowing();
+        return false;
+    }
+
+    public String dismissDialogue() {
+        if (dlg_text != null && dlg_text.isShowing())
+        {
+            dlg_text.dismiss();
+            return textBox_text.getText().toString();
+        }
+        return text;
+    }
+
+    public void setText(String text)
+    {
+        this.text = text;
+    }
+
 }

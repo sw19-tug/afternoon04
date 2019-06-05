@@ -222,6 +222,12 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onSaveInstanceState(state);
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
+        if(textPicker.isShowing())
+        {
+            state.putBoolean("text", true);
+        }
+        String text = textPicker.dismissDialogue();
+        state.putString("textPicker", text);
     }
 
     @Override
@@ -230,6 +236,11 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(state);
         drawingArea.setSize(state.getInt("stroke_width", 10));
         strokeWidth.setText(String.format("%02d", state.getInt("stroke_width", 10)));
+        textPicker.setText(state.getString("textPicker"));
+        if(state.getBoolean("text"))
+        {
+            textPicker.show();
+        }
     }
 
     private void setupToolbar() {
