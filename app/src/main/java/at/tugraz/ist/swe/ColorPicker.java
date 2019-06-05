@@ -32,7 +32,7 @@ public class ColorPicker {
     private EditText textBox_Blue;
     private EditText textBox_Hex;
 
-    public AlertDialog dlg_color;
+    private AlertDialog dlg_color;
     private Context context;
 
     private View background_color;
@@ -594,5 +594,10 @@ public class ColorPicker {
         seekBar_Red.setProgress(color_r);
         seekBar_Green.setProgress(color_g);
         seekBar_Blue.setProgress(color_b);
+    }
+
+    public void dismissDialogue() {
+        if (dlg_color != null && dlg_color.isShowing())
+            dlg_color.dismiss();
     }
 }

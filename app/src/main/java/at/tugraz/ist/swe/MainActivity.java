@@ -98,9 +98,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if ( foreground.dlg_color!=null && foreground.dlg_color.isShowing() ){
-            foreground.dlg_color.cancel();
-        }
+        foreground.dismissDialogue();
+
     }
 
     public void showTool(int shown_tool)
