@@ -50,6 +50,11 @@ public class TextPickerTest {
         onView(withText("Apply")).inRoot(isDialog()).check(matches(hasTextColor(R.color.colorAcceptButtons)));
     }
 
+    @Test
+    public void testTextViewVisible(){
+        openDialog();
+        onView(withId(R.id.textPicker_view)).inRoot(isDialog()).check(matches(isDisplayed()));
+    }
     public void openDialog()
     {
         onView(withId(R.id.toolFlyoutMenu)).perform(click());
