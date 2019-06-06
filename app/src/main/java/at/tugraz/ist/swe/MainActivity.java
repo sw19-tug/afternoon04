@@ -338,11 +338,6 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_outline_brush_24px:
                 drawingArea.setTool(new PathTool(foreground.getColor(), 10));
                 break;
-            case R.drawable.ic_outline_add_photo_alternate_24px:
-                showFileChooser();
-                strokeWidthLayout.setVisibility(View.VISIBLE);
-                drawingArea.setTool(new PathTool(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
-                break;
             case R.drawable.ic_si_glyph_erase:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new PathTool(Color.WHITE, Integer.parseInt(strokeWidth.getText().toString())));
@@ -358,6 +353,10 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_si_glyph_bucket:
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 drawingArea.setTool(new FillBucket(foreground.getColor()));
+                break;
+            case R.drawable.ic_outline_add_photo_alternate_24px:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                showFileChooser();
                 break;
             case R.drawable.ic_si_save:
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -401,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
                     Uri uri = data.getData();
                     try {
                         Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        drawingArea.setTool(new ImageImportTool(selected_image));
+                        drawingArea.setTool(new ImageImportTool(selected_image, this));
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -411,8 +410,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
-
 
     public void changeStrokeWidth(View element)
     {
