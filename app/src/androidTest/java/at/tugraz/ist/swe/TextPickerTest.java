@@ -84,12 +84,22 @@ public class TextPickerTest {
 
     @Test
     public void testResetButton(){
-
         openDialog();
         onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
         onView(withText("Reset")).inRoot(isDialog()).perform(click());
         onView(withId(R.id.textPicker_text)).check(matches(withText("")));
+    }
 
+    @Test
+    public void testResetButtonAfterApply(){
+        openDialog();
+        onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
+        onView(withText("Apply")).inRoot(isDialog()).perform(click());
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        openDialog();
+        onView(withId(R.id.textPicker_text)).perform(setText("ABBC"));
+        onView(withText("Reset")).inRoot(isDialog()).perform(click());
+        onView(withId(R.id.textPicker_text)).check(matches(withText("HALLO")));
     }
 
     @Test
