@@ -9,6 +9,10 @@ public class BitmapCache {
     private static int cacheSize = maxMemory / 8;
     public static int rotation = 0;
     public static int oldRotation = 0;
+    public final static int max_redo_steps = 10;
+    public static int current_steps = 0;
+    public static boolean redo_overflow = false;
+    public static int current_undo = 0;
 
     public BitmapCache()
     {

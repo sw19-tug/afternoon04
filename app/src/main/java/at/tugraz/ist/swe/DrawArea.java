@@ -63,6 +63,16 @@ public class DrawArea extends View {
                 paintingTool.cleanUp();
                 BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
             }
+            if(event.getAction() == MotionEvent.ACTION_UP)
+            {
+              BitmapCache.mMemoryCache.put("step"+Integer.toString(BitmapCache.current_steps), oldBitmap);
+              BitmapCache.current_steps++;
+              if(BitmapCache.current_steps >= BitmapCache.max_redo_steps)
+              {
+                BitmapCache.current_steps = BitmapCache.current_steps - BitmapCache.max_redo_steps;
+                BitmapCache.redo_overflow = true;
+              }
+            }
         }
         return true;
     }

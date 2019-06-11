@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
     private EditText strokeWidth;
+    private ImageButton redoButton;
+    private ImageButton undoButton;
     private Display screen;
     private Matrix matrix;
     private Bitmap oldActivity;
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(drawingArea);
 
         strokeWidth = findViewById(R.id.strokewidth_text);
+        redoButton = findViewById(R.id.buttonRedo);
+        undoButton = findViewById(R.id.buttonUndo);
 
         screen = getWindowManager().getDefaultDisplay();
 
@@ -375,6 +380,32 @@ public class MainActivity extends AppCompatActivity {
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
             break;
         }
+    }
+
+
+    public void undoStep(View element)
+    {
+      if(BitmapCache.current_steps == 0)
+      {
+        undoButton.setEnabled(false);
+      }
+      else
+      {
+        undoButton.setEnabled(true);
+      }
+      
+    }
+
+    public void redoStep(View element)
+    {
+      if(BitmapCache.current_steps < BitmapCache.max_redo_steps)
+      {
+        redoButton.setEnabled(true);
+      }
+      else
+      {
+        redoButton.setEnabled(false);
+      }
     }
 
     public void changeStrokeWidth(View element)
