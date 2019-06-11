@@ -81,6 +81,15 @@ public class TextPickerTest {
         onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap_old, bitmap_new)));
     }
 
+    @Test
+    public void testResetButton(){
+
+        openDialog();
+        onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
+        onView(withText("Reset")).inRoot(isDialog()).perform(click());
+        onView(withId(R.id.textPicker_text)).check(matches(withText("")));
+    }
+
     // helper function to set value on edit text
     public static ViewAction setText(final String value){
         return new ViewAction() {
