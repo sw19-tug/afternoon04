@@ -14,7 +14,10 @@ public abstract class PaintingTool
     public abstract void cleanUp();
     public void setColor(int color)
     {
-        this.color.setColor(color);
+        if(this.color != null)
+        {
+            this.color.setColor(color);
+        }
     }
     public void setSize(int size)
     {
