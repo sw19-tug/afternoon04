@@ -15,10 +15,11 @@ public class DrawArea extends View {
     }
 
     private PaintingTool paintingTool;
-    private Bitmap oldBitmap;
+    private Bitmap oldBitmap = null;
     private boolean handleEvents;
     private boolean drawCurrentTool;
     private boolean prepareBitmap;
+    private boolean undo = false;
 
     public DrawArea(Context context)
     {
@@ -32,8 +33,15 @@ public class DrawArea extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        oldBitmap = BitmapCache.mMemoryCache.get("oldBitmap");
-        if (BitmapCache.mMemoryCache.get("oldBitmap") != null)
+
+        //oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.oldBitmap));
+
+        if(this.undo)
+        {
+            oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.oldBitmap));
+        }
+
+        if (oldBitmap != null)
         {
             canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
@@ -41,15 +49,28 @@ public class DrawArea extends View {
         {
             prepareBitmap = false;
             oldBitmap = this.createBitmap();
-            BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
+            BitmapCache.mMemoryCache.put("step0", oldBitmap);
         }
         if(drawCurrentTool)
             paintingTool.drawTool(canvas);
+        if(undo)
+        {
+            this.undo = false;
+            BitmapCache.oldBitmap--;
+            BitmapCache.current_step--;
+            this.drawCurrentTool = true;
+        }
+
     }
 
     public void setHandleToucheEvents(boolean bool)
     {
         handleEvents = bool;
+    }
+
+    public void setDrawCurrentTool(boolean bool)
+    {
+        drawCurrentTool = bool;
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -58,20 +79,24 @@ public class DrawArea extends View {
             this.drawCurrentTool = true;
             paintingTool.handleEvent(event);
             invalidate();
-            if (event.getAction() != MotionEvent.ACTION_MOVE) {
-                oldBitmap = createBitmap();
-                paintingTool.cleanUp();
-                BitmapCache.mMemoryCache.put("oldBitmap", oldBitmap);
+            if(event.getAction() == MotionEvent.ACTION_DOWN)
+            {
+                BitmapCache.oldBitmap = BitmapCache.current_step;
+                BitmapCache.current_step++;
+                if(BitmapCache.current_step >= BitmapCache.max_undo_steps)
+                {
+                    BitmapCache.current_step = BitmapCache.current_step - BitmapCache.max_undo_steps;
+                    BitmapCache.redo_overflow = true;
+                }
+                BitmapCache.current_undo = BitmapCache.current_step;
             }
+
             if(event.getAction() == MotionEvent.ACTION_UP)
             {
-              BitmapCache.mMemoryCache.put("step"+Integer.toString(BitmapCache.current_steps), oldBitmap);
-              BitmapCache.current_steps++;
-              if(BitmapCache.current_steps >= BitmapCache.max_redo_steps)
-              {
-                BitmapCache.current_steps = BitmapCache.current_steps - BitmapCache.max_redo_steps;
-                BitmapCache.redo_overflow = true;
-              }
+                oldBitmap = createBitmap();
+                paintingTool.cleanUp();
+                BitmapCache.mMemoryCache.put("step"+Integer.toString(BitmapCache.current_step), oldBitmap);
+                invalidate();
             }
         }
         return true;
@@ -83,6 +108,13 @@ public class DrawArea extends View {
         Bitmap current = Bitmap.createBitmap(this.getDrawingCache());
         this.setDrawingCacheEnabled(false);
         return current;
+    }
+
+    public void undoStep()
+    {
+        setDrawCurrentTool(false);
+        this.undo = true;
+        invalidate();
     }
 
     public Bitmap getBitmap()

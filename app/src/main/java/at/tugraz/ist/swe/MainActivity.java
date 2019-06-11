@@ -385,27 +385,43 @@ public class MainActivity extends AppCompatActivity {
 
     public void undoStep(View element)
     {
-      if(BitmapCache.current_steps == 0)
-      {
-        undoButton.setEnabled(false);
-      }
-      else
-      {
-        undoButton.setEnabled(true);
-      }
-      
+        if(BitmapCache.redo_overflow)
+        {
+
+        }
+        else
+        {
+            if(BitmapCache.current_undo == 0)
+            {
+                undoButton.setEnabled(false);
+            }
+            else
+            {
+                undoButton.setEnabled(true);
+            }
+        }
+        drawingArea.undoStep();
     }
 
     public void redoStep(View element)
     {
-      if(BitmapCache.current_steps < BitmapCache.max_redo_steps)
-      {
-        redoButton.setEnabled(true);
-      }
-      else
-      {
-        redoButton.setEnabled(false);
-      }
+        if(BitmapCache.redo_overflow)
+        {
+
+        }
+        else
+        {
+            BitmapCache.current_undo++;
+            if(BitmapCache.current_undo < BitmapCache.current_step)
+            {
+                undoButton.setEnabled(true);
+            }
+            else
+            {
+                undoButton.setEnabled(false);
+            }
+        }
+        drawingArea.invalidate();
     }
 
     public void changeStrokeWidth(View element)
