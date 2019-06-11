@@ -320,6 +320,8 @@ public class MainActivity extends AppCompatActivity {
     public void showTool(int shown_tool)
     {
         LinearLayout strokeWidthLayout = findViewById(R.id.strokeWidthLayout);
+        LinearLayout undoRedoLayout = findViewById(R.id.undoLayout);
+        undoRedoLayout.setVisibility(View.INVISIBLE);
         switch(shown_tool) {
             case R.drawable.ic_si_glyph_circle:
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
@@ -365,6 +367,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
                 }
             case R.drawable.ic_baseline_swap_horiz_24px:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                undoRedoLayout.setVisibility(View.VISIBLE);
                 break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);

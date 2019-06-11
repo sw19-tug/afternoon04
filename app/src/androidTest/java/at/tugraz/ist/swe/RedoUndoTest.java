@@ -11,6 +11,7 @@ import org.zakariya.flyoutmenu.FlyoutMenuView;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
@@ -27,9 +28,9 @@ public class RedoUndoTest {
         onView(withId(R.id.strokewidth_left)).check(doesNotExist());
         onView(withId(R.id.strokewidth_right)).check(doesNotExist());
         onView(withId(R.id.strokewidth_text)).check(doesNotExist());
-        onView(withId(R.id.undoLayout)).check(isDisplayed());
-        onView(withId(R.id.buttonUndo)).check(isDisplayed());
-        onView(withId(R.id.buttonRedo)).check(isDisplayed());
+        onView(withId(R.id.undoLayout)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonUndo)).check(matches(isDisplayed()));
+        onView(withId(R.id.buttonRedo)).check(matches(isDisplayed()));
     }
 
     public void openDialog()
