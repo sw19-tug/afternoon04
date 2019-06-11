@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.MotionEvents;
@@ -28,9 +29,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Random;
 
 
 public class ImportImageTest {
+
+    private static Bitmap bitmap;
+    private static Bitmap canvas;
 
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -46,12 +51,42 @@ public class ImportImageTest {
 
         try {
             InputStream is = activityTestRule.getActivity().getResources().getAssets().open("demo_img.png");
-            Bitmap bitmap = BitmapFactory.decodeStream(is);
-            //Log.d("TEST", "Width:" + bitmap.getWidth());
+            bitmap = BitmapFactory.decodeStream(is);
+
+            activityTestRule.getActivity().drawingArea.setTool(new ImageImportTool(bitmap, null));
+            canvas = activityTestRule.getActivity().drawingArea.getBitmap();
+
+            float finger_x = canvas.getWidth() / (float) 2.f;
+            float finger_y = canvas.getHeight() / (float) 2.f;
+            performTouch(finger_x, finger_y);
+
+
+            int height = bitmap.getHeight()-1;
+            int width = bitmap.getWidth()-1;
+
+            int begin_x =  (int)finger_x - (width / 2);
+            int begin_y = (int)finger_y - (height /2);
+
+            int end_x = (int)finger_x + (width / 2);
+            int end_y = (int)finger_y + (height /2);
+
+            for(int i = 0;i < 100; i++) {
+                Random randomGenerator = new Random();
+                int x = randomGenerator.nextInt((end_x - begin_x) + 1) + begin_x;
+                int y = randomGenerator.nextInt((end_y - begin_y) + 1) + begin_y;
+
+                int x_bitmap = x - begin_x;
+                int y_bitmap = y - begin_y;
+                onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(x_bitmap,y_bitmap, x, y)));
+            }
+
+
             }
         catch (IOException e){
             e.printStackTrace();
         }
+
+
 
     }
 
@@ -104,7 +139,7 @@ public class ImportImageTest {
         });
     }
 
-    public static Matcher<View> checkCoordinates(final float x, final float y)
+    public static Matcher<View> checkCoordinates(final float x_bitmap, final float y_bitmap, final int x_global, final int y_global)
     {
         return new Matcher<View>() {
             @Override
@@ -114,17 +149,21 @@ public class ImportImageTest {
 
             @Override
             public boolean matches(Object item) {
-                DrawArea temp = (DrawArea) item;
-                Bitmap tool_bitmap = temp.getBitmap();
 
-                int alpha_color = Color.alpha(tool_bitmap.getPixel((int )x, (int) y));
-                int red_color = Color.red(tool_bitmap.getPixel((int) x,(int) y));
-                int green_color = Color.green(tool_bitmap.getPixel((int) x,(int) y));
-                int blue_color = Color.blue(tool_bitmap.getPixel((int) x,(int) y));
 
-                if(Color.BLACK == Color.argb(alpha_color, red_color, green_color, blue_color))
+
+                int alpha_color_bitmap = Color.alpha(bitmap.getPixel((int )x_bitmap, (int) y_bitmap));
+                int red_color_bitmap = Color.red(bitmap.getPixel((int) x_bitmap,(int) y_bitmap));
+                int green_color_bitmap = Color.green(bitmap.getPixel((int) x_bitmap,(int) y_bitmap));
+                int blue_color_bitmap = Color.blue(bitmap.getPixel((int) x_bitmap,(int) y_bitmap));
+
+                int alpha_color_global = Color.alpha(canvas.getPixel((int )x_global, (int) y_global));
+                int red_color_global = Color.red(canvas.getPixel((int) x_global,(int) y_global));
+                int green_color_global = Color.green(canvas.getPixel((int) x_global,(int) y_global));
+                int blue_color_global = Color.blue(canvas.getPixel((int) x_global,(int) y_global));
+
+                if(Color.argb(alpha_color_bitmap, red_color_bitmap, green_color_bitmap, blue_color_bitmap) == Color.argb(alpha_color_global, red_color_global, green_color_global, blue_color_global))
                     return true;
-
 
                 return false;
 
