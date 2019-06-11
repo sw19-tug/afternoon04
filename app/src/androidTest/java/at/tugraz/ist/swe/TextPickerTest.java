@@ -1,7 +1,6 @@
 package at.tugraz.ist.swe;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.MotionEvents;
