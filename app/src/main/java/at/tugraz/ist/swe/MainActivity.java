@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_bucket);
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
+        tools.add(R.drawable.ic_pipette);
         tools.add(R.drawable.ic_oval);
         tools.add(R.drawable.ic_si_save);
 
@@ -350,6 +351,10 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_si_glyph_bucket:
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 drawingArea.setTool(new FillBucket(foreground.getColor()));
+                break;
+            case R.drawable.ic_pipette:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                drawingArea.setTool(new Pipette(this, foreground, drawingArea));
                 break;
             case R.drawable.ic_si_save:
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
