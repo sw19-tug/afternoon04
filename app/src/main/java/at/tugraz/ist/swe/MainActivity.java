@@ -363,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
                     else
                         Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
                 }
+                break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
