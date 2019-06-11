@@ -21,6 +21,7 @@ import org.zakariya.flyoutmenu.FlyoutMenuView;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
@@ -88,6 +89,16 @@ public class TextPickerTest {
         onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
         onView(withText("Reset")).inRoot(isDialog()).perform(click());
         onView(withId(R.id.textPicker_text)).check(matches(withText("")));
+
+    }
+
+    @Test
+    public void testCancelButton(){
+
+        openDialog();
+        onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
+        onView(withText("Cancel")).inRoot(isDialog()).perform(click());
+        onView(withText(R.string.text_picker_title)).check(doesNotExist());
     }
 
     // helper function to set value on edit text
