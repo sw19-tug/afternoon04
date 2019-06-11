@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_rect);
         tools.add(R.drawable.ic_oval);
         tools.add(R.drawable.ic_si_save);
+        tools.add(R.drawable.ic_baseline_swap_horiz_24px);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -363,6 +364,8 @@ public class MainActivity extends AppCompatActivity {
                     else
                         Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
                 }
+            case R.drawable.ic_baseline_swap_horiz_24px:
+                break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));

@@ -10,9 +10,9 @@ import org.zakariya.flyoutmenu.FlyoutMenuView;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.junit.Assert.assertEquals;
-
 @RunWith(AndroidJUnit4.class)
 public class RedoUndoTest {
 
@@ -22,6 +22,18 @@ public class RedoUndoTest {
     @Test
     public void testSelectedTool()
     {
+        openDialog();
+        onView(withId(R.id.strokeWidthLayout)).check(doesNotExist());
+        onView(withId(R.id.strokewidth_left)).check(doesNotExist());
+        onView(withId(R.id.strokewidth_right)).check(doesNotExist());
+        onView(withId(R.id.strokewidth_text)).check(doesNotExist());
+        onView(withId(R.id.undoLayout)).check(isDisplayed());
+        onView(withId(R.id.buttonUndo)).check(isDisplayed());
+        onView(withId(R.id.buttonRedo)).check(isDisplayed());
+    }
+
+    public void openDialog()
+    {
         onView(withId(R.id.toolFlyoutMenu)).perform(click());
         activityTestRule.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -30,18 +42,14 @@ public class RedoUndoTest {
                 for(int counter = 0; 0 < amount_items; counter++)
                 {
                     FlyoutMenuView.MenuItem result = activityTestRule.getActivity().toolFlyoutMenu.getAdapter().getItem(counter);
-                    if(((FlyoutToolbar.MenuItemImage)result).getID() == R.drawable.baseline_swap_horiz_24px)
+                    if(((FlyoutToolbar.MenuItemImage)result).getID() == R.drawable.ic_baseline_swap_horiz_24px)
                     {
                         activityTestRule.getActivity().toolFlyoutMenu.setSelectedMenuItem(result);
                         break;
                     }
                 }
-                PaintingTool tool = activityTestRule.getActivity().drawingArea.getPaintingTool();
-
-                assertEquals(Line.class.toString(), tool.getClass().toString());
             }
         });
     }
-
 
 }
