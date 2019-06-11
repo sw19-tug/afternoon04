@@ -1,8 +1,19 @@
 package at.tugraz.ist.swe;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.MotionEvents;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,6 +66,107 @@ public class TextPickerTest {
         openDialog();
         onView(withId(R.id.textPicker_view)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testTextDrawn(){
+
+        openDialog();
+        onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
+        onView(withText("Apply")).inRoot(isDialog()).perform(click());
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        Bitmap bitmap_old = activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(700, 700));
+        Bitmap bitmap_new = activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap_old, bitmap_new)));
+    }
+
+    // helper function to set value on edit text
+    public static ViewAction setText(final String value){
+        return new ViewAction() {
+
+            @Override
+            public Matcher<View> getConstraints() {
+                return ViewMatchers.isAssignableFrom(EditText.class);
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ((EditText) view).setText(value);
+            }
+
+            @Override
+            public String getDescription() {
+                return "sets text of Edit Text";
+            }
+        };
+    }
+
+    public static ViewAction performTouch(final float x, final float y) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isDisplayed();
+            }
+
+            @Override
+            public String getDescription() {
+                return "perform touch down";
+            }
+
+            @Override
+            public void perform(UiController uiController, final View view) {
+
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+
+                float[] coordinates = new float[] { x + location[0], y + location[1] };
+                float[] precision = new float[] { 1f, 1f };
+
+                MotionEvent down = MotionEvents.sendDown(uiController, coordinates, precision).down; // go down
+                uiController.loopMainThreadForAtLeast(200); // wait
+                MotionEvents.sendUp(uiController, down, coordinates); // go up
+                uiController.loopMainThreadForAtLeast(1000); // wait
+            }
+        };
+    }
+
+    public static Matcher<View> checkBitmap(final Bitmap bitmap_old, final Bitmap bitmap_new) {
+        return new Matcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+
+            }
+
+            @Override
+            public boolean matches(Object item) {
+
+                for(int x = 1; x < bitmap_new.getWidth(); x++)
+                {
+                    for(int y = 1; y < bitmap_new.getHeight(); y++)
+                    {
+                        if(bitmap_new.getPixel(x, y) != bitmap_old.getPixel(x, y))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public void describeMismatch(Object item, Description mismatchDescription) {
+            }
+
+            @Override
+            public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
+
+            }
+        };
+
+    }
+
     public void openDialog()
     {
         onView(withId(R.id.toolFlyoutMenu)).perform(click());
