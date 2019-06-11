@@ -74,7 +74,7 @@ public class ImageImportTool extends PaintingTool {
 
     @Override
     public int getId() {
-        return 0;
+        return R.drawable.ic_outline_add_photo_alternate_24px;
     }
 
     private Bitmap scaleDownBitmap(Bitmap bm, int max_height, int max_width) {
