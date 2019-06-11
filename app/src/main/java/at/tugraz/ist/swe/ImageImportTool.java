@@ -23,7 +23,8 @@ public class ImageImportTool extends PaintingTool {
         this.position = null;
         this.overwrite_full_canvas = false;
 
-        //showUsageHint();
+        if (context != null)
+            showUsageHint();
     }
 
     @Override
@@ -36,12 +37,14 @@ public class ImageImportTool extends PaintingTool {
         if (image != null && position != null) {
 
             if (image.getHeight() > c_height || image.getWidth() > c_width) {
-                /*
-                Toast toast;
-                toast = Toast.makeText(context,"Your image is larger than the canvas dimensions. It has been resized to fit in.", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
-                */
+
+                if (context != null) {
+                    Toast toast;
+                    toast = Toast.makeText(context, "Your image is larger than the canvas dimensions. It has been resized to fit in.", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+
                 image = scaleDownBitmap(image, c_height, c_width);
                 overwrite_full_canvas = true;
             }
