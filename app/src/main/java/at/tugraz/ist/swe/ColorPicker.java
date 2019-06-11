@@ -741,6 +741,7 @@ public class ColorPicker {
     }
 
     public void setHexString(String hex) {
-        textBox_Hex.setText(hex);
+        if(textBox_Hex!=null)
+            textBox_Hex.setText(hex);
     }
 }
