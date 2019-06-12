@@ -68,6 +68,46 @@ public class RedoUndoTest {
         onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(oldBitmap, newBitmap)));
     }
 
+    @Test
+    public void testMultipleUndo()
+    {
+
+        Bitmap bitmap0 = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        openDialog(R.drawable.ic_si_glyph_circle);
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50));
+        Bitmap bitmap1 = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        Bitmap bitmap2 = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(350, 350));
+        Bitmap bitmap3 = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        openDialog(R.drawable.ic_baseline_swap_horiz_24px);
+        onView(withId(R.id.buttonUndo)).perform(click());
+        Bitmap newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap2, newBitmap)));
+        onView(withId(R.id.buttonUndo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap1, newBitmap)));
+        onView(withId(R.id.buttonUndo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap0, newBitmap)));
+        onView(withId(R.id.buttonUndo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap0, newBitmap)));
+        onView(withId(R.id.buttonRedo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap1, newBitmap)));
+        onView(withId(R.id.buttonRedo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap2, newBitmap)));
+        onView(withId(R.id.buttonRedo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap3, newBitmap)));
+        onView(withId(R.id.buttonRedo)).perform(click());
+        newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap3, newBitmap)));
+    }
+
     public void openDialog(final int tool)
     {
         onView(withId(R.id.toolFlyoutMenu)).perform(click());
