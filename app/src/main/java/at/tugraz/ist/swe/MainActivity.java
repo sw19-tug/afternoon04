@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     public List<Integer> tools = new ArrayList<>();
     public LinearLayout layout;
     public ColorPicker foreground;
+    public TextPicker textPicker;
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
     public static final int IMAGE_CHOOSER = 123;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
         tools.add(R.drawable.ic_oval);
+        tools.add(R.drawable.ic_baseline_text_fields_24px);
         tools.add(R.drawable.ic_si_save);
 
         layout=findViewById(R.id.main_canvas_view);
@@ -88,8 +90,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         drawingArea = new DrawArea(this);
         drawingArea.setWillNotDraw(false);
+
+
+        textPicker = new TextPicker(this);
+        textPicker.setOnTextAppliedListener(new TextPicker.TextApprovedListener() {
+            @Override
+            public void onTextApproved(String text) {
+
+                LinearLayout strokeWidthLayout = findViewById(R.id.strokeWidthLayout);
+                drawingArea.setTool(new TextTool(getApplicationContext(), foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString()), text));
+                strokeWidthLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
 
         layout.addView(drawingArea);
 
@@ -228,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
 
         state.putBoolean("color", false);
+
         if(foreground.isShowing())
         {
             state.putBoolean("color", true);
@@ -239,6 +256,14 @@ public class MainActivity extends AppCompatActivity {
         else
             state.putInt("tool", R.drawable.ic_si_glyph_circle);
 
+        if(textPicker.isShowing())
+        {
+            state.putString("reset", textPicker.getText());
+            state.putBoolean("text", true);
+        }
+
+        String text = textPicker.dismissDialogue();
+        state.putString("textPicker", text);
     }
 
     @Override
@@ -266,6 +291,16 @@ public class MainActivity extends AppCompatActivity {
         }
         String oldColor = state.getString("current_color");
         foreground.setHexString(oldColor);
+        if(state.getBoolean("text"))
+        {
+            textPicker.setText(state.getString("reset"));
+            textPicker.setTextBox(state.getString("textPicker"));
+            textPicker.show();
+        }
+        else
+        {
+          textPicker.setText(state.getString("textPicker"));
+        }
     }
 
 
@@ -376,6 +411,9 @@ public class MainActivity extends AppCompatActivity {
                     else
                         Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case R.drawable.ic_baseline_text_fields_24px:
+                textPicker.show();
                 break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
