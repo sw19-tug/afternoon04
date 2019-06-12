@@ -1,18 +1,23 @@
 package at.tugraz.ist.swe;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
@@ -28,6 +33,8 @@ import android.widget.TextView;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public ColorPicker foreground;
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
+    public static final int IMAGE_CHOOSER = 123;
+
     private EditText strokeWidth;
     private Display screen;
     private Matrix matrix;
@@ -58,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
+        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
         tools.add(R.drawable.ic_si_glyph_bucket);
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
@@ -258,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
         foreground.setHexString(oldColor);
     }
 
+
     private void setupToolbar() {
         toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
 
@@ -310,9 +321,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-
         foreground.dismissDialogue();
-
 
     }
 
@@ -351,6 +360,10 @@ public class MainActivity extends AppCompatActivity {
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 drawingArea.setTool(new FillBucket(foreground.getColor()));
                 break;
+            case R.drawable.ic_outline_add_photo_alternate_24px:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                showFileChooser();
+                break;
             case R.drawable.ic_si_save:
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -369,6 +382,40 @@ public class MainActivity extends AppCompatActivity {
             break;
         }
     }
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select an image"), IMAGE_CHOOSER);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "Please install a file manager.",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            if(requestCode == IMAGE_CHOOSER) {
+                if (resultCode == RESULT_OK) {
+
+                    Uri uri = data.getData();
+                    try {
+                        Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        drawingArea.setTool(new ImageImportTool(selected_image, this));
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+
+        }
 
     public void changeStrokeWidth(View element)
     {
