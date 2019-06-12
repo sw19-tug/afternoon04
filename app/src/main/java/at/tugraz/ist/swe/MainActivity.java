@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
             state.putString("current_color", current_color);
         }
         else if(toolFlyoutMenu.getSelectedMenuItem() != null)
-            state.putInt("tool", toolFlyoutMenu.getSelectedMenuItem().getId());
+            state.putInt("tool", drawingArea.getPaintingTool().getId());
         else
             state.putInt("tool", R.drawable.ic_si_glyph_circle);
 
