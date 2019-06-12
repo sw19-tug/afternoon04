@@ -9,6 +9,16 @@ import android.view.View;
 
 public class DrawArea extends View {
 
+    private StepsListener listener;
+
+    public interface StepsListener
+    {
+        void onTouched(boolean undo, boolean redo);
+    }
+
+    public void setStepListener(StepsListener listener){
+        this.listener = listener;
+    }
 
     public PaintingTool getPaintingTool() {
         return paintingTool;
@@ -20,10 +30,12 @@ public class DrawArea extends View {
     private boolean drawCurrentTool;
     private boolean prepareBitmap;
     private boolean undo = false;
+    private boolean redo = false;
 
     public DrawArea(Context context)
     {
         super(context);
+        this.listener = null;
         this.paintingTool = new Circle(Color.BLACK, 10);
         this.setId(R.id.draw_point_view);
         this.setBackgroundColor(Color.WHITE);
@@ -40,6 +52,19 @@ public class DrawArea extends View {
         {
             oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.oldBitmap));
         }
+        else if(this.redo)
+        {
+            this.redo = false;
+            BitmapCache.oldBitmap++;
+            BitmapCache.nextBitmap++;
+            if(BitmapCache.redo_overflow) {
+                if (BitmapCache.oldBitmap >= BitmapCache.max_undo_steps)
+                    BitmapCache.oldBitmap = 0;
+                if (BitmapCache.nextBitmap >= BitmapCache.max_undo_steps)
+                    BitmapCache.nextBitmap = 0;
+            }
+            oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.nextBitmap));
+        }
 
         if (oldBitmap != null)
         {
@@ -50,6 +75,7 @@ public class DrawArea extends View {
             prepareBitmap = false;
             oldBitmap = this.createBitmap();
             BitmapCache.mMemoryCache.put("step0", oldBitmap);
+            BitmapCache.max_undo_steps = (int)(BitmapCache.cacheSize / (BitmapCache.mMemoryCache.get("step0").getByteCount() / 1024));
         }
         if(drawCurrentTool)
             paintingTool.drawTool(canvas);
@@ -57,10 +83,14 @@ public class DrawArea extends View {
         {
             this.undo = false;
             BitmapCache.oldBitmap--;
-            BitmapCache.current_step--;
-            this.drawCurrentTool = true;
+            BitmapCache.nextBitmap--;
+            if(BitmapCache.redo_overflow) {
+                if (BitmapCache.oldBitmap < 0)
+                    BitmapCache.oldBitmap = BitmapCache.max_undo_steps- 1;
+                if (BitmapCache.nextBitmap < 0)
+                    BitmapCache.nextBitmap = BitmapCache.max_undo_steps - 1;
+            }
         }
-
     }
 
     public void setHandleToucheEvents(boolean bool)
@@ -81,22 +111,27 @@ public class DrawArea extends View {
             invalidate();
             if(event.getAction() == MotionEvent.ACTION_DOWN)
             {
-                BitmapCache.oldBitmap = BitmapCache.current_step;
-                BitmapCache.current_step++;
-                if(BitmapCache.current_step >= BitmapCache.max_undo_steps)
+                listener.onTouched(false, false);
+                BitmapCache.oldBitmap = BitmapCache.nextBitmap;
+                BitmapCache.nextBitmap++;
+                BitmapCache.array_position = BitmapCache.nextBitmap;
+                if(BitmapCache.nextBitmap >= BitmapCache.max_undo_steps)
                 {
-                    BitmapCache.current_step = BitmapCache.current_step - BitmapCache.max_undo_steps;
+                    BitmapCache.nextBitmap = 0;
                     BitmapCache.redo_overflow = true;
                 }
-                BitmapCache.current_undo = BitmapCache.current_step;
+                if(BitmapCache.array_position >= BitmapCache.max_undo_steps) {
+                    BitmapCache.array_position = 0;
+                }
             }
 
             if(event.getAction() == MotionEvent.ACTION_UP)
             {
                 oldBitmap = createBitmap();
                 paintingTool.cleanUp();
-                BitmapCache.mMemoryCache.put("step"+Integer.toString(BitmapCache.current_step), oldBitmap);
+                BitmapCache.mMemoryCache.put("step"+Integer.toString(BitmapCache.nextBitmap), oldBitmap);
                 invalidate();
+                listener.onTouched(true, false);
             }
         }
         return true;
@@ -114,6 +149,12 @@ public class DrawArea extends View {
     {
         setDrawCurrentTool(false);
         this.undo = true;
+        invalidate();
+    }
+    public void redoStep()
+    {
+        setDrawCurrentTool(false);
+        this.redo = true;
         invalidate();
     }
 

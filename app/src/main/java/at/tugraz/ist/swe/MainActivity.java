@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.Window;
@@ -90,6 +91,16 @@ public class MainActivity extends AppCompatActivity {
         strokeWidth = findViewById(R.id.strokewidth_text);
         redoButton = findViewById(R.id.buttonRedo);
         undoButton = findViewById(R.id.buttonUndo);
+        redoButton.setEnabled(false);
+        undoButton.setEnabled(false);
+
+        drawingArea.setStepListener(new DrawArea.StepsListener() {
+            @Override
+            public void onTouched(boolean undo, boolean redo) {
+                undoButton.setEnabled(undo);
+                redoButton.setEnabled(redo);
+            }
+        });
 
         screen = getWindowManager().getDefaultDisplay();
 
@@ -214,6 +225,8 @@ public class MainActivity extends AppCompatActivity {
             ((Button)findViewById(R.id.strokewidth_left)).setText("-");
             ((Button)findViewById(R.id.strokewidth_right)).setText("+");
         }
+
+
     }
 
     @Override
@@ -385,13 +398,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void undoStep(View element)
     {
+        drawingArea.undoStep();
+        if(BitmapCache.max_undo_steps == 0)
+            redoButton.setEnabled(false);
+        redoButton.setEnabled(true);
         if(BitmapCache.redo_overflow)
         {
-
+            if(BitmapCache.array_position == 0)
+            {
+                if (BitmapCache.oldBitmap == 1)
+                    undoButton.setEnabled(false);
+                else
+                    undoButton.setEnabled(true);
+            }
+            else {
+                if (BitmapCache.nextBitmap == BitmapCache.array_position)
+                    undoButton.setEnabled(false);
+                else
+                    undoButton.setEnabled(true);
+            }
         }
         else
         {
-            if(BitmapCache.current_undo == 0)
+            if(BitmapCache.oldBitmap == 0)
             {
                 undoButton.setEnabled(false);
             }
@@ -400,28 +429,40 @@ public class MainActivity extends AppCompatActivity {
                 undoButton.setEnabled(true);
             }
         }
-        drawingArea.undoStep();
     }
 
     public void redoStep(View element)
     {
+        drawingArea.redoStep();
+        undoButton.setEnabled(true);
         if(BitmapCache.redo_overflow)
         {
-
-        }
-        else
-        {
-            BitmapCache.current_undo++;
-            if(BitmapCache.current_undo < BitmapCache.current_step)
+            if(BitmapCache.array_position == 0)
             {
-                undoButton.setEnabled(true);
+               if(BitmapCache.nextBitmap == BitmapCache.max_undo_steps - 1)
+                   redoButton.setEnabled(false);
+               else
+                   redoButton.setEnabled(true);
             }
             else
             {
-                undoButton.setEnabled(false);
+                if(BitmapCache.nextBitmap == BitmapCache.array_position)
+                    redoButton.setEnabled(false);
+                else
+                    redoButton.setEnabled(true);
+            }
+            }
+        else
+        {
+            if(BitmapCache.nextBitmap == BitmapCache.array_position)
+            {
+                redoButton.setEnabled(false);
+            }
+            else
+            {
+                redoButton.setEnabled(true);
             }
         }
-        drawingArea.invalidate();
     }
 
     public void changeStrokeWidth(View element)
