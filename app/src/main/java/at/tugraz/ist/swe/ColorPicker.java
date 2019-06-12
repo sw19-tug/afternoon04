@@ -83,6 +83,14 @@ public class ColorPicker {
         return Color.argb(this.color_a, this.color_r, this.color_g, this.color_b);
     }
 
+    public void setColor(int c_a, int c_r, int c_g, int c_b)
+    {
+        this.color_a = c_a;
+        this.color_r = c_r;
+        this.color_g = c_g;
+        this.color_b = c_b;
+    }
+
     public void setOnColorAppliedListener(ColorAppliedListener listener){
         this.listener = listener;
     }
