@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
     public static final int IMAGE_CHOOSER = 123;
+    public static final int CAMERA_CHOOSER = 111;
+
 
     private EditText strokeWidth;
     private Display screen;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_rect);
         tools.add(R.drawable.ic_oval);
         tools.add(R.drawable.ic_si_save);
+        tools.add(R.drawable.ic_outline_add_a_photo_24px);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -376,11 +379,20 @@ public class MainActivity extends AppCompatActivity {
                     else
                         Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
                 }
+            case R.drawable.ic_outline_add_a_photo_24px:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                getImageFromCamera();
+                break;
             default:
                 strokeWidthLayout.setVisibility(View.VISIBLE);
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
             break;
         }
+    }
+
+    private void getImageFromCamera() {
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_CHOOSER);
     }
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -414,8 +426,13 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-
+        if (requestCode == CAMERA_CHOOSER && resultCode == RESULT_OK)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            drawingArea.setTool(new ImageImportTool(photo, this));
         }
+
+    }
 
     public void changeStrokeWidth(View element)
     {
