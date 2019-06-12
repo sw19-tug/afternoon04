@@ -393,19 +393,18 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.drawable.ic_outline_add_a_photo_24px:
-                strokeWidthLayout.setVisibility(View.INVISIBLE);
-                getImageFromCamera();
-                break;
-            default:
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this,"Unable to open Camera! - Missing Permissions", Toast.LENGTH_SHORT).show();
                 }
-                else{
+                else {
+                    strokeWidthLayout.setVisibility(View.INVISIBLE);
+                    getImageFromCamera();
+                }
+                break;
+            default:
                     strokeWidthLayout.setVisibility(View.VISIBLE);
                     drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
-                }
-
             break;
         }
     }
