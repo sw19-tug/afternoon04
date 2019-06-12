@@ -7,17 +7,18 @@ import android.net.Uri;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Color;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
@@ -33,10 +34,14 @@ import android.widget.TextView;
 
 import org.zakariya.flyoutmenu.FlyoutMenuView;
 
+import java.io.File;
 import java.io.IOException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     public FlyoutMenuView toolFlyoutMenu;
     public DrawArea drawingArea;
     public static final int IMAGE_CHOOSER = 123;
+    public static final int CAMERA_CHOOSER = 111;
+
 
     private EditText strokeWidth;
     private Display screen;
@@ -54,11 +61,15 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap oldActivity;
     private InputMethodManager manager;
     private String current_color = "";
+    private File mTempCameraPhotoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -75,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         tools.add(R.drawable.ic_oval);
         tools.add(R.drawable.ic_baseline_text_fields_24px);
         tools.add(R.drawable.ic_si_save);
+        tools.add(R.drawable.ic_outline_add_a_photo_24px);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -415,11 +427,38 @@ public class MainActivity extends AppCompatActivity {
             case R.drawable.ic_baseline_text_fields_24px:
                 textPicker.show();
                 break;
+            case R.drawable.ic_outline_add_a_photo_24px:
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this,"Unable to open Camera! - Missing Permissions", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    strokeWidthLayout.setVisibility(View.INVISIBLE);
+                    getImageFromCamera();
+                }
+                break;
             default:
-                strokeWidthLayout.setVisibility(View.VISIBLE);
-                drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
+                    strokeWidthLayout.setVisibility(View.VISIBLE);
+                    drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
             break;
         }
+    }
+
+    private void getImageFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+            File exportDir = new File(Environment.getExternalStorageDirectory(), "TempFolder");
+            if (!exportDir.exists()) {
+                exportDir.mkdirs();
+            } else {
+                exportDir.delete();
+            }
+            mTempCameraPhotoFile = new File(exportDir, "/" + UUID.randomUUID().toString().replaceAll("-", "") + ".jpg");
+            Log.d("anna", "/" + UUID.randomUUID().toString().replaceAll("-", "") + ".jpg");
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTempCameraPhotoFile));
+            startActivityForResult(takePictureIntent, CAMERA_CHOOSER);
+        };
+
     }
     private void showFileChooser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -453,8 +492,22 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
+        if (requestCode == CAMERA_CHOOSER && resultCode == RESULT_OK)
+        {
+
+            Uri uri = Uri.fromFile(mTempCameraPhotoFile);
+            try {
+                Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                drawingArea.setTool(new ImageImportTool(selected_image, this));
+                Log.d("anna","width: "+selected_image.getWidth()+" height: "+selected_image.getHeight());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
+
+    }
 
     public void changeStrokeWidth(View element)
     {
@@ -495,5 +548,36 @@ public class MainActivity extends AppCompatActivity {
         }
         else
             return new_number;
+    }
+
+    /** Create a file Uri for saving an image or video */
+    private static Uri getOutputMediaFileUri(){
+        return Uri.fromFile(getOutputMediaFile());
+    }
+
+    /** Create a File for saving an image or video */
+    private static File getOutputMediaFile(){
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_"+ timeStamp + ".jpg");
+
+        return mediaFile;
     }
 }
