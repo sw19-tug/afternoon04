@@ -391,6 +391,7 @@ public class MainActivity extends AppCompatActivity {
                     else
                         Toast.makeText(this,"Unable to save Image!", Toast.LENGTH_SHORT).show();
                 }
+                break;
             case R.drawable.ic_outline_add_a_photo_24px:
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
                 getImageFromCamera();
