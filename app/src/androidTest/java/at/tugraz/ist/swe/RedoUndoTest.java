@@ -46,12 +46,26 @@ public class RedoUndoTest {
     {
         Bitmap oldBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
         openDialog(R.drawable.ic_si_glyph_circle);
-        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150)); // click to close menu
-        onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50)); // click to draw
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50));
         openDialog(R.drawable.ic_baseline_swap_horiz_24px);
         onView(withId(R.id.buttonUndo)).perform(click());
         Bitmap newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
         onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(oldBitmap,newBitmap)));
+    }
+
+    @Test
+    public void testRedoFunction()
+    {
+        openDialog(R.drawable.ic_si_glyph_circle);
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150));
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50));
+        Bitmap oldBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        openDialog(R.drawable.ic_baseline_swap_horiz_24px);
+        onView(withId(R.id.buttonUndo)).perform(click());
+        onView(withId(R.id.buttonRedo)).perform(click());
+        Bitmap newBitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
+        onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(oldBitmap, newBitmap)));
     }
 
     public void openDialog(final int tool)
