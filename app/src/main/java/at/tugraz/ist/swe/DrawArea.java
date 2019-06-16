@@ -90,4 +90,8 @@ public class DrawArea extends View {
         this.paintingTool.setSize(size);
         this.drawCurrentTool = false;
     }
+
+    public void resetCanvas() {
+        this.oldBitmap.eraseColor(Color.TRANSPARENT);
+    }
 }
