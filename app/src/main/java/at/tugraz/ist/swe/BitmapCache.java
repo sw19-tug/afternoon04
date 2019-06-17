@@ -14,6 +14,7 @@ public class BitmapCache {
     public static int max_undo_steps = 10;
     public static int nextBitmap = 0;
     public static int array_position = 0;
+    public static int dead_zone_start = -1;
     public static boolean redo_overflow = false;
     public static int oldBitmap = 0;
 

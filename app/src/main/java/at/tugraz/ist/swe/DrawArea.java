@@ -46,12 +46,11 @@ public class DrawArea extends View {
 
     protected void onDraw(Canvas canvas) {
 
-        //oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.oldBitmap));
-
         if(this.undo)
         {
             oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.oldBitmap));
         }
+
         else if(this.redo)
         {
             this.redo = false;
@@ -73,9 +72,17 @@ public class DrawArea extends View {
         else if(prepareBitmap)
         {
             prepareBitmap = false;
-            oldBitmap = this.createBitmap();
-            BitmapCache.mMemoryCache.put("step0", oldBitmap);
-            BitmapCache.max_undo_steps = (int)(BitmapCache.cacheSize / (BitmapCache.mMemoryCache.get("step0").getByteCount() / 1024));
+            if(BitmapCache.mMemoryCache.get("step0") == null)
+            {
+                oldBitmap = this.createBitmap();
+                BitmapCache.mMemoryCache.put("step0", oldBitmap);
+                BitmapCache.max_undo_steps = (int)(BitmapCache.cacheSize / (BitmapCache.mMemoryCache.get("step0").getByteCount() / 1024));
+            }
+            else
+            {
+                oldBitmap = BitmapCache.mMemoryCache.get("step" + Integer.toString(BitmapCache.nextBitmap));
+                canvas.drawBitmap(oldBitmap, 0, 0, null);
+            }
         }
         if(drawCurrentTool)
             paintingTool.drawTool(canvas);
@@ -86,7 +93,7 @@ public class DrawArea extends View {
             BitmapCache.nextBitmap--;
             if(BitmapCache.redo_overflow) {
                 if (BitmapCache.oldBitmap < 0)
-                    BitmapCache.oldBitmap = BitmapCache.max_undo_steps- 1;
+                    BitmapCache.oldBitmap = BitmapCache.max_undo_steps - 1;
                 if (BitmapCache.nextBitmap < 0)
                     BitmapCache.nextBitmap = BitmapCache.max_undo_steps - 1;
             }
@@ -113,8 +120,12 @@ public class DrawArea extends View {
             {
                 listener.onTouched(false, false);
                 BitmapCache.oldBitmap = BitmapCache.nextBitmap;
+                if(BitmapCache.redo_overflow && BitmapCache.array_position != BitmapCache.nextBitmap && BitmapCache.dead_zone_start == -1)
+                    BitmapCache.dead_zone_start = BitmapCache.array_position;
                 BitmapCache.nextBitmap++;
                 BitmapCache.array_position = BitmapCache.nextBitmap;
+                if(BitmapCache.dead_zone_start != -1 && BitmapCache.dead_zone_start == BitmapCache.array_position)
+                    BitmapCache.dead_zone_start = -1;
                 if(BitmapCache.nextBitmap >= BitmapCache.max_undo_steps)
                 {
                     BitmapCache.nextBitmap = 0;

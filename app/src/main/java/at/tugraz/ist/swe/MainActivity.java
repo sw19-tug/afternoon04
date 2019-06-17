@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap oldActivity;
     private InputMethodManager manager;
     private String current_color = "";
+    private boolean prepareBitmap = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,77 +109,80 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOrientationChanged(int orientation) {
                 if(BitmapCache.rotation != screen.getRotation()) {
-                    oldActivity = BitmapCache.mMemoryCache.get("oldBitmap");
-                    BitmapCache.oldRotation = BitmapCache.rotation;
-                    BitmapCache.rotation = screen.getRotation();
+                    for (int count = 0; 0 < BitmapCache.max_undo_steps; count++) {
+                        oldActivity = BitmapCache.mMemoryCache.get("step" + Integer.toString(count));
+                        if(oldActivity == null)
+                            break;
+                        BitmapCache.oldRotation = BitmapCache.rotation;
+                        BitmapCache.rotation = screen.getRotation();
 
-                    if (oldActivity != null) {
+                        if (oldActivity != null) {
 
-                        if (BitmapCache.oldRotation == 0) {
-                            if (BitmapCache.rotation == 1) {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            } else if (BitmapCache.rotation == 3) {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            } else if(BitmapCache.rotation == 2)
+                            if (BitmapCache.oldRotation == 0) {
+                                if (BitmapCache.rotation == 1) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                } else if (BitmapCache.rotation == 3) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                } else if(BitmapCache.rotation == 2)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                            } else if (BitmapCache.oldRotation == 1) {
+                                if (BitmapCache.rotation == 0) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                } else if (BitmapCache.rotation == 3) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                                else if(BitmapCache.rotation == 2)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                }
+                            } else if (BitmapCache.oldRotation == 3) {
+                                if (BitmapCache.rotation == 0) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                } else if (BitmapCache.rotation == 1) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                                else if(BitmapCache.rotation == 2)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                }
+                            }
+                            else if(BitmapCache.oldRotation == 2)
                             {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
+                                if(BitmapCache.rotation == 1)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                }
+                                else if(BitmapCache.rotation == 0)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                                if(BitmapCache.rotation == 3)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                }
+
                             }
-                        } else if (BitmapCache.oldRotation == 1) {
-                            if (BitmapCache.rotation == 0) {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            } else if (BitmapCache.rotation == 3) {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
-                            }
-                            else if(BitmapCache.rotation == 2)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            }
-                        } else if (BitmapCache.oldRotation == 3) {
-                            if (BitmapCache.rotation == 0) {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            } else if (BitmapCache.rotation == 1) {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
-                            }
-                            else if(BitmapCache.rotation == 2)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            }
+                            BitmapCache.mMemoryCache.put("step" + Integer.toString(count), Bitmap.createBitmap(oldActivity, 0, 0, oldActivity.getWidth(), oldActivity.getHeight(), matrix, true));
                         }
-                        else if(BitmapCache.oldRotation == 2)
-                        {
-                            if(BitmapCache.rotation == 1)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            }
-                            else if(BitmapCache.rotation == 0)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
-                            }
-                            if(BitmapCache.rotation == 3)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            }
-
-                        }
-
-                        BitmapCache.mMemoryCache.put("oldBitmap", Bitmap.createBitmap(oldActivity, 0, 0, oldActivity.getWidth(), oldActivity.getHeight(), matrix, true));
                     }
+                    if((BitmapCache.oldRotation == 3 && BitmapCache.rotation == 1) || (BitmapCache.oldRotation == 1 && BitmapCache.rotation == 3) ||
+                            (BitmapCache.oldRotation == 0 && BitmapCache.rotation == 2) || (BitmapCache.oldRotation == 2 && BitmapCache.rotation == 0))
+                        drawingArea.invalidate();
                 }
-                if((BitmapCache.oldRotation == 3 && BitmapCache.rotation == 1) || (BitmapCache.oldRotation == 1 && BitmapCache.rotation == 3) ||
-                   (BitmapCache.oldRotation == 0 && BitmapCache.rotation == 2) || (BitmapCache.oldRotation == 2 && BitmapCache.rotation == 0))
-                    drawingArea.invalidate();
             }
         };
         rotation.enable();
@@ -247,7 +251,8 @@ public class MainActivity extends AppCompatActivity {
             state.putInt("tool", toolFlyoutMenu.getSelectedMenuItem().getId());
         else
             state.putInt("tool", R.drawable.ic_si_glyph_circle);
-
+        state.putBoolean("undo", undoButton.isEnabled());
+        state.putBoolean("redo", redoButton.isEnabled());
     }
 
     @Override
@@ -275,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
         }
         String oldColor = state.getString("current_color");
         foreground.setHexString(oldColor);
+        redoButton.setEnabled(state.getBoolean("redo"));
+        undoButton.setEnabled(state.getBoolean("undo"));
     }
 
     private void setupToolbar() {
@@ -404,7 +411,8 @@ public class MainActivity extends AppCompatActivity {
         redoButton.setEnabled(true);
         if(BitmapCache.redo_overflow)
         {
-            if(BitmapCache.array_position == 0)
+            int position_to_check_against = (BitmapCache.dead_zone_start > -1) ? BitmapCache.dead_zone_start : BitmapCache.array_position;
+            if(position_to_check_against == 0)
             {
                 if (BitmapCache.oldBitmap == 1)
                     undoButton.setEnabled(false);
@@ -412,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
                     undoButton.setEnabled(true);
             }
             else {
-                if (BitmapCache.nextBitmap == BitmapCache.array_position)
+                if (BitmapCache.oldBitmap == position_to_check_against + 1)
                     undoButton.setEnabled(false);
                 else
                     undoButton.setEnabled(true);
@@ -446,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else
             {
-                if(BitmapCache.nextBitmap == BitmapCache.array_position)
+                if(BitmapCache.nextBitmap == BitmapCache.array_position - 1)
                     redoButton.setEnabled(false);
                 else
                     redoButton.setEnabled(true);
@@ -454,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
             }
         else
         {
-            if(BitmapCache.nextBitmap == BitmapCache.array_position)
+            if(BitmapCache.nextBitmap == BitmapCache.array_position - 1)
             {
                 redoButton.setEnabled(false);
             }
