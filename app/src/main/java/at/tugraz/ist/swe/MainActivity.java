@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap oldActivity;
     private InputMethodManager manager;
     private String current_color = "";
-    private boolean prepareBitmap = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -336,10 +335,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-
         foreground.dismissDialogue();
-
-
     }
 
     public void showTool(int shown_tool)
@@ -401,7 +397,6 @@ public class MainActivity extends AppCompatActivity {
             break;
         }
     }
-
 
     public void undoStep(View element)
     {
