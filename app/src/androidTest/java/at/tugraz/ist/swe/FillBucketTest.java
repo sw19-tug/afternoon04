@@ -61,6 +61,7 @@ public class FillBucketTest {
 
     @Test
     public void testDrawboardUserAction() {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog(R.drawable.ic_si_glyph_bucket);
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
@@ -76,6 +77,7 @@ public class FillBucketTest {
     }
     @Test
     public void testDrawboardUserActionFillBucket() {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog(R.drawable.ic_si_glyph_bucket);
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
