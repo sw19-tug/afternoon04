@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+<LinearLayout
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-   >
+    >
 
     <View
         android:id="@+id/color_picker_preview"
@@ -136,7 +139,9 @@
             android:max="255"
             android:progress="255"
             android:layout_weight="0.70"
-            app:thumbTint="#FF00FF00"/>
+            app:thumbTint="#FF0000FF"
+            android:tint="#FF0000FF"/>
+
         <EditText
             android:id="@+id/textView_alpha_color"
             android:layout_width="0dp"
@@ -148,7 +153,6 @@
             android:text="0"
             android:imeOptions="actionDone"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -173,3 +177,4 @@
 
 
 </LinearLayout>
+</ScrollView>

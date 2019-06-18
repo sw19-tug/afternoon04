@@ -64,6 +64,7 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_red)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.color_picker_seekbar_green)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.color_picker_seekbar_blue)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withId(R.id.color_picker_seekbar_alpha)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -88,6 +89,7 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_label_r)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.color_picker_label_g)).inRoot(isDialog()).check(matches(isDisplayed()));
         onView(withId(R.id.color_picker_label_b)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withId(R.id.color_picker_label_a)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -107,6 +109,9 @@ public class ColorPickerDialogTest {
 
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(256));
         onView(withId(R.id.textView_blue_color)).check(matches(withText("255")));
+
+        onView(withId(R.id.color_picker_seekbar_alpha)).perform(setProgress(256));
+        onView(withId(R.id.textView_alpha_color)).check(matches(withText("255")));
     }
     @Test
     public void testCorrectColorPreview() {
@@ -114,8 +119,9 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
+        onView(withId(R.id.color_picker_seekbar_alpha)).perform(setProgress(100));
 
-        onView(withId(R.id.color_picker_preview)).check(matches(withBackgroundColor(Color.argb(255, 0, 100, 255))));
+        onView(withId(R.id.color_picker_preview)).check(matches(withBackgroundColor(Color.argb(100, 0, 100, 255))));
 
     }
 
@@ -125,20 +131,22 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
+        onView(withId(R.id.color_picker_seekbar_alpha)).perform(setProgress(100));
 
         onView(withText("Apply")).inRoot(isDialog()).perform(click());
         openDialog();
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(200));
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(0));
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(20));
+        onView(withId(R.id.color_picker_seekbar_alpha)).perform(setProgress(180));
 
         onView(withText("Reset")).inRoot(isDialog()).perform(click());
 
         onView(withId(R.id.color_picker_seekbar_red)).check(matches(withProgress(0)));
         onView(withId(R.id.color_picker_seekbar_green)).check(matches(withProgress(100)));
         onView(withId(R.id.color_picker_seekbar_blue)).check(matches(withProgress(255)));
-
-    }
+        onView(withId(R.id.color_picker_seekbar_alpha)).check(matches(withProgress(100)));
+}
 
 
     @Test
@@ -165,19 +173,21 @@ public class ColorPickerDialogTest {
         onView(withId(R.id.color_picker_seekbar_red)).perform(setProgress(0));
         onView(withId(R.id.color_picker_seekbar_green)).perform(setProgress(100));
         onView(withId(R.id.color_picker_seekbar_blue)).perform(setProgress(255));
+        onView(withId(R.id.color_picker_seekbar_alpha)).perform(setProgress(255));
 
-        onView(withId(R.id.textView_hex_color)).check(matches(withText("0064FF")));
+        onView(withId(R.id.textView_hex_color)).check(matches(withText("0064FFFF")));
     }
 
     @Test
     public void testSeekbarShowsTextBoxHexValues()
     {
         openDialog();
-        onView(withId(R.id.textView_hex_color)).perform(setText("64FF32"));
+        onView(withId(R.id.textView_hex_color)).perform(setText("64FF3232"));
 
         onView(withId(R.id.color_picker_seekbar_red)).check(matches(withProgress(100)));
         onView(withId(R.id.color_picker_seekbar_green)).check(matches(withProgress(255)));
         onView(withId(R.id.color_picker_seekbar_blue)).check(matches(withProgress(50)));
+        onView(withId(R.id.color_picker_seekbar_alpha)).check(matches(withProgress(50)));
     }
 
     // helper function to set value on seekbar
