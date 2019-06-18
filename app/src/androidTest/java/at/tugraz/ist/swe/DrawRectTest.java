@@ -59,6 +59,7 @@ public class DrawRectTest {
 
     @Test
     public void testDrawboardUserAction() {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog();
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
@@ -71,6 +72,7 @@ public class DrawRectTest {
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50, 699)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 50)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699)));
+
 
     }
 

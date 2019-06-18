@@ -1,19 +1,15 @@
 package at.tugraz.ist.swe;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.MotionEvents;
 import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.SeekBar;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -24,14 +20,9 @@ import org.zakariya.flyoutmenu.FlyoutMenuView;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.isDialog;
-import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class PipetteTest {
@@ -50,11 +41,13 @@ public class PipetteTest {
     @Test
     public void testRightColorPicked()
     {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog();
 
         onView(withId(R.id.main_canvas_view)).perform(performTouch(150,150));
         onView(withId(R.id.main_canvas_view)).perform(performTouch(150,150));
         onView(withId(R.id.main_canvas_view)).check(matches(withBackgroundColor(Color.argb(255, 255, 255, 255))));
+
     }
 
     public static Matcher<View> withBackgroundColor(final int expectedColor) {

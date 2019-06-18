@@ -32,6 +32,7 @@ public class DrawLineTest {
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+
     @Test
     public void testSelectedTool()
     {
@@ -66,7 +67,8 @@ public class DrawLineTest {
     public void testDrawboardUserAction()
     {
         openDialog();
-
+        activityTestRule.getActivity().drawingArea.resetCanvas();
+        onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50, 300, 50));//click to hide toolbar
         onView(withId(R.id.main_canvas_view)).perform(performTouch(50, 50, 300, 50)); // click to draw
         onView(withId(R.id.main_canvas_view)).perform(performTouch(300, 200, 700, 200)); // click to draw
 
@@ -100,7 +102,6 @@ public class DrawLineTest {
                             return false;
                         }
                 }
-
                 return true;
 
             }
@@ -138,6 +139,7 @@ public class DrawLineTest {
     }
 
     public static ViewAction performTouch(final float x_down, final float y_down, final float x_up, final float y_up) {
+
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
@@ -151,7 +153,6 @@ public class DrawLineTest {
 
             @Override
             public void perform(UiController uiController, final View view) {
-
                 int[] location = new int[2];
                 view.getLocationOnScreen(location);
 

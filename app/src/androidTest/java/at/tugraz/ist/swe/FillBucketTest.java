@@ -67,14 +67,15 @@ public class FillBucketTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
 
-        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
+        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50));
+        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50));
 
         Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
 
         onView(withId(R.id.draw_point_view)).check(matches(checkBitmap(bitmap, 255, 0, 0, 0)));
 
-
     }
+
     @Test
     public void testDrawboardUserActionFillBucket() {
         activityTestRule.getActivity().drawingArea.resetCanvas();
@@ -83,7 +84,8 @@ public class FillBucketTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
         onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50)); // click to close menu
 
-        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to go down
+        onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50));
+        onView(withId(R.id.main_canvas_view)).perform(performTouchUp(50, 50));
 
         Bitmap bitmap = (Bitmap)activityTestRule.getActivity().drawingArea.getBitmap();
         int height = bitmap.getHeight()-1;
@@ -94,7 +96,6 @@ public class FillBucketTest {
             int y = randomGenerator.nextInt(height) + 1;
             onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(x,y)));
         }
-
 
     }
 

@@ -127,7 +127,7 @@
             android:layout_weight="0.1"
             android:text="A"
             android:textAlignment="viewEnd"
-
+            android:textColor="#FF666666"
             />
         <SeekBar
             android:id="@+id/color_picker_seekbar_alpha"
@@ -136,9 +136,7 @@
             android:max="255"
             android:progress="255"
             android:layout_weight="0.70"
-            app:thumbTint="#FF0000FF"
-            android:tint="#FF0000FF"/>
-
+            app:thumbTint="#FF00FF00"/>
         <EditText
             android:id="@+id/textView_alpha_color"
             android:layout_width="0dp"
@@ -147,7 +145,7 @@
             android:digits="0123456789"
             android:maxLength="3"
             android:layout_weight="0.20"
-            android:text="255"
+            android:text="0"
             android:imeOptions="actionDone"/>
     </LinearLayout>
 

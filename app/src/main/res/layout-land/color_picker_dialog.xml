@@ -130,7 +130,7 @@
             android:layout_weight="0.1"
             android:text="A"
             android:textAlignment="viewEnd"
-
+            android:textColor="#FF666666"
             />
         <SeekBar
             android:id="@+id/color_picker_seekbar_alpha"
@@ -150,10 +150,9 @@
             android:digits="0123456789"
             android:maxLength="3"
             android:layout_weight="0.20"
-            android:text="255"
+            android:text="0"
             android:imeOptions="actionDone"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

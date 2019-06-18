@@ -29,6 +29,33 @@
             android:layout_alignParentBottom="true"
             android:clickable="true"
             android:focusableInTouchMode="true"
+            android:id="@+id/undoLayout"
+            android:visibility="invisible"
+            >
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_undo_24px"
+                android:id="@+id/buttonUndo"
+                android:onClick="undoStep"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_redo_24px"
+                android:id="@+id/buttonRedo"
+                android:onClick="redoStep"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:layout_toStartOf="@id/toolFlyoutMenu"
+            android:layout_alignParentBottom="true"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
             android:id="@+id/strokeWidthLayout"
             >
             <EditText

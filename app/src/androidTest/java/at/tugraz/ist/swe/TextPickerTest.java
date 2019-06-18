@@ -69,7 +69,7 @@ public class TextPickerTest {
 
     @Test
     public void testTextDrawn(){
-
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog();
         onView(withId(R.id.textPicker_text)).perform(setText("HALLO"));
         onView(withText("Apply")).inRoot(isDialog()).perform(click());
@@ -79,6 +79,7 @@ public class TextPickerTest {
         onView(withId(R.id.main_canvas_view)).perform(performTouch(700, 700));
         Bitmap bitmap_new = activityTestRule.getActivity().drawingArea.getBitmap();
         onView(withId(R.id.main_canvas_view)).check(matches(checkBitmap(bitmap_old, bitmap_new)));
+
     }
 
     @Test

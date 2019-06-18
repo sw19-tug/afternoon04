@@ -59,6 +59,7 @@ public class DrawPathTest {
 
     @Test
     public void testDrawboardUserAction() {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog(R.drawable.ic_outline_brush_24px);
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
@@ -75,10 +76,12 @@ public class DrawPathTest {
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 75, Color.BLACK)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(450, 375, Color.BLACK)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699, Color.BLACK)));
+
     }
 
     @Test
     public void testEraser() {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog(R.drawable.ic_outline_brush_24px);
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu
@@ -106,6 +109,7 @@ public class DrawPathTest {
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150, 75, Color.WHITE)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(450, 375, Color.WHITE)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(699, 699, Color.WHITE)));
+
     }
 
     public static Matcher<View> checkCoordinates(final float x_check, final float y_check, final int color) {

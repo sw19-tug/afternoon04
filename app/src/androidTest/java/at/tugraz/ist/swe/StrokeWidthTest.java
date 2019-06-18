@@ -45,6 +45,7 @@ public class StrokeWidthTest {
 
         @Test
         public void testCorrectPointSize() {
+            activityTestRule.getActivity().drawingArea.resetCanvas();
             selectTool(R.drawable.ic_si_glyph_circle);
             onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150)); // click to close menu
 
@@ -55,6 +56,7 @@ public class StrokeWidthTest {
 
             onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(50,50, 30)));
             onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150,150, 30)));
+
         }
 
         // helper function to set value on edit text

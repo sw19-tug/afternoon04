@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -56,12 +57,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private EditText strokeWidth;
+    private ImageButton redoButton;
+    private ImageButton undoButton;
     private Display screen;
     private Matrix matrix;
     private Bitmap oldActivity;
     private InputMethodManager manager;
     private String current_color = "";
     private File mTempCameraPhotoFile;
+    private static Bitmap toImport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +79,20 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        tools.add(R.drawable.ic_outline_color_lens_24px);
         tools.add(R.drawable.ic_si_glyph_circle);
         tools.add(R.drawable.ic_outline_brush_24px);
         tools.add(R.drawable.ic_si_glyph_line_two_angle_point);
-        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
         tools.add(R.drawable.ic_si_glyph_bucket);
         tools.add(R.drawable.ic_si_glyph_erase);
         tools.add(R.drawable.ic_rect);
-        tools.add(R.drawable.ic_pipette);
         tools.add(R.drawable.ic_oval);
         tools.add(R.drawable.ic_baseline_text_fields_24px);
-        tools.add(R.drawable.ic_si_save);
+        tools.add(R.drawable.ic_baseline_swap_horiz_24px);
+        tools.add(R.drawable.ic_outline_color_lens_24px);
+        tools.add(R.drawable.ic_pipette);
+        tools.add(R.drawable.ic_outline_add_photo_alternate_24px);
         tools.add(R.drawable.ic_outline_add_a_photo_24px);
+        tools.add(R.drawable.ic_si_save);
 
         layout=findViewById(R.id.main_canvas_view);
 
@@ -102,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 drawingArea.getPaintingTool().setColor(color);
             }
         });
-
 
         drawingArea = new DrawArea(this);
         drawingArea.setWillNotDraw(false);
@@ -123,6 +127,18 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(drawingArea);
 
         strokeWidth = findViewById(R.id.strokewidth_text);
+        redoButton = findViewById(R.id.buttonRedo);
+        undoButton = findViewById(R.id.buttonUndo);
+        redoButton.setEnabled(false);
+        undoButton.setEnabled(false);
+
+        drawingArea.setStepListener(new DrawArea.StepsListener() {
+            @Override
+            public void onTouched(boolean undo, boolean redo) {
+                undoButton.setEnabled(undo);
+                redoButton.setEnabled(redo);
+            }
+        });
 
         screen = getWindowManager().getDefaultDisplay();
 
@@ -130,77 +146,80 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onOrientationChanged(int orientation) {
                 if(BitmapCache.rotation != screen.getRotation()) {
-                    oldActivity = BitmapCache.mMemoryCache.get("oldBitmap");
-                    BitmapCache.oldRotation = BitmapCache.rotation;
-                    BitmapCache.rotation = screen.getRotation();
+                    for (int count = 0; 0 < BitmapCache.max_undo_steps; count++) {
+                        oldActivity = BitmapCache.mMemoryCache.get("step" + Integer.toString(count));
+                        if(oldActivity == null)
+                            break;
+                        BitmapCache.oldRotation = BitmapCache.rotation;
+                        BitmapCache.rotation = screen.getRotation();
 
-                    if (oldActivity != null) {
+                        if (oldActivity != null) {
 
-                        if (BitmapCache.oldRotation == 0) {
-                            if (BitmapCache.rotation == 1) {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            } else if (BitmapCache.rotation == 3) {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            } else if(BitmapCache.rotation == 2)
+                            if (BitmapCache.oldRotation == 0) {
+                                if (BitmapCache.rotation == 1) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                } else if (BitmapCache.rotation == 3) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                } else if(BitmapCache.rotation == 2)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                            } else if (BitmapCache.oldRotation == 1) {
+                                if (BitmapCache.rotation == 0) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                } else if (BitmapCache.rotation == 3) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                                else if(BitmapCache.rotation == 2)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                }
+                            } else if (BitmapCache.oldRotation == 3) {
+                                if (BitmapCache.rotation == 0) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                } else if (BitmapCache.rotation == 1) {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                                else if(BitmapCache.rotation == 2)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                }
+                            }
+                            else if(BitmapCache.oldRotation == 2)
                             {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
+                                if(BitmapCache.rotation == 1)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(90);
+                                }
+                                else if(BitmapCache.rotation == 0)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(180);
+                                }
+                                if(BitmapCache.rotation == 3)
+                                {
+                                    matrix = new Matrix();
+                                    matrix.postRotate(-90);
+                                }
+
                             }
-                        } else if (BitmapCache.oldRotation == 1) {
-                            if (BitmapCache.rotation == 0) {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            } else if (BitmapCache.rotation == 3) {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
-                            }
-                            else if(BitmapCache.rotation == 2)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            }
-                        } else if (BitmapCache.oldRotation == 3) {
-                            if (BitmapCache.rotation == 0) {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            } else if (BitmapCache.rotation == 1) {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
-                            }
-                            else if(BitmapCache.rotation == 2)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            }
+                            BitmapCache.mMemoryCache.put("step" + Integer.toString(count), Bitmap.createBitmap(oldActivity, 0, 0, oldActivity.getWidth(), oldActivity.getHeight(), matrix, true));
                         }
-                        else if(BitmapCache.oldRotation == 2)
-                        {
-                            if(BitmapCache.rotation == 1)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(90);
-                            }
-                            else if(BitmapCache.rotation == 0)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(180);
-                            }
-                            if(BitmapCache.rotation == 3)
-                            {
-                                matrix = new Matrix();
-                                matrix.postRotate(-90);
-                            }
-
-                        }
-
-                        BitmapCache.mMemoryCache.put("oldBitmap", Bitmap.createBitmap(oldActivity, 0, 0, oldActivity.getWidth(), oldActivity.getHeight(), matrix, true));
                     }
+                    if((BitmapCache.oldRotation == 3 && BitmapCache.rotation == 1) || (BitmapCache.oldRotation == 1 && BitmapCache.rotation == 3) ||
+                            (BitmapCache.oldRotation == 0 && BitmapCache.rotation == 2) || (BitmapCache.oldRotation == 2 && BitmapCache.rotation == 0))
+                        drawingArea.invalidate();
                 }
-                if((BitmapCache.oldRotation == 3 && BitmapCache.rotation == 1) || (BitmapCache.oldRotation == 1 && BitmapCache.rotation == 3) ||
-                   (BitmapCache.oldRotation == 0 && BitmapCache.rotation == 2) || (BitmapCache.oldRotation == 2 && BitmapCache.rotation == 0))
-                    drawingArea.invalidate();
             }
         };
         rotation.enable();
@@ -247,6 +266,8 @@ public class MainActivity extends AppCompatActivity {
             ((Button)findViewById(R.id.strokewidth_left)).setText("-");
             ((Button)findViewById(R.id.strokewidth_right)).setText("+");
         }
+
+
     }
 
     @Override
@@ -257,7 +278,6 @@ public class MainActivity extends AppCompatActivity {
         state.putInt("stroke_width", Integer.parseInt(strokeWidth.getText().toString()));
 
         state.putBoolean("color", false);
-
         if(foreground.isShowing())
         {
             state.putBoolean("color", true);
@@ -277,6 +297,8 @@ public class MainActivity extends AppCompatActivity {
 
         String text = textPicker.dismissDialogue();
         state.putString("textPicker", text);
+        state.putBoolean("undo", undoButton.isEnabled());
+        state.putBoolean("redo", redoButton.isEnabled());
     }
 
     @Override
@@ -314,8 +336,9 @@ public class MainActivity extends AppCompatActivity {
         {
           textPicker.setText(state.getString("textPicker"));
         }
+        redoButton.setEnabled(state.getBoolean("redo"));
+        undoButton.setEnabled(state.getBoolean("undo"));
     }
-
 
     private void setupToolbar() {
         toolFlyoutMenu = findViewById(R.id.toolFlyoutMenu);
@@ -370,12 +393,15 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
         foreground.dismissDialogue();
-
     }
 
     public void showTool(int shown_tool)
     {
         LinearLayout strokeWidthLayout = findViewById(R.id.strokeWidthLayout);
+        LinearLayout undoRedoLayout = findViewById(R.id.undoLayout);
+        undoRedoLayout.setVisibility(View.INVISIBLE);
+        drawingArea.setHandleToucheEvents(true);
+        drawingArea.getPixelColor(false);
         switch(shown_tool) {
             case R.drawable.ic_si_glyph_circle:
                 drawingArea.setTool(new Circle(foreground.getColor(), Integer.parseInt(strokeWidth.getText().toString())));
@@ -414,6 +440,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.drawable.ic_pipette:
                 strokeWidthLayout.setVisibility(View.INVISIBLE);
+                drawingArea.setHandleToucheEvents(false);
+                drawingArea.getPixelColor(true);
                 drawingArea.setTool(new Pipette(this, foreground, drawingArea));
                 break;
             case R.drawable.ic_si_save:
@@ -433,6 +461,7 @@ public class MainActivity extends AppCompatActivity {
                 textPicker.show();
                 break;
             case R.drawable.ic_outline_add_a_photo_24px:
+                int curvisibility = strokeWidthLayout.getVisibility();
                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this,"Unable to open Camera! - Missing Permissions", Toast.LENGTH_SHORT).show();
@@ -441,6 +470,10 @@ public class MainActivity extends AppCompatActivity {
                     strokeWidthLayout.setVisibility(View.INVISIBLE);
                     getImageFromCamera();
                 }
+                break;
+            case R.drawable.ic_baseline_swap_horiz_24px:
+                strokeWidthLayout.setVisibility(View.INVISIBLE);
+                undoRedoLayout.setVisibility(View.VISIBLE);
                 break;
             default:
                     strokeWidthLayout.setVisibility(View.VISIBLE);
@@ -459,10 +492,9 @@ public class MainActivity extends AppCompatActivity {
                 exportDir.delete();
             }
             mTempCameraPhotoFile = new File(exportDir, "/" + UUID.randomUUID().toString().replaceAll("-", "") + ".jpg");
-            Log.d("anna", "/" + UUID.randomUUID().toString().replaceAll("-", "") + ".jpg");
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mTempCameraPhotoFile));
             startActivityForResult(takePictureIntent, CAMERA_CHOOSER);
-        };
+        }
 
     }
     private void showFileChooser() {
@@ -488,8 +520,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Uri uri = data.getData();
                     try {
-                        Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                        drawingArea.setTool(new ImageImportTool(selected_image, this));
+                        toImport = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                        drawingArea.setTool(new ImageImportTool(toImport, this));
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -502,16 +534,84 @@ public class MainActivity extends AppCompatActivity {
 
             Uri uri = Uri.fromFile(mTempCameraPhotoFile);
             try {
-                Bitmap selected_image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                drawingArea.setTool(new ImageImportTool(selected_image, this));
-                Log.d("anna","width: "+selected_image.getWidth()+" height: "+selected_image.getHeight());
-
+                toImport = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                drawingArea.setTool(new ImageImportTool(toImport, this));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
 
+    }
+
+    public void undoStep(View element)
+    {
+        drawingArea.undoStep();
+        if(BitmapCache.max_undo_steps == 0)
+            redoButton.setEnabled(false);
+        redoButton.setEnabled(true);
+        if(BitmapCache.redo_overflow)
+        {
+            int position_to_check_against = (BitmapCache.dead_zone_start > -1) ? BitmapCache.dead_zone_start : BitmapCache.array_position;
+            if(position_to_check_against == 0)
+            {
+                if (BitmapCache.oldBitmap == 1)
+                    undoButton.setEnabled(false);
+                else
+                    undoButton.setEnabled(true);
+            }
+            else {
+                if (BitmapCache.oldBitmap == position_to_check_against + 1)
+                    undoButton.setEnabled(false);
+                else
+                    undoButton.setEnabled(true);
+            }
+        }
+        else
+        {
+            if(BitmapCache.oldBitmap == 0)
+            {
+                undoButton.setEnabled(false);
+            }
+            else
+            {
+                undoButton.setEnabled(true);
+            }
+        }
+    }
+
+    public void redoStep(View element)
+    {
+        drawingArea.redoStep();
+        undoButton.setEnabled(true);
+        if(BitmapCache.redo_overflow)
+        {
+            if(BitmapCache.array_position == 0)
+            {
+               if(BitmapCache.nextBitmap == BitmapCache.max_undo_steps - 1)
+                   redoButton.setEnabled(false);
+               else
+                   redoButton.setEnabled(true);
+            }
+            else
+            {
+                if(BitmapCache.nextBitmap == BitmapCache.array_position - 1)
+                    redoButton.setEnabled(false);
+                else
+                    redoButton.setEnabled(true);
+            }
+            }
+        else
+        {
+            if(BitmapCache.nextBitmap == BitmapCache.array_position - 1)
+            {
+                redoButton.setEnabled(false);
+            }
+            else
+            {
+                redoButton.setEnabled(true);
+            }
+        }
     }
 
     public void changeStrokeWidth(View element)
@@ -573,7 +673,6 @@ public class MainActivity extends AppCompatActivity {
         // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
-                Log.d("MyCameraApp", "failed to create directory");
                 return null;
             }
         }

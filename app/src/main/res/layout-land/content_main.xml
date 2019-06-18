@@ -24,6 +24,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:id="@+id/undoLayout"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_undo_24px"
+                android:id="@+id/buttonUndo"
+                android:onClick="undoStep"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_baseline_redo_24px"
+                android:id="@+id/buttonRedo"
+                android:onClick="redoStep"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:id="@+id/strokeWidthLayout"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"

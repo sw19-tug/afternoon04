@@ -1,5 +1,10 @@
 package at.tugraz.ist.swe;
 
+//Original algorithm by J. Dunlap queuelinearfloodfill.aspx
+//Java port by Owen Kaluza
+//Android port by Darrin Smith (Standard Android)
+//See readme
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;

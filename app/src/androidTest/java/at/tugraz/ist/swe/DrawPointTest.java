@@ -38,6 +38,7 @@ public class DrawPointTest {
     @Test
     public void testDrawboardUserAction()
     {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog();
         onView(withId(R.id.main_canvas_view)).perform(performTouch(150, 150)); // click to close menu
 
@@ -50,6 +51,7 @@ public class DrawPointTest {
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(150,150)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(300,300)));
         onView(withId(R.id.draw_point_view)).check(matches(checkCoordinates(500,900)));
+
     }
 
     public static ViewAction performTouch(final float x, final float y) {

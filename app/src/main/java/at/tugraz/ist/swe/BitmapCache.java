@@ -6,9 +6,15 @@ import android.support.v4.util.LruCache;
 public class BitmapCache {
 
     private static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-    private static int cacheSize = maxMemory / 8;
+    public static int cacheSize = maxMemory / 2;
     public static int rotation = 0;
     public static int oldRotation = 0;
+    public static int max_undo_steps = 10;
+    public static int nextBitmap = 0;
+    public static int array_position = 0;
+    public static int dead_zone_start = -1;
+    public static boolean redo_overflow = false;
+    public static int oldBitmap = 0;
 
     public BitmapCache()
     {

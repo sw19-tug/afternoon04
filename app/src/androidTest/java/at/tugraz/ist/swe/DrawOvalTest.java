@@ -59,6 +59,7 @@ public class DrawOvalTest {
 
     @Test
     public void testDrawboardUserAction() {
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         openDialog();
 
         onView(withId(R.id.main_canvas_view)).perform(performTouchDown(50, 50)); // click to close menu

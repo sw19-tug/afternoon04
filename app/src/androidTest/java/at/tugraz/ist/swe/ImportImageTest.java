@@ -2,7 +2,6 @@ package at.tugraz.ist.swe;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.SystemClock;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.MotionEvents;
@@ -32,7 +31,7 @@ public class ImportImageTest {
 
     @Test
     public void openPicture() {
-
+        activityTestRule.getActivity().drawingArea.resetCanvas();
         try {
             InputStream is = activityTestRule.getActivity().getResources().getAssets().open("demo_img.png");
             Bitmap bitmap = BitmapFactory.decodeStream(is);
